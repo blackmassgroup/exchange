@@ -32,6 +32,38 @@
       >
         Get Started <span aria-hidden="true">&rarr;</span>
       </a>
+
+      <%= if @current_user do %>
+        <%= @current_user.email %>
+
+        <.link
+          href={~p"/users/settings"}
+          class="text-[0.8125rem] font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+        >
+          Settings
+        </.link>
+        <.link
+          href={~p"/users/log_out"}
+          method="delete"
+          class="text-[0.8125rem] font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+        >
+          Log out
+        </.link>
+      <% else %>
+        <.link
+          href={~p"/users/register"}
+          class="text-[0.8125rem] font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+        >
+          Register
+        </.link>
+
+        <.link
+          href={~p"/users/log_in"}
+          class="text-[0.8125rem] font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+        >
+          Log in
+        </.link>
+      <% end %>
     </div>
   </div>
 </header>
