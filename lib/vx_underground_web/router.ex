@@ -68,6 +68,13 @@ defmodule VxUndergroundWeb.Router do
       on_mount: [{VxUndergroundWeb.UserAuth, :ensure_authenticated}] do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+
+      live "/tags", TagLive.Index, :index
+      live "/tags/new", TagLive.Index, :new
+      live "/tags/:id/edit", TagLive.Index, :edit
+
+      live "/tags/:id", TagLive.Show, :show
+      live "/tags/:id/show/edit", TagLive.Show, :edit
     end
   end
 
