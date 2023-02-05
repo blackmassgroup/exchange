@@ -1,0 +1,44 @@
+<.header>
+  Listing Samples
+  <:actions>
+    <.link patch={~p"/samples/new"}>
+      <.button>New Sample</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="samples" rows={@samples} row_click={&JS.navigate(~p"/samples/#{&1}")}>
+  <:col :let={sample} label="Hash"><%= sample.hash %></:col>
+  <:col :let={sample} label="Size"><%= sample.size %></:col>
+  <:col :let={sample} label="Type"><%= sample.type %></:col>
+  <:col :let={sample} label="First seen"><%= sample.first_seen %></:col>
+  <:col :let={sample} label="S3 object key"><%= sample.s3_object_key %></:col>
+  <:col :let={sample} label="Tags"><%= sample.tags %></:col>
+  <:action :let={sample}>
+    <div class="sr-only">
+      <.link navigate={~p"/samples/#{sample}"}>Show</.link>
+    </div>
+    <.link patch={~p"/samples/#{sample}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={sample}>
+    <.link phx-click={JS.push("delete", value: %{id: sample.id})} data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="sample-modal"
+  show
+  on_cancel={JS.navigate(~p"/samples")}
+>
+  <.live_component
+    module={VxUndergroundWeb.SampleLive.FormComponent}
+    id={@sample.id || :new}
+    title={@page_title}
+    action={@live_action}
+    sample={@sample}
+    navigate={~p"/samples"}
+  />
+</.modal>

@@ -1,0 +1,31 @@
+<.header>
+  Sample <%= @sample.id %>
+  <:subtitle>This is a sample record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/samples/#{@sample}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit sample</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Hash"><%= @sample.hash %></:item>
+  <:item title="Size"><%= @sample.size %></:item>
+  <:item title="Type"><%= @sample.type %></:item>
+  <:item title="First seen"><%= @sample.first_seen %></:item>
+  <:item title="S3 object key"><%= @sample.s3_object_key %></:item>
+  <:item title="Tags"><%= @sample.tags %></:item>
+</.list>
+
+<.back navigate={~p"/samples"}>Back to samples</.back>
+
+<.modal :if={@live_action == :edit} id="sample-modal" show on_cancel={JS.patch(~p"/samples/#{@sample}")}>
+  <.live_component
+    module={VxUndergroundWeb.SampleLive.FormComponent}
+    id={@sample.id}
+    title={@page_title}
+    action={@live_action}
+    sample={@sample}
+    navigate={~p"/samples/#{@sample}"}
+  />
+</.modal>
