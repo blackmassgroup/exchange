@@ -7,7 +7,19 @@
   </:actions>
 </.header>
 
-<.table id="samples" rows={@samples} row_click={&JS.navigate(~p"/samples/#{&1}")}>
+<.live_component
+  module={VxUndergroundWeb.SampleLive.FilterComponent}
+  id="filter"
+  filter={@filter}
+/>
+
+<.table
+  id="samples"
+  rows={@samples}
+  row_click={&JS.navigate(~p"/samples/#{&1}")}
+  sorting_headers={true}
+  sorting={@sorting}
+>
   <:col :let={sample} label="Hash"><%= sample.hash %></:col>
   <:col :let={sample} label="Size"><%= sample.size %></:col>
   <:col :let={sample} label="Type"><%= sample.type %></:col>
