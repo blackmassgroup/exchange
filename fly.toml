@@ -1,5 +1,6 @@
-app = "vx-underground"
+# fly.toml file generated for vx on 2023-02-06T21:10:36-05:00
 
+app = "vx"
 kill_signal = "SIGTERM"
 kill_timeout = 5
 processes = []
@@ -8,11 +9,10 @@ processes = []
   release_command = "/app/bin/migrate"
 
 [env]
-  PHX_HOST = "herbener.net"
+  PHX_HOST = "vx.fly.dev"
   PORT = "8080"
 
 [experimental]
-  allowed_public_ports = []
   auto_rollback = true
 
 [[services]]
@@ -21,10 +21,9 @@ processes = []
   processes = ["app"]
   protocol = "tcp"
   script_checks = []
-
   [services.concurrency]
-    hard_limit = 25
-    soft_limit = 20
+    hard_limit = 1000
+    soft_limit = 1000
     type = "connections"
 
   [[services.ports]]
