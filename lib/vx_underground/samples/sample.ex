@@ -16,7 +16,7 @@ defmodule VxUnderground.Samples.Sample do
   @doc false
   def changeset(sample, attrs) do
     sample
-    |> cast(attrs, [:hash, :size, :type, :first_seen, :s3_object_key, :tags])
-    |> validate_required([:hash, :size, :type, :first_seen, :s3_object_key, :tags])
+    |> cast(attrs, [:hash, :size, :type, :first_seen, :s3_object_key])
+    |> validate_required([:hash, :size, :type, :first_seen, :s3_object_key])
   end
 end

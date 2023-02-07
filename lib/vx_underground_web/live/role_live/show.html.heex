@@ -1,0 +1,27 @@
+<.header>
+  Role <%= @role.id %>
+  <:subtitle>This is a role record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/roles/#{@role}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit role</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @role.name %></:item>
+  <:item title="Permissions"><%= @role.permissions %></:item>
+</.list>
+
+<.back navigate={~p"/roles"}>Back to roles</.back>
+
+<.modal :if={@live_action == :edit} id="role-modal" show on_cancel={JS.patch(~p"/roles/#{@role}")}>
+  <.live_component
+    module={VxUndergroundWeb.RoleLive.FormComponent}
+    id={@role.id}
+    title={@page_title}
+    action={@live_action}
+    role={@role}
+    navigate={~p"/roles/#{@role}"}
+  />
+</.modal>

@@ -6,6 +6,10 @@ defmodule VxUndergroundWeb.UserSettingsLive do
   def render(assigns) do
     ~H"""
     <div class="bg-slate-100 p-5 mb-5">
+      <.header>Custom Permissions</.header>
+      <%= @current_user.custom_permissions %>
+    </div>
+    <div class="bg-slate-100 p-5 mb-5">
       <.header>Change Email</.header>
 
       <.simple_form

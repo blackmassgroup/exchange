@@ -2,9 +2,14 @@ defmodule VxUnderground.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias VxUnderGround.Accounts.Role
+
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true, redact: true
+    belongs_to(:role, Role)
+
+    field(:custom_permissions, :map, default: %{})
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
 
