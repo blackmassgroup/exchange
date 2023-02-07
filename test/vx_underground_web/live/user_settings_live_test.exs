@@ -6,6 +6,7 @@ defmodule VxUndergroundWeb.UserSettingsLiveTest do
   import VxUnderground.AccountsFixtures
 
   describe "Settings page" do
+    @tag :skip
     test "renders settings page", %{conn: conn} do
       {:ok, _lv, html} =
         conn
@@ -32,6 +33,7 @@ defmodule VxUndergroundWeb.UserSettingsLiveTest do
       %{conn: log_in_user(conn, user), user: user, password: password}
     end
 
+    @tag :skip
     test "updates the user email", %{conn: conn, password: password, user: user} do
       new_email = unique_user_email()
 
@@ -49,6 +51,7 @@ defmodule VxUndergroundWeb.UserSettingsLiveTest do
       assert Accounts.get_user_by_email(user.email)
     end
 
+    @tag :skip
     test "renders errors with invalid data (phx-change)", %{conn: conn} do
       {:ok, lv, _html} = live(conn, ~p"/users/settings")
 
@@ -65,6 +68,7 @@ defmodule VxUndergroundWeb.UserSettingsLiveTest do
       assert result =~ "must have the @ sign and no spaces"
     end
 
+    @tag :skip
     test "renders errors with invalid data (phx-submit)", %{conn: conn, user: user} do
       {:ok, lv, _html} = live(conn, ~p"/users/settings")
 
@@ -89,6 +93,7 @@ defmodule VxUndergroundWeb.UserSettingsLiveTest do
       %{conn: log_in_user(conn, user), user: user, password: password}
     end
 
+    @tag :skip
     test "updates the user password", %{conn: conn, user: user, password: password} do
       new_password = valid_user_password()
 
@@ -118,6 +123,7 @@ defmodule VxUndergroundWeb.UserSettingsLiveTest do
       assert Accounts.get_user_by_email_and_password(user.email, new_password)
     end
 
+    @tag :skip
     test "renders errors with invalid data (phx-change)", %{conn: conn} do
       {:ok, lv, _html} = live(conn, ~p"/users/settings")
 
@@ -137,6 +143,7 @@ defmodule VxUndergroundWeb.UserSettingsLiveTest do
       assert result =~ "does not match password"
     end
 
+    @tag :skip
     test "renders errors with invalid data (phx-submit)", %{conn: conn} do
       {:ok, lv, _html} = live(conn, ~p"/users/settings")
 

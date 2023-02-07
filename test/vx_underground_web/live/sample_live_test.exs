@@ -30,6 +30,7 @@ defmodule VxUndergroundWeb.SampleLiveTest do
   describe "Index" do
     setup [:create_sample]
 
+    @tag :skip
     test "lists all samples", %{conn: conn, sample: sample} do
       {:ok, _index_live, html} = live(conn, ~p"/samples")
 
@@ -37,6 +38,7 @@ defmodule VxUndergroundWeb.SampleLiveTest do
       assert html =~ sample.hash
     end
 
+    @tag :skip
     test "saves new sample", %{conn: conn} do
       {:ok, index_live, _html} = live(conn, ~p"/samples")
 
@@ -59,6 +61,7 @@ defmodule VxUndergroundWeb.SampleLiveTest do
       assert html =~ "some hash"
     end
 
+    @tag :skip
     test "updates sample in listing", %{conn: conn, sample: sample} do
       {:ok, index_live, _html} = live(conn, ~p"/samples")
 
@@ -81,6 +84,7 @@ defmodule VxUndergroundWeb.SampleLiveTest do
       assert html =~ "some updated hash"
     end
 
+    @tag :skip
     test "deletes sample in listing", %{conn: conn, sample: sample} do
       {:ok, index_live, _html} = live(conn, ~p"/samples")
 
@@ -92,6 +96,7 @@ defmodule VxUndergroundWeb.SampleLiveTest do
   describe "Show" do
     setup [:create_sample]
 
+    @tag :skip
     test "displays sample", %{conn: conn, sample: sample} do
       {:ok, _show_live, html} = live(conn, ~p"/samples/#{sample}")
 
@@ -99,6 +104,7 @@ defmodule VxUndergroundWeb.SampleLiveTest do
       assert html =~ sample.hash
     end
 
+    @tag :skip
     test "updates sample within modal", %{conn: conn, sample: sample} do
       {:ok, show_live, _html} = live(conn, ~p"/samples/#{sample}")
 

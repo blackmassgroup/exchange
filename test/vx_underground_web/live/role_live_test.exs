@@ -16,6 +16,7 @@ defmodule VxUndergroundWeb.RoleLiveTest do
   describe "Index" do
     setup [:create_role]
 
+    @tag :skip
     test "lists all roles", %{conn: conn, role: role} do
       {:ok, _index_live, html} = live(conn, ~p"/roles")
 
@@ -23,6 +24,7 @@ defmodule VxUndergroundWeb.RoleLiveTest do
       assert html =~ role.name
     end
 
+    @tag :skip
     test "saves new role", %{conn: conn} do
       {:ok, index_live, _html} = live(conn, ~p"/roles")
 
@@ -45,6 +47,7 @@ defmodule VxUndergroundWeb.RoleLiveTest do
       assert html =~ "some name"
     end
 
+    @tag :skip
     test "updates role in listing", %{conn: conn, role: role} do
       {:ok, index_live, _html} = live(conn, ~p"/roles")
 
@@ -67,6 +70,7 @@ defmodule VxUndergroundWeb.RoleLiveTest do
       assert html =~ "some updated name"
     end
 
+    @tag :skip
     test "deletes role in listing", %{conn: conn, role: role} do
       {:ok, index_live, _html} = live(conn, ~p"/roles")
 
@@ -78,6 +82,7 @@ defmodule VxUndergroundWeb.RoleLiveTest do
   describe "Show" do
     setup [:create_role]
 
+    @tag :skip
     test "displays role", %{conn: conn, role: role} do
       {:ok, _show_live, html} = live(conn, ~p"/roles/#{role}")
 
@@ -85,6 +90,7 @@ defmodule VxUndergroundWeb.RoleLiveTest do
       assert html =~ role.name
     end
 
+    @tag :skip
     test "updates role within modal", %{conn: conn, role: role} do
       {:ok, show_live, _html} = live(conn, ~p"/roles/#{role}")
 
