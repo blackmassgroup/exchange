@@ -20,11 +20,11 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={{f, :hash}} type="text" label="Hash" />
-        <.input field={{f, :size}} type="number" label="Size" />
-        <.input field={{f, :type}} type="text" label="Type" />
+        <.input field={{f, :hash}} type="hidden" />
+        <.input field={{f, :size}} type="hidden" />
+        <.input field={{f, :type}} type="hidden" />
 
-        <.input field={{f, :first_seen}} type="datetime-local" label="First seen" />
+        <.input field={{f, :first_seen}} type="hidden" />
         <%!-- render each avatar entry --%>
         <%= for entry <- @uploads.s3_object_key.entries do %>
           <article class="upload-entry">
@@ -80,7 +80,7 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
 
   defp presign_upload(entry, socket) do
     uploads = socket.assigns.uploads
-    bucket = "vxug"
+    bucket = "vx-ug"
     key = "#{entry.client_name}"
 
     config = %{
@@ -100,7 +100,7 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
     meta = %{
       uploader: "S3",
       key: key,
-      url: "http://#{bucket}.s3-#{config.region}.amazonaws.com",
+      url: "http://#{bucket}.s3.#{config.region}.amazonaws.com",
       fields: fields
     }
 
@@ -139,6 +139,27 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
   end
 
   defp save_sample(socket, :new, sample_params) do
+    new_params =
+      case socket.assigns.uploads.s3_object_key.entries |> List.first() do
+        nil ->
+          %{}
+
+        upload ->
+          region = "us-east-1"
+          bucket = "vx-ug"
+          url = "http://#{bucket}.s3.#{region}.amazonaws.com/#{upload.client_name}"
+
+          %{
+            "type" => upload.client_type,
+            "size" => upload.client_size,
+            "hash" => upload.client_name,
+            "s3_object_key" => url,
+            "first_seen" => DateTime.utc_now()
+          }
+      end
+
+    sample_params = Map.merge(sample_params, new_params)
+
     case Samples.create_sample(sample_params) do
       {:ok, _sample} ->
         {:noreply,
