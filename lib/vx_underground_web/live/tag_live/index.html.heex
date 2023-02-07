@@ -23,12 +23,7 @@
   </:action>
 </.table>
 
-<.modal
-  :if={@live_action in [:new, :edit]}
-  id="tag-modal"
-  show
-  on_cancel={JS.navigate(~p"/tags")}
->
+<.modal :if={@live_action in [:new, :edit]} id="tag-modal" show on_cancel={JS.navigate(~p"/tags")}>
   <.live_component
     module={VxUndergroundWeb.TagLive.FormComponent}
     id={@tag.id || :new}

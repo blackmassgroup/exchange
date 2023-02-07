@@ -4,8 +4,22 @@ defmodule VxUndergroundWeb.SampleLiveTest do
   import Phoenix.LiveViewTest
   import VxUnderground.SamplesFixtures
 
-  @create_attrs %{first_seen: "2023-02-04T17:21:00Z", hash: "some hash", s3_object_key: "some s3_object_key", size: 42, tags: [1, 2], type: "some type"}
-  @update_attrs %{first_seen: "2023-02-05T17:21:00Z", hash: "some updated hash", s3_object_key: "some updated s3_object_key", size: 43, tags: [1], type: "some updated type"}
+  @create_attrs %{
+    first_seen: "2023-02-04T17:21:00Z",
+    hash: "some hash",
+    s3_object_key: "some s3_object_key",
+    size: 42,
+    tags: [1, 2],
+    type: "some type"
+  }
+  @update_attrs %{
+    first_seen: "2023-02-05T17:21:00Z",
+    hash: "some updated hash",
+    s3_object_key: "some updated s3_object_key",
+    size: 43,
+    tags: [1],
+    type: "some updated type"
+  }
   @invalid_attrs %{first_seen: nil, hash: nil, s3_object_key: nil, size: nil, tags: [], type: nil}
 
   defp create_sample(_) do
