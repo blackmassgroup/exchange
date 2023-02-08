@@ -17,7 +17,7 @@ defmodule VxUndergroundWeb.UserRegistrationLiveTest do
         conn
         |> log_in_user(user_fixture())
         |> live(~p"/users/register")
-        |> follow_redirect(conn, "/")
+        |> follow_redirect(conn, "/samples")
 
       assert {:ok, _conn} = result
     end
