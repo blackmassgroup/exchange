@@ -4,12 +4,12 @@ defmodule VxUndergroundWeb.SampleLive.SortingForm do
   alias VxUndergroundWeb.Live.EctoHelper
 
   @fields %{
-    sort_by: EctoHelper.enum([:id, :hash, :size, :type, :first_seen]),
+    sort_by: EctoHelper.enum([:Hash, :Size, :Type, :"First seen", :"S3 object key", :tags]),
     sort_dir: EctoHelper.enum([:asc, :desc])
   }
 
-  @default_vaules %{
-    sort_by: :first_seen,
+  @default_values %{
+    sort_by: :Size,
     sort_dir: :desc
   }
 
@@ -20,10 +20,10 @@ defmodule VxUndergroundWeb.SampleLive.SortingForm do
   end
 
   def parse(params) do
-    {@default_vaules, @fields}
+    {@default_values, @fields}
     |> cast(params, Map.keys(@fields))
     |> apply_action(:insert)
   end
 
-  def default_vaules(), do: @default_vaules
+  def default_values(), do: @default_values
 end

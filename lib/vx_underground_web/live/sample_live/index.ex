@@ -15,9 +15,19 @@ defmodule VxUndergroundWeb.SampleLive.Index do
   def handle_params(params, _url, socket) do
     socket =
       parse_params(socket, params)
+      |> assign_samples()
       |> apply_action(socket.assigns.live_action, params)
 
     {:noreply, socket}
+  end
+
+  defp assign_samples(socket) do
+    params = merge_and_sanitize_params(socket)
+
+    samples = list_samples(params)
+
+    socket
+    |> assign(:samples, samples)
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
@@ -81,16 +91,16 @@ defmodule VxUndergroundWeb.SampleLive.Index do
   end
 
   defp assign_sorting(socket, overrides \\ %{}) do
-    opts = Map.merge(SortingForm.default_vaules(), overrides)
+    opts = Map.merge(SortingForm.default_values(), overrides)
 
     assign(socket, :sorting, opts)
   end
 
   defp assign_filter(socket, overrides \\ %{}) do
-    assign(socket, :filter, FilterForm.default_vaules(overrides))
+    assign(socket, :filter, FilterForm.default_values(overrides))
   end
 
-  defp list_samples do
-    Samples.list_samples()
+  defp list_samples(params \\ %{}) do
+    Samples.list_samples(params)
   end
 end
