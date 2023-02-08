@@ -100,7 +100,7 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
     meta = %{
       uploader: "S3",
       key: key,
-      url: "http://#{bucket}.s3.#{config.region}.amazonaws.com",
+      url: "https://#{bucket}.s3.#{config.region}.amazonaws.com",
       fields: fields
     }
 

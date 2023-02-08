@@ -30,7 +30,6 @@ Uploaders.S3 = function (entries, onViewError) {
   entries.forEach(entry => {
     let formData = new FormData()
     let { url, fields } = entry.meta
-    console.log(fields);
     Object.entries(fields).forEach(([key, val]) => formData.append(key, val))
     formData.append("file", entry.file)
     let xhr = new XMLHttpRequest()
