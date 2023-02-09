@@ -447,9 +447,6 @@ defmodule VxUnderground.Accounts do
     Role.changeset(role, attrs)
   end
 
-  @doc """
-
-  """
   # def add_role_to_user(user, role_name) do
   #   with {:ok, role} <- get_role_by_name(role_name) do
   #     update_user(user, %{role_id: role.id})

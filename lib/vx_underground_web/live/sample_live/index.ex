@@ -1,6 +1,7 @@
 defmodule VxUndergroundWeb.SampleLive.Index do
   use VxUndergroundWeb, :live_view
 
+  alias VxUnderground.Tags
   alias VxUnderground.Samples
   alias VxUnderground.Samples.Sample
   alias VxUndergroundWeb.SampleLive.SortingForm
@@ -37,9 +38,11 @@ defmodule VxUndergroundWeb.SampleLive.Index do
     params = merge_and_sanitize_params(socket)
 
     samples = list_samples(params)
+    tags = Tags.list_tags() |> Enum.map(&[value: &1.id, key: &1.name])
 
     socket
     |> assign(:samples, samples)
+    |> assign(:tags, tags)
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do

@@ -20,11 +20,11 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={{f, :hash}} type="hidden" />
-        <.input field={{f, :size}} type="hidden" />
-        <.input field={{f, :type}} type="hidden" />
+        <%= Phoenix.HTML.Form.hidden_input(f, :hash) %>
+        <%= Phoenix.HTML.Form.hidden_input(f, :size) %>
+        <%= Phoenix.HTML.Form.hidden_input(f, :type) %>
+        <%= Phoenix.HTML.Form.hidden_input(f, :first_seen) %>
 
-        <.input field={{f, :first_seen}} type="hidden" />
         <%!-- render each avatar entry --%>
         <%= for entry <- @uploads.s3_object_key.entries do %>
           <article class="upload-entry">
@@ -53,7 +53,7 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
           </article>
         <% end %>
         <.live_file_input upload={@uploads.s3_object_key} label="S3 object key" />
-        <.input field={{f, :tags}} type="select" multiple label="Tags" options={[{"1", 1}, {"2", 2}]} />
+        <.input field={{f, :tags}} type="select" multiple label="Tags" options={@tags} />
 
         <:actions>
           <.button phx-disable-with="Saving...">Save Sample</.button>
