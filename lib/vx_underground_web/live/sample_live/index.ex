@@ -21,6 +21,18 @@ defmodule VxUndergroundWeb.SampleLive.Index do
     {:noreply, socket}
   end
 
+  defp generate_url_for_file(socket, file_location) do
+    opts = [expires_in: 300]
+    "http://vxug.s3.eu-central-1.wasabisys.com/" <> path = file_location
+
+    ExAws.Config.new(:s3)
+    |> ExAws.S3.presigned_url(:get, "vxug", path, opts)
+    |> case do
+      {:ok, url} -> url
+      _ -> "#"
+    end
+  end
+
   defp assign_samples(socket) do
     params = merge_and_sanitize_params(socket)
 
