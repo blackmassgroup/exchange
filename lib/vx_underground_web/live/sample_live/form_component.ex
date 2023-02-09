@@ -79,30 +79,11 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
   end
 
   defp presign_upload(entry, socket) do
-    uploads = socket.assigns.uploads
-    bucket = "vx-ug"
+    bucket = "vxug"
     key = "#{entry.client_name}"
 
-    config = %{
-      region: "us-east-1",
-      access_key_id: System.fetch_env!("AWS_ACCESS_KEY_ID"),
-      secret_access_key: System.fetch_env!("AWS_SECRET_ACCESS_KEY")
-    }
-
-    {:ok, fields} =
-      SimpleS3Upload.sign_form_upload(config, bucket,
-        key: key,
-        content_type: entry.client_type,
-        max_file_size: uploads[entry.upload_config].max_file_size,
-        expires_in: :timer.hours(1)
-      )
-
-    meta = %{
-      uploader: "S3",
-      key: key,
-      url: "https://#{bucket}.s3.#{config.region}.amazonaws.com",
-      fields: fields
-    }
+    {:ok, presigned_url} = ExAws.Config.new(:s3) |> ExAws.S3.presigned_url(:put, bucket, key)
+    meta = %{uploader: "S3", bucket: bucket, key: key, url: presigned_url}
 
     {:ok, meta, socket}
   end
@@ -145,9 +126,9 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
           %{}
 
         upload ->
-          region = "us-east-1"
-          bucket = "vx-ug"
-          url = "http://#{bucket}.s3.#{region}.amazonaws.com/#{upload.client_name}"
+          region = "eu-central-1"
+          bucket = "vxug"
+          url = "http://#{bucket}.s3.#{region}.wasabisys.com/#{upload.client_name}"
 
           %{
             "type" => upload.client_type,
