@@ -30,7 +30,7 @@ Uploaders.S3 = function (entries, onViewError) {
   entries.forEach(entry => {
     let xhr = new XMLHttpRequest()
     onViewError(() => xhr.abort())
-    xhr.onload = () => (xhr.status === 200 ? entry.done() : entry.error())
+    xhr.onload = () => (xhr.status === 200 ? entry.progress(100) : entry.error())
     xhr.onerror = () => entry.error()
     xhr.upload.addEventListener("progress", event => {
       if (event.lengthComputable) {
