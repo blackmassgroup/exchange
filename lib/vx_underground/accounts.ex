@@ -471,7 +471,7 @@ defmodule VxUnderground.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_role_by_name!(name), do: Repo.get_by!(Role, name: name)
+  def get_role_by_name!(name), do: Repo.get_by(Role, name: name)
 
   @doc """
   Updates the user role or custom permissions.

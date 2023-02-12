@@ -33,7 +33,16 @@ defmodule VxUndergroundWeb.ConnCase do
 
   setup tags do
     VxUnderground.DataCase.setup_sandbox(tags)
+    setup_roles()
     {:ok, conn: Phoenix.ConnTest.build_conn()}
+  end
+
+  def setup_roles() do
+    for role <- VxUnderground.Accounts.DefaultRoles.all() do
+      unless VxUnderground.Accounts.get_role_by_name!(role.name) do
+        {:ok, _role} = VxUnderground.Accounts.create_role(role)
+      end
+    end
   end
 
   @doc """

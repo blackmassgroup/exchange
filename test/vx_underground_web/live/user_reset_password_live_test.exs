@@ -56,8 +56,8 @@ defmodule VxUndergroundWeb.UserResetPasswordLiveTest do
         lv
         |> form("#reset_password_form",
           user: %{
-            "password" => "new valid password",
-            "password_confirmation" => "new valid password"
+            "password" => "New valid password!",
+            "password_confirmation" => "New valid password!"
           }
         )
         |> render_submit()
@@ -65,7 +65,7 @@ defmodule VxUndergroundWeb.UserResetPasswordLiveTest do
 
       refute get_session(conn, :user_token)
       assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Password reset successfully"
-      assert Accounts.get_user_by_email_and_password(user.email, "new valid password")
+      assert Accounts.get_user_by_email_and_password(user.email, "New valid password!")
     end
 
     test "does not reset password on invalid data", %{conn: conn, token: token} do
