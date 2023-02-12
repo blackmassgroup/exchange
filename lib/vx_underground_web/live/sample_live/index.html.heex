@@ -34,13 +34,14 @@
     </a>
   </:col>
   <:col :let={sample} label="Tags"><%= sample.tags %></:col>
-  <:action :let={sample}>
+
+  <:action :let={sample} :if={@current_user.role.name == "Admin"}>
     <div class="sr-only">
       <.link navigate={~p"/samples/#{sample}"}>Show</.link>
     </div>
     <.link patch={~p"/samples/#{sample}/edit"}>Edit</.link>
   </:action>
-  <:action :let={sample}>
+  <:action :let={sample} :if={@current_user.role.name == "Admin"}>
     <.link phx-click={JS.push("delete", value: %{id: sample.id})} data-confirm="Are you sure?">
       Delete
     </.link>

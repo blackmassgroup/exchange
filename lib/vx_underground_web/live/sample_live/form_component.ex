@@ -1,7 +1,7 @@
 defmodule VxUndergroundWeb.SampleLive.FormComponent do
   use VxUndergroundWeb, :live_component
 
-  alias VxUnderground.{Samples, SimpleS3Upload}
+  alias VxUnderground.Samples
 
   @impl true
   def render(assigns) do

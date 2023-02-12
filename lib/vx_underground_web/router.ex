@@ -71,16 +71,23 @@ defmodule VxUndergroundWeb.Router do
 
       live "/tags", TagLive.Index, :index
       live "/tags/new", TagLive.Index, :new
-      live "/tags/:id/edit", TagLive.Index, :edit
-
       live "/tags/:id", TagLive.Show, :show
-      live "/tags/:id/show/edit", TagLive.Show, :edit
 
       live "/samples", SampleLive.Index, :index
       live "/samples/new", SampleLive.Index, :new
-      live "/samples/:id/edit", SampleLive.Index, :edit
-
       live "/samples/:id", SampleLive.Show, :show
+    end
+  end
+
+  scope "/", VxUndergroundWeb do
+    pipe_through [:browser, :require_authenticated_user, :require_admin]
+
+    live_session :require_admin_user,
+      on_mount: [{VxUndergroundWeb.UserAuth, :ensure_authenticated}] do
+      live "/tags/:id/edit", TagLive.Index, :edit
+      live "/tags/:id/show/edit", TagLive.Show, :edit
+
+      live "/samples/:id/edit", SampleLive.Index, :edit
       live "/samples/:id/show/edit", SampleLive.Show, :edit
 
       live "/roles", RoleLive.Index, :index

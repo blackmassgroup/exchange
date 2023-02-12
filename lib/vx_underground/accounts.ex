@@ -78,6 +78,16 @@ defmodule VxUnderground.Accounts do
     %User{}
     |> User.registration_changeset(attrs)
     |> Repo.insert()
+    |> case do
+      {:ok, user} ->
+        case add_role_to_user(user, "User") do
+          {:ok, user} -> {:ok, user}
+          _ -> {:ok, user}
+        end
+
+      error ->
+        error
+    end
   end
 
   @doc """
@@ -447,14 +457,78 @@ defmodule VxUnderground.Accounts do
     Role.changeset(role, attrs)
   end
 
-  # def add_role_to_user(user, role_name) do
-  #   with {:ok, role} <- get_role_by_name(role_name) do
-  #     update_user(user, %{role_id: role.id})
-  #   end
-  # end
+  @doc """
+  Gets a single role by name.
 
-  # def add_custom_permission_to_user(user, name, actions) do
-  #   custom_permissions = Map.put(user.custom_permissions, name, actions)
-  #   update_user(user, %{custom_permissions, custom_permissions})
-  # end
+  Raises `Ecto.NoResultsError` if the Role does not exist.
+
+  ## Examples
+
+      iex> get_role_by_name!("Admin")
+      %Role{name: "Admin"}
+
+      iex> get_role_by_name!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_role_by_name!(name), do: Repo.get_by!(Role, name: name)
+
+  @doc """
+  Updates the user role or custom permissions.
+
+  ## Examples
+
+      iex> update_user_roles_and_permissions(user, %{role_id: 1})
+      {:ok, %User{}}
+
+      iex> update_user_roles_and_permissions(user, %{password: 1}
+      {:error, %Ecto.Changeset{}}
+  """
+  def update_user_roles_and_permissions(user, params) do
+    changeset = User.role_changeset(user, params)
+
+    Ecto.Multi.new()
+    |> Ecto.Multi.update(:user, changeset)
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{user: user}} -> {:ok, user}
+      {:error, :user, changeset, _} -> {:error, changeset}
+    end
+  end
+
+  @doc """
+  Adds a role to a user by name
+
+  ## Examples
+
+      iex> add_role_to_user(user, "Admin")
+      {:ok, %User{}}
+
+      iex> add_role_to_user(user, "Admin"}
+      {:error, %Ecto.Changeset{}}
+  """
+  def add_role_to_user(user, role_name) do
+    with role when role != nil <- get_role_by_name!(role_name) do
+      update_user_roles_and_permissions(user, %{role_id: role.id})
+    else
+      _ ->
+        {:error, :role_doesnt_exist}
+    end
+  end
+
+  @doc """
+  Adds custom permissions to a user
+
+  ## Examples
+
+      iex> add_custom_permission_to_user(user, "Sample", ["read", "update", "delete"])
+      {:ok, %User{}}
+
+      iex> add_custom_permission_to_user(user, nil, [])
+      {:error, %Ecto.Changeset{}}
+  """
+  def add_custom_permission_to_user(user, key_name, actions) do
+    custom_permissions = Map.put(user.custom_permissions, key_name, actions)
+    update_user_roles_and_permissions(user, %{custom_permissions: custom_permissions})
+  end
 end

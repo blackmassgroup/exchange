@@ -91,7 +91,7 @@ defmodule VxUndergroundWeb.UserAuth do
   def fetch_current_user(conn, _opts) do
     {user_token, conn} = ensure_user_token(conn)
     user = user_token && Accounts.get_user_by_session_token(user_token)
-    assign(conn, :current_user, user)
+    assign(conn, :current_user, VxUnderground.Repo.preload(user, :role))
   end
 
   defp ensure_user_token(conn) do
@@ -177,6 +177,7 @@ defmodule VxUndergroundWeb.UserAuth do
       %{"user_token" => user_token} ->
         Phoenix.Component.assign_new(socket, :current_user, fn ->
           Accounts.get_user_by_session_token(user_token)
+          |> VxUnderground.Repo.preload(:role)
         end)
 
       %{} ->
@@ -206,6 +207,31 @@ defmodule VxUndergroundWeb.UserAuth do
   def require_authenticated_user(conn, _opts) do
     if conn.assigns[:current_user] do
       conn
+    else
+      conn
+      |> put_flash(:error, "You must log in to access this page.")
+      |> maybe_store_return_to()
+      |> redirect(to: ~p"/users/log_in")
+      |> halt()
+    end
+  end
+
+  @doc """
+  Used for routes that require the user role of admin to be authenticated.
+  """
+  def require_admin(conn, _opts) do
+    user = conn.assigns[:current_user]
+
+    if user do
+      if user.role.name == "Admin" do
+        conn
+      else
+        conn
+        |> put_flash(:error, "You do not have permission to access this page.")
+        |> maybe_store_return_to()
+        |> redirect(to: ~p"/samples")
+        |> halt()
+      end
     else
       conn
       |> put_flash(:error, "You must log in to access this page.")
