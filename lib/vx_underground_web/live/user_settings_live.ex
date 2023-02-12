@@ -6,6 +6,12 @@ defmodule VxUndergroundWeb.UserSettingsLive do
   def render(assigns) do
     ~H"""
     <div class="bg-slate-50 p-5 mb-5">
+      <.header>User Role</.header>
+      <%= if @current_user.role != nil,
+        do: @current_user.role.name,
+        else: "No role." %>
+    </div>
+    <div class="bg-slate-50 p-5 mb-5">
       <.header>Custom Permissions</.header>
       <%= if @current_user.custom_permissions != nil,
         do: Jason.encode!(@current_user.custom_permissions),

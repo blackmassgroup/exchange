@@ -259,7 +259,7 @@ defmodule VxUndergroundWeb.CoreComponents do
   attr :type, :string,
     default: "text",
     values: ~w(checkbox color date datetime-local email file hidden month number password
-               range radio search select tel text textarea time url week)
+               range radio search select tel text textarea time url week json)
 
   attr :value, :any
   attr :field, :any, doc: "a %Phoenix.HTML.Form{}/field name tuple, for example: {f, :email}"
@@ -483,6 +483,8 @@ defmodule VxUndergroundWeb.CoreComponents do
   attr :id, :string, required: true
   attr :row_click, :any, default: nil
   attr :rows, :list, required: true
+  attr :sorting_headers, :boolean
+  attr :sorting, :map
 
   slot :col, required: true do
     attr :label, :string
@@ -496,7 +498,7 @@ defmodule VxUndergroundWeb.CoreComponents do
       <table class="mt-11 w-[40rem] sm:w-full">
         <thead class="text-left text-[0.8125rem] leading-6 text-zinc-500">
           <tr>
-            <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal">
+            <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal ">
               <.live_component
                 module={VxUndergroundWeb.SampleLive.SortingComponent}
                 id={"th-#{col[:label]}"}

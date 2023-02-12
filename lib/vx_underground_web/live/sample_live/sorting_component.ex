@@ -11,7 +11,11 @@ defmodule VxUndergroundWeb.SampleLive.SortingComponent do
 
   def render(assigns) do
     ~H"""
-    <div phx-click="sort_by_key" phx-target={@myself} class="sorting-header flex justify-items-center">
+    <div
+      phx-click="sort_by_key"
+      phx-target={@myself}
+      class="sorting-header flex justify-items-center items-center"
+    >
       <%= @key %> <%= chevron(@sorting, String.to_atom(@key)) %>
     </div>
     """
@@ -41,7 +45,7 @@ defmodule VxUndergroundWeb.SampleLive.SortingComponent do
     """
   end
 
-  def chevron(assigns, key) do
+  def chevron(assigns, _key) do
     ~H"""
     <Heroicons.chevron_right solid class="h-5 w-5 stroke-current" />
     """

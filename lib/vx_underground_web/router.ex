@@ -96,6 +96,13 @@ defmodule VxUndergroundWeb.Router do
 
       live "/roles/:id", RoleLive.Show, :show
       live "/roles/:id/show/edit", RoleLive.Show, :edit
+
+      live "/manage/users", AccountLive.User.Index, :index
+      live "/manage/users/new", AccountLive.User.Index, :new
+      live "/manage/users/:id/edit", AccountLive.User.Index, :edit
+
+      live "/manage/users/:id", AccountLive.User.Show, :show
+      live "/manage/users/:id/show/edit", AccountLive.User.Show, :edit
     end
   end
 

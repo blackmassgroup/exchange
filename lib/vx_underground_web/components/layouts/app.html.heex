@@ -10,12 +10,20 @@
     </div>
     <div class="flex items-center gap-4">
       <%= if @current_user do %>
-        <.link
-          href={~p"/roles"}
-          class="text-[0.8125rem] font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
-        >
-          Roles
-        </.link>
+        <%= if @current_user.role.name ==  "Admin" do %>
+          <.link
+            href={~p"/manage/users"}
+            class="text-[0.8125rem] font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+          >
+            Users
+          </.link>
+          <.link
+            href={~p"/roles"}
+            class="text-[0.8125rem] font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+          >
+            Roles
+          </.link>
+        <% end %>
         <.link
           href={~p"/samples"}
           class="text-[0.8125rem] font-semibold leading-6 text-zinc-900 hover:text-zinc-700"

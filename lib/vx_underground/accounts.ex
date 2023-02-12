@@ -531,4 +531,49 @@ defmodule VxUnderground.Accounts do
     custom_permissions = Map.put(user.custom_permissions, key_name, actions)
     update_user_roles_and_permissions(user, %{custom_permissions: custom_permissions})
   end
+
+  @doc """
+  Returns the list of users.
+
+  ## Examples
+
+      iex> list_users()
+      [%User{}, ...]
+
+  """
+  def list_users(opts \\ []) do
+    from(s in User, preload: :role)
+    |> filter(opts)
+    |> sort(opts)
+    |> Repo.all()
+  end
+
+  defp sort(query, %{sort_by: sort_by, sort_dir: sort_dir})
+       when sort_by in [:id, :inserted_at, :role_id, :custom_permissions] and
+              sort_dir in [:asc, :desc] do
+    order_by(query, {^sort_dir, ^sort_by})
+  end
+
+  defp sort(query, _opts), do: query
+
+  defp filter(query, opts) do
+    query
+    |> filter_by_email(opts)
+  end
+
+  defp filter_by_email(query, %{email: email})
+       when is_binary(email) and email != "" do
+    query_string = "%#{email}%"
+
+    where(query, [s], ilike(s.email, ^query_string))
+  end
+
+  defp filter_by_email(query, _), do: query
+
+  @doc """
+  Deletes a user
+  """
+  def delete_user(user) do
+    Repo.delete(User, user.id)
+  end
 end

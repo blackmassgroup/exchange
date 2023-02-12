@@ -1,7 +1,6 @@
 defmodule VxUnderground.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
-
   alias VxUnderground.Accounts.Role
 
   schema "users" do
