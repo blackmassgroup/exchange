@@ -1,10 +1,13 @@
 <.header>
   Sample <%= @sample.id %>
   <:subtitle>This is a sample record from your database.</:subtitle>
+
   <:actions>
-    <.link patch={~p"/samples/#{@sample}/show/edit"} phx-click={JS.push_focus()}>
-      <.button>Edit sample</.button>
-    </.link>
+    <%= if @current_user.role.name == "Admin" do %>
+      <.link patch={~p"/samples/#{@sample}/show/edit"} phx-click={JS.push_focus()}>
+        <.button>Edit sample</.button>
+      </.link>
+    <% end %>
   </:actions>
 </.header>
 
@@ -32,5 +35,6 @@
     action={@live_action}
     sample={@sample}
     navigate={~p"/samples/#{@sample}"}
+    tags={@tags}
   />
 </.modal>
