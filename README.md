@@ -57,6 +57,8 @@ To get a local copy up and running follow these simple steps.
 6.  Start Phoenix server with `iex -S mix phx.server`
     1. Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 7.  Now you can visit `http://localhost:4000` in your browser and you will see the app running.
+8.  Once you register a user, you make it admin by running this in the same window you ran `iex -S mix phx.server` in (yes we run commands in a running server)
+    1.  `VxUnderground.Accounts.get_user!(1) |> VxUnderground.Accounts.add_role_to_user("Admin")`
 
 > You can run unit tests with the command `mix test`
 
