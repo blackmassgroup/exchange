@@ -10,7 +10,7 @@
 
 <.list>
   <:item title="Name"><%= @role.name %></:item>
-  <:item title="Permissions"><%= @role.permissions %></:item>
+  <:item title="Permissions"><%= Jason.encode!(@role.permissions) %></:item>
 </.list>
 
 <.back navigate={~p"/roles"}>Back to roles</.back>

@@ -55,6 +55,8 @@ defmodule VxUndergroundWeb.RoleLive.FormComponent do
   end
 
   defp save_role(socket, :edit, role_params) do
+    role_params = Map.put(role_params, "permissions", Jason.decode!(role_params["permissions"]))
+
     case Accounts.update_role(socket.assigns.role, role_params) do
       {:ok, _role} ->
         {:noreply,
