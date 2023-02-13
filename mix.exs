@@ -57,7 +57,8 @@ defmodule VxUnderground.MixProject do
       {:poison, "~> 3.0"},
       {:hackney, "~> 1.9"},
       # optional dependency
-      {:sweet_xml, "~> 0.6.6"}
+      {:sweet_xml, "~> 0.6.6"},
+      {:mint, "~> 1.0"}
     ]
   end
 

@@ -117,6 +117,9 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
     end
+    # |> VxUnderground.Services.Triage.submit(sample.s3_object_key)
+    # |> VxUnderground.Services.HybridAnalysis.submit(sample.s3_object_key)
+    # |> VxUnderground.Services.VirusTotal.submit(sample.s3_object_key)
   end
 
   defp save_sample(socket, :new, sample_params) do
