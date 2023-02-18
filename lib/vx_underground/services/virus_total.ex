@@ -1,12 +1,44 @@
 defmodule VxUnderground.Services.VirusTotal do
-  # https://developers.virustotal.com/reference/authentication
-  @public_url ""
+  @moduledoc """
+  Module for interacting with the Virus Total API
+
+  https://developers.virustotal.com/reference/authentication
+
+  --- WIP ---
+  """
   @api_key System.get_env("VIRUS_TOTAL_API_KEY")
 
-  def submit(_) do
-    headers = [{"x-apikey", @api_key}]
-    {:ok, conn} = Mint.HTTP.connect(:http, @public_url, 80)
+  @public_url "https://www.virustotal.com/api/v3"
 
-    Mint.HTTP.request(conn, "GET", "/", headers, "")
+  @get_headers [
+    {"Content-Type", "application/json"},
+    {"x-apikey", "#{@api_key}"}
+  ]
+
+  @post_headers [
+    {"accept", "application/json"},
+    {"content-type", "multipart/form-data"},
+    {"x-apikey", "#{@api_key}"}
+  ]
+
+  def submit_for_processing(file) do
+    _http_client(@post_headers)
+    |> Tesla.post(@public_url <> "/files", %{file: file})
+  end
+
+  def get_sample(sha_256) do
+    _http_client(@get_headers)
+    |> Tesla.get("/files/" <> sha_256)
+  end
+
+  @doc """
+  Setup the Telsa HTTP Client and return it
+  """
+  def _http_client(headers) do
+    middlewares = [
+      {Tesla.Middleware.Headers, headers}
+    ]
+
+    Tesla.client(middlewares, {Tesla.Adapter.Mint, timeout: 240_000})
   end
 end
