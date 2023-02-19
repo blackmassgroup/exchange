@@ -1,6 +1,7 @@
 defmodule VxUndergroundWeb.SampleLive.Index do
   use VxUndergroundWeb, :live_view
 
+  alias VxUnderground.Services.S3
   alias VxUnderground.Tags
   alias VxUnderground.Samples
   alias VxUnderground.Samples.Sample
@@ -22,12 +23,11 @@ defmodule VxUndergroundWeb.SampleLive.Index do
     {:noreply, socket}
   end
 
-  defp generate_url_for_file(socket, file_location) do
+  defp generate_url_for_file(s3_object_key) do
     opts = [expires_in: 300]
-    "http://vxug.s3.eu-central-1.wasabisys.com/" <> path = file_location
 
     ExAws.Config.new(:s3)
-    |> ExAws.S3.presigned_url(:get, "vxug", path, opts)
+    |> ExAws.S3.presigned_url(:get, "vxug", s3_object_key, opts)
     |> case do
       {:ok, url} -> url
       _ -> "#"
