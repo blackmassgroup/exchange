@@ -495,17 +495,23 @@ defmodule VxUndergroundWeb.CoreComponents do
   def table(%{sorting_headers: true} = assigns) do
     ~H"""
     <div id={@id} class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
-      <table class="mt-11 w-[40rem] sm:w-full">
+      <table class="mt-11 w-[40rem] sm:w-full p-5">
         <thead class="text-left text-[0.8125rem] leading-6 text-zinc-500">
           <tr>
-            <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal ">
-              <.live_component
-                module={VxUndergroundWeb.SampleLive.SortingComponent}
-                id={"th-#{col[:label]}"}
-                key={col[:label]}
-                sorting={@sorting}
-              />
-            </th>
+            <%= for col <- @col do %>
+              <%= if col[:label] in ["Download", "Hashes", nil] do %>
+                <th class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></th>
+              <% else %>
+                <th class="p-0 pb-4 pr-6 font-normal">
+                  <.live_component
+                    module={VxUndergroundWeb.SampleLive.SortingComponent}
+                    id={"th-#{col[:label]}"}
+                    key={col[:label]}
+                    sorting={@sorting}
+                  />
+                </th>
+              <% end %>
+            <% end %>
             <th class="relative p-0 pb-4"><span class="sr-only"><%= gettext("Actions") %></span></th>
           </tr>
         </thead>
