@@ -24,7 +24,7 @@
       <% end %>
     </p>
   </:item>
-  <:item title="Size"><%= @sample.size %></:item>
+  <:item title="Size"><%= Number.Delimit.number_to_delimited(@sample.size, precision: 0) %> bytes</:item>
   <:item title="Type"><%= @sample.type %></:item>
   <:item title="First seen"><%= @sample.first_seen %></:item>
   <:item title="Names"><%= @sample.names %></:item>

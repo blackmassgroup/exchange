@@ -32,7 +32,7 @@
       <% end %>
     </p>
   </:col>
-  <:col :let={sample} label="Size"><%= sample.size %></:col>
+  <:col :let={sample} label="Size"><%= Number.Delimit.number_to_delimited(sample.size, precision: 0) %> KB</:col>
   <:col :let={sample} label="Type"><%= sample.type %></:col>
   <:col :let={sample} label="First seen"><%= sample.first_seen %></:col>
   <:col :let={sample} label="S3 object key">

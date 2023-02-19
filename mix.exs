@@ -58,7 +58,8 @@ defmodule VxUnderground.MixProject do
       {:hackney, "~> 1.9"},
       # optional dependency
       {:sweet_xml, "~> 0.6.6"},
-      {:tesla, "~> 1.4"}
+      {:tesla, "~> 1.4"},
+      {:number, "~> 1.0.1"}
     ]
   end
 
