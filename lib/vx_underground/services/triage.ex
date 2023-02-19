@@ -33,14 +33,9 @@ defmodule VxUnderground.Services.Triage do
     max_retries: 60,
     max_delay: 300_000,
     should_retry: fn
-      {:ok, %{status: status} = resp} when status in [400, 404, 500] ->
-        true
-
-      {:ok, _} ->
-        false
-
-      {:error, _} ->
-        true
+      {:ok, %{status: status}} when status in [400, 404, 500] -> true
+      {:ok, _} -> false
+      {:error, _} -> true
     end
 
   def upload(url) do

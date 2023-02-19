@@ -23,6 +23,7 @@ defmodule VxUndergroundWeb.SampleLive.Index do
     socket =
       parse_params(socket, params)
       |> assign_samples()
+      |> assign(:count, count)
       |> apply_action(socket.assigns.live_action, params)
 
     {:noreply, socket}

@@ -27,27 +27,15 @@ defmodule VxUnderground.Samples do
   end
 
   defp base_query(), do: from(s in Sample)
+
   defp sort(query, %{sort_by: sort_by, sort_dir: sort_dir})
-       when sort_by in [
-              :id,
-              :md5,
-              :sha1,
-              :sha256,
-              :sha,
-              :name,
-              :Size,
-              :Type,
-              :"First seen",
-              :"S3 object key"
-            ] and
+       when sort_by in [:Size, :Type, :"First seen"] and
               sort_dir in [:asc, :desc] do
     sort_by =
       case sort_by do
-        :Hash -> :hash
         :Size -> :size
         :Type -> :type
         :"First seen" -> :first_seen
-        :"S3 object key" -> :s3_object_key
       end
 
     order_by(query, {^sort_dir, ^sort_by})
