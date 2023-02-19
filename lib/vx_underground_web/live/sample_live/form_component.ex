@@ -2,6 +2,7 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
   use VxUndergroundWeb, :live_component
 
   alias VxUnderground.Samples
+  alias VxUnderground.Samples.Sample
 
   @impl true
   def render(assigns) do
@@ -156,42 +157,46 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
     end
-    # |> VxUnderground.Services.Triage.submit(sample.s3_object_key)
-    # |> VxUnderground.Services.HybridAnalysis.submit(sample.s3_object_key)
-    # |> VxUnderground.Services.VirusTotal.submit(sample.s3_object_key)
   end
 
-  defp save_sample(socket, :new, sample_params) do
-    new_params =
-      case socket.assigns.uploads.s3_object_key.entries |> List.first() do
-        nil ->
-          %{}
+  defp save_sample(%{assigns: %{uploads: %{s3_object_key: uploads}}} = socket, :new, params) do
+    Enum.reduce(uploads.entries, Ecto.Multi.new(), fn upload, acc ->
+      build_complete_sample_params(upload, params)
+      |> then(&(acc |> Ecto.Multi.insert(upload.client_name, &1)))
+    end)
+    |> VxUnderground.Repo.transaction()
+    |> case do
+      {:ok, samples} ->
+        Enum.map(socket.assigns.uploads.s3_object_key.entries, fn upload ->
+          sample = Map.get(samples, upload.client_name)
 
-        upload ->
-          region = "eu-central-1"
-          bucket = "vxug"
-          url = "http://#{bucket}.s3.#{region}.wasabisys.com/#{upload.client_name}"
+          send(self(), {:kickoff_triage_report, %{upload: upload, sample: sample}})
+        end)
 
-          %{
-            "type" => upload.client_type,
-            "size" => upload.client_size,
-            "hash" => upload.client_name,
-            "s3_object_key" => url,
-            "first_seen" => DateTime.utc_now()
-          }
-      end
+        socket =
+          socket
+          |> put_flash(:info, "Samples created successfully")
+          |> push_patch(to: ~p(/samples))
 
-    sample_params = Map.merge(sample_params, new_params)
+        {:noreply, socket}
 
-    case Samples.create_sample(sample_params) do
-      {:ok, _sample} ->
-        {:noreply,
-         socket
-         |> put_flash(:info, "Sample created successfully")
-         |> push_navigate(to: socket.assigns.navigate)}
+      {:error, _failed_operation, _failed_value, _changes_so_far} ->
+        message = "There was a problem with one or more of your uploads, please try again."
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
+        {:noreply, put_flash(socket, :error, message)}
     end
+    |> dbg()
+  end
+
+  defp build_complete_sample_params(upload, _params) do
+    type = if upload.client_type == "", do: "unknown", else: upload.client_type
+
+    %Sample{
+      type: type,
+      size: upload.client_size,
+      names: [upload.client_name],
+      s3_object_key: upload.client_name,
+      first_seen: DateTime.utc_now() |> DateTime.truncate(:second)
+    }
   end
 end

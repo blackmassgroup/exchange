@@ -71,13 +71,6 @@ defmodule VxUndergroundWeb.SampleLive.Index do
     {:noreply, assign(socket, :samples, list_samples())}
   end
 
-  def handle_info({:update, opts}, socket) do
-    params = merge_and_sanitize_params(socket, opts)
-    path = "/samples?" <> URI.encode_query(params)
-
-    {:noreply, push_patch(socket, to: path, replace: true)}
-  end
-
   defp merge_and_sanitize_params(socket, overrides \\ %{}) do
     %{sorting: sorting, filter: filter} = socket.assigns
 
@@ -117,5 +110,57 @@ defmodule VxUndergroundWeb.SampleLive.Index do
 
   defp list_samples(params \\ %{}) do
     Samples.list_samples(params)
+  end
+
+  @impl true
+  def handle_info({:update, opts}, socket) do
+    params = merge_and_sanitize_params(socket, opts)
+    path = "/samples?" <> URI.encode_query(params)
+
+    {:noreply, push_patch(socket, to: path, replace: true)}
+  end
+
+  def handle_info({:triage_report_complete, _}, socket) do
+    socket = assign_samples(socket) |> put_flash(:info, "Sample finished processing.")
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:kickoff_triage_report, %{upload: upload, sample: sample}}, socket) do
+    kickoff_triage_report(upload, sample)
+
+    {:noreply, socket}
+  end
+
+  defp kickoff_triage_report(upload, sample) do
+    with(
+      {:ok, presigned_url} <-
+        ExAws.Config.new(:s3) |> ExAws.S3.presigned_url(:get, "vxug", "#{upload.client_name}"),
+      {:ok, id} <- VxUnderground.Services.Triage.upload(presigned_url),
+      {:ok, hashes} <- VxUnderground.Services.Triage.get_sample(id),
+      {:ok, complete_params} <- build_complete_sample_params(hashes),
+      {:ok, _sample} <- Samples.update_sample(sample, complete_params)
+    ) do
+      send(self(), {:triage_report_complete, %{}})
+    else
+      _ ->
+        :error
+    end
+  end
+
+  defp build_complete_sample_params(hashes) do
+    {:ok,
+     %{
+       "md5" => hashes["md5"],
+       "sha1" => hashes["sha1"],
+       "sha256" => hashes["sha256"],
+       "sha512" => hashes["sha512"]
+     }}
+  end
+
+  def truncate_hash(nil), do: ""
+
+  def truncate_hash(hash) do
+    String.slice(hash, 0..20) <> "..." <> String.slice(hash, -20..-1)
   end
 end
