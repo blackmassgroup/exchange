@@ -25,18 +25,61 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
         <%= Phoenix.HTML.Form.hidden_input(f, :type) %>
         <%= Phoenix.HTML.Form.hidden_input(f, :first_seen) %>
 
-        <%!-- render each avatar entry --%>
+        <div
+          class="flex items-center justify-center w-full"
+          phx-drop-target={@uploads.s3_object_key.ref}
+        >
+          <label
+            for="dropzone-file"
+            class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-slate-50"
+          >
+            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+              <svg
+                aria-hidden="true"
+                class="w-10 h-10 mb-3 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                >
+                </path>
+              </svg>
+              <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                <span class="font-semibold">Click "browse" below to upload</span> or drag and drop your files here.
+              </p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">
+                All file types accepted, 10 file limit, 50MB limit per file.
+              </p>
+            </div>
+            <.live_file_input
+              upload={@uploads.s3_object_key}
+              label="S3 object key"
+              auto_upload="true"
+            />
+          </label>
+        </div>
+
         <%= for entry <- @uploads.s3_object_key.entries do %>
           <article class="upload-entry">
             <figure>
-              <.live_img_preview entry={entry} />
               <figcaption><%= entry.client_name %></figcaption>
             </figure>
 
             <%!-- entry.progress will update automatically for in-flight entries --%>
-            <progress value={entry.progress} max="100"><%= entry.progress %>%</progress>
+            <progress
+              value={entry.progress}
+              max="100"
+              style="width: 95%; height: 10px;border-radius: 25px;"
+            >
+              <%= entry.progress %>%
+            </progress>
 
-            <%!-- a regular click event whose handler will invoke Phoenix.LiveView.cancel_upload/3 --%>
             <button
               type="button"
               phx-click="cancel-upload"
@@ -46,15 +89,11 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
               &times;
             </button>
 
-            <%!-- Phoenix.Component.upload_errors/2 returns a list of error atoms --%>
             <%= for err <- upload_errors(@uploads.s3_object_key, entry) do %>
               <p class="alert alert-danger"><%= error_to_string(err) %></p>
             <% end %>
           </article>
         <% end %>
-        <.live_file_input upload={@uploads.s3_object_key} label="S3 object key" />
-        <.input field={{f, :tags}} type="select" multiple label="Tags" options={@tags} />
-
         <:actions>
           <.button phx-disable-with="Saving...">Save Sample</.button>
         </:actions>
@@ -75,7 +114,7 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
      socket
      |> assign(assigns)
      |> assign(:changeset, changeset)
-     |> allow_upload(:s3_object_key, accept: :any, max_entries: 1, external: &presign_upload/2)}
+     |> allow_upload(:s3_object_key, accept: :any, max_entries: 10, external: &presign_upload/2, max_file_size: 50_000_000)}
   end
 
   defp presign_upload(entry, socket) do
