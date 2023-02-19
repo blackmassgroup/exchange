@@ -20,7 +20,18 @@
   sorting_headers={true}
   sorting={@sorting}
 >
-  <:col :let={sample} label="Hash"><%= sample.hash %></:col>
+  <:col :let={sample} label="Hashes">
+    <p class="font-thin">
+      <%= if sample.md5 do %>
+        <strong>MD5:</strong> <%= sample.md5 %> <br /> <strong>SHA1:</strong> <%= sample.sha1 %>
+        <br />
+        <strong>SHA256:</strong> <%= sample.sha256 |> truncate_hash() %>
+        <br /> <strong>SHA512:</strong> <%= sample.sha512 |> truncate_hash() %>
+      <% else %>
+        Processing...
+      <% end %>
+    </p>
+  </:col>
   <:col :let={sample} label="Size"><%= sample.size %></:col>
   <:col :let={sample} label="Type"><%= sample.type %></:col>
   <:col :let={sample} label="First seen"><%= sample.first_seen %></:col>

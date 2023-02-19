@@ -25,7 +25,18 @@ defmodule VxUnderground.Samples do
   end
 
   defp sort(query, %{sort_by: sort_by, sort_dir: sort_dir})
-       when sort_by in [:id, :Hash, :Size, :Type, :"First seen", :"S3 object key"] and
+       when sort_by in [
+              :id,
+              :md5,
+              :sha1,
+              :sha256,
+              :sha,
+              :name,
+              :Size,
+              :Type,
+              :"First seen",
+              :"S3 object key"
+            ] and
               sort_dir in [:asc, :desc] do
     sort_by =
       case sort_by do
@@ -50,7 +61,12 @@ defmodule VxUnderground.Samples do
        when is_binary(hash) and hash != "" do
     query_string = "%#{hash}%"
 
-    where(query, [s], ilike(s.hash, ^query_string))
+    where(
+      query,
+      [s],
+      ilike(s.md5, ^query_string) or ilike(s.sha1, ^query_string) or
+        ilike(s.sha256, ^query_string) or ilike(s.sha512, ^query_string)
+    )
   end
 
   defp filter_by_hash(query, _), do: query

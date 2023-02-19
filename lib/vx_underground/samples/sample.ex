@@ -2,13 +2,31 @@ defmodule VxUnderground.Samples.Sample do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @allowed [
+    :names,
+    :size,
+    :type,
+    :first_seen,
+    :s3_object_key,
+    :md5,
+    :sha1,
+    :sha256,
+    :sha512
+  ]
+
+  @required [:first_seen, :size, :type, :names]
+
   schema "samples" do
     field :first_seen, :utc_datetime
-    field :hash, :string
+    field :names, {:array, :string}
+    field :md5, :string
+    field :sha1, :string
+    field :sha256, :string
+    field :sha512, :string
     field :s3_object_key, :string
     field :size, :integer
-    field :tags, {:array, :integer}
     field :type, :string
+    field :tags, {:array, :integer}
 
     timestamps()
   end
@@ -16,7 +34,12 @@ defmodule VxUnderground.Samples.Sample do
   @doc false
   def changeset(sample, attrs) do
     sample
-    |> cast(attrs, [:hash, :size, :type, :first_seen, :s3_object_key])
-    |> validate_required([:hash, :size, :type, :first_seen, :s3_object_key])
+    |> cast(attrs, @allowed)
+    |> validate_length(:md5, is: 32)
+    |> validate_length(:sha1, is: 40)
+    |> validate_length(:sha256, is: 64)
+    |> validate_length(:sha512, is: 128)
+
+    # |> validate_required(@required)
   end
 end

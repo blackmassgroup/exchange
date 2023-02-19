@@ -1,6 +1,6 @@
 <.header>
-  Sample <%= @sample.id %>
-  <:subtitle>This is a sample record from your database.</:subtitle>
+  Sample <%= @sample.md5 %>
+  <:subtitle>This is a malware sample found in the wild.</:subtitle>
 
   <:actions>
     <%= if @current_user.role.name == "Admin" do %>
@@ -12,11 +12,22 @@
 </.header>
 
 <.list>
-  <:item title="Hash"><%= @sample.hash %></:item>
+  <:item title="Hashes">
+    <p class="font-thin">
+      <%= if @sample.md5 do %>
+        <strong>MD5:</strong> <%= @sample.md5 %> <br /> <strong>SHA1:</strong> <%= @sample.sha1 %>
+        <br />
+        <strong>SHA256:</strong> <%= @sample.sha256 %>
+        <br /> <strong>SHA512:</strong> <%= @sample.sha512 %>
+      <% else %>
+        Processing...
+      <% end %>
+    </p>
+  </:item>
   <:item title="Size"><%= @sample.size %></:item>
   <:item title="Type"><%= @sample.type %></:item>
   <:item title="First seen"><%= @sample.first_seen %></:item>
-  <:item title="S3 object key"><%= @sample.s3_object_key %></:item>
+  <:item title="Names"><%= @sample.names %></:item>
   <:item title="Tags"><%= @sample.tags %></:item>
 </.list>
 
