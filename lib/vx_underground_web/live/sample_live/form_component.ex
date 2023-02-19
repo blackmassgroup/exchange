@@ -52,7 +52,8 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
                 </path>
               </svg>
               <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                <span class="font-semibold">Click "browse" below to upload</span> or drag and drop your files here.
+                <span class="font-semibold">Click "browse" below to upload</span>
+                or drag and drop your files here.
               </p>
               <p class="text-xs text-gray-500 dark:text-gray-400">
                 All file types accepted, 10 file limit, 50MB limit per file.
@@ -115,7 +116,12 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
      socket
      |> assign(assigns)
      |> assign(:changeset, changeset)
-     |> allow_upload(:s3_object_key, accept: :any, max_entries: 10, external: &presign_upload/2, max_file_size: 50_000_000)}
+     |> allow_upload(:s3_object_key,
+       accept: :any,
+       max_entries: 10,
+       external: &presign_upload/2,
+       max_file_size: 50_000_000
+     )}
   end
 
   defp presign_upload(entry, socket) do

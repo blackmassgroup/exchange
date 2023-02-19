@@ -32,7 +32,9 @@
       <% end %>
     </p>
   </:col>
-  <:col :let={sample} label="Size"><%= Number.Delimit.number_to_delimited(sample.size, precision: 0) %> KB</:col>
+  <:col :let={sample} label="Size">
+    <%= Number.Delimit.number_to_delimited(sample.size, precision: 0) %> KB
+  </:col>
   <:col :let={sample} label="Type"><%= sample.type %></:col>
   <:col :let={sample} label="First seen"><%= sample.first_seen %></:col>
   <:col :let={sample} label="Download">
@@ -45,11 +47,11 @@
     </.link>
   </:col>
 
-  <:col :let={sample} label={nil}> 
-   <%= if @current_user.role.name == "Admin" do %>
-    <.link phx-click={JS.push("delete", value: %{id: sample.id})} data-confirm="Are you sure?">
-      <.button>Delete</.button>
-    </.link>
+  <:col :let={sample} label={nil}>
+    <%= if @current_user.role.name == "Admin" do %>
+      <.link phx-click={JS.push("delete", value: %{id: sample.id})} data-confirm="Are you sure?">
+        <.button>Delete</.button>
+      </.link>
     <% end %>
   </:col>
   <%!-- <:col :let={sample} label="Tags"><%= sample.tags %></:col> --%>

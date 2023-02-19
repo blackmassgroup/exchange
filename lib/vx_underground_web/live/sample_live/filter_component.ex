@@ -1,7 +1,5 @@
 defmodule VxUndergroundWeb.SampleLive.FilterComponent do
   use VxUndergroundWeb, :live_component
-  import Phoenix.HTML.Form
-  import VxUndergroundWeb.ErrorHelpers
 
   alias VxUndergroundWeb.SampleLive.FilterForm
 

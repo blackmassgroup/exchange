@@ -4,9 +4,9 @@
 
   <:actions>
     <%= if @current_user.role.name == "Admin" do %>
-    <.link phx-click={JS.push("delete", value: %{id: @sample.id})} data-confirm="Are you sure?">
-      <.button>Delete</.button>
-    </.link>
+      <.link phx-click={JS.push("delete", value: %{id: @sample.id})} data-confirm="Are you sure?">
+        <.button>Delete</.button>
+      </.link>
     <% end %>
   </:actions>
 </.header>
@@ -24,7 +24,9 @@
       <% end %>
     </p>
   </:item>
-  <:item title="Size"><%= Number.Delimit.number_to_delimited(@sample.size, precision: 0) %> bytes</:item>
+  <:item title="Size">
+    <%= Number.Delimit.number_to_delimited(@sample.size, precision: 0) %> bytes
+  </:item>
   <:item title="Type"><%= @sample.type %></:item>
   <:item title="First seen"><%= @sample.first_seen %></:item>
   <:item title="Names"><%= @sample.names %></:item>
