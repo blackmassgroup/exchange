@@ -185,7 +185,6 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
 
         {:noreply, put_flash(socket, :error, message)}
     end
-    |> dbg()
   end
 
   defp build_complete_sample_params(upload, _params) do
