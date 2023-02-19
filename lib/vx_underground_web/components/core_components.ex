@@ -485,6 +485,7 @@ defmodule VxUndergroundWeb.CoreComponents do
   attr :rows, :list, required: true
   attr :sorting_headers, :boolean
   attr :sorting, :map
+  attr :filter, :map
   attr :phx_update, :atom
 
   slot :col, required: true do
@@ -500,17 +501,28 @@ defmodule VxUndergroundWeb.CoreComponents do
         <thead class="text-left text-[0.8125rem] leading-6 text-zinc-500">
           <tr>
             <%= for col <- @col do %>
-              <%= if col[:label] in ["Download", "Hashes", nil] do %>
+              <%= if col[:label] in ["Download", ""] do %>
                 <th class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></th>
               <% else %>
-                <th class="p-0 pb-4 pr-6 font-normal">
-                  <.live_component
-                    module={VxUndergroundWeb.SampleLive.SortingComponent}
-                    id={"th-#{col[:label]}"}
-                    key={col[:label]}
-                    sorting={@sorting}
-                  />
-                </th>
+                <%= if col[:label] == "Hashes" do %>
+                  <th class="p-0 pb-4 pr-6 font-normal">
+                    <%= col[:label] %>
+                    <.live_component
+                      module={VxUndergroundWeb.SampleLive.FilterComponent}
+                      id="filter"
+                      filter={@filter}
+                    />
+                  </th>
+                <% else %>
+                  <th class="p-0 pb-4 pr-6 font-normal">
+                    <.live_component
+                      module={VxUndergroundWeb.SampleLive.SortingComponent}
+                      id={"th-#{col[:label]}"}
+                      key={col[:label]}
+                      sorting={@sorting}
+                    />
+                  </th>
+                <% end %>
               <% end %>
             <% end %>
             <th class="relative p-0 pb-4"><span class="sr-only"><%= gettext("Actions") %></span></th>

@@ -1,17 +1,11 @@
 <.header>
-  Listing Samples
+  Malware Samples
   <:actions>
     <.link patch={~p"/samples/new"}>
       <.button>New Sample</.button>
     </.link>
   </:actions>
 </.header>
-
-<.live_component
-  module={VxUndergroundWeb.SampleLive.FilterComponent}
-  id="filter"
-  filter={@filter}
-/>
 
 <.table
   id="samples"
@@ -20,6 +14,7 @@
   sorting_headers={true}
   sorting={@sorting}
   phx_update={@phx_update}
+  filter={@filter}
 >
   <:col :let={sample} label="Hashes">
     <p class="font-thin">
@@ -48,7 +43,7 @@
     </.link>
   </:col>
 
-  <:col :let={sample} label={nil}>
+  <:col :let={sample} label="">
     <%= if @current_user.role.name == "Admin" do %>
       <.link phx-click={JS.push("delete", value: %{id: sample.id})} data-confirm="Are you sure?">
         <.button>Delete</.button>
