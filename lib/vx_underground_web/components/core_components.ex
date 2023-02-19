@@ -487,7 +487,7 @@ defmodule VxUndergroundWeb.CoreComponents do
   attr :sorting, :map
 
   slot :col, required: true do
-    attr :label, :string
+    attr :label, :string || nil
   end
 
   slot :action, doc: "the slot for showing user actions in the last table column"

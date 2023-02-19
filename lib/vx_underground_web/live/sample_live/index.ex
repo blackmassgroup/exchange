@@ -1,7 +1,6 @@
 defmodule VxUndergroundWeb.SampleLive.Index do
   use VxUndergroundWeb, :live_view
 
-  alias VxUnderground.Services.S3
   alias VxUnderground.Tags
   alias VxUnderground.Samples
   alias VxUnderground.Samples.Sample

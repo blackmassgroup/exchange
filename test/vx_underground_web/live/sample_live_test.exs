@@ -12,14 +12,14 @@ defmodule VxUndergroundWeb.SampleLiveTest do
     tags: [1, 2],
     type: "some type"
   }
-  @update_attrs %{
-    first_seen: "2023-02-05T17:21:00Z",
-    hash: "some updated hash",
-    s3_object_key: "some updated s3_object_key",
-    size: 43,
-    tags: [1],
-    type: "some updated type"
-  }
+  # @update_attrs %{
+  #   first_seen: "2023-02-05T17:21:00Z",
+  #   hash: "some updated hash",
+  #   s3_object_key: "some updated s3_object_key",
+  #   size: 43,
+  #   tags: [1],
+  #   type: "some updated type"
+  # }
   @invalid_attrs %{first_seen: nil, hash: nil, s3_object_key: nil, size: nil, tags: [], type: nil}
 
   defp create_sample(_) do
@@ -62,27 +62,27 @@ defmodule VxUndergroundWeb.SampleLiveTest do
     end
 
     @tag :skip
-    test "updates sample in listing", %{conn: conn, sample: sample} do
-      {:ok, index_live, _html} = live(conn, ~p"/samples")
+    # test "updates sample in listing", %{conn: conn, sample: sample} do
+    #   {:ok, index_live, _html} = live(conn, ~p"/samples")
 
-      assert index_live |> element("#samples-#{sample.id} a", "Edit") |> render_click() =~
-               "Edit Sample"
+    #   assert index_live |> element("#samples-#{sample.id} a", "Edit") |> render_click() =~
+    #            "Edit Sample"
 
-      assert_patch(index_live, ~p"/samples/#{sample}/edit")
+    #   assert_patch(index_live, ~p"/samples/#{sample}/edit")
 
-      assert index_live
-             |> form("#sample-form", sample: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
+    #   assert index_live
+    #          |> form("#sample-form", sample: @invalid_attrs)
+    #          |> render_change() =~ "can&#39;t be blank"
 
-      {:ok, _, html} =
-        index_live
-        |> form("#sample-form", sample: @update_attrs)
-        |> render_submit()
-        |> follow_redirect(conn, ~p"/samples")
+    #   {:ok, _, html} =
+    #     index_live
+    #     |> form("#sample-form", sample: @update_attrs)
+    #     |> render_submit()
+    #     |> follow_redirect(conn, ~p"/samples")
 
-      assert html =~ "Sample updated successfully"
-      assert html =~ "some updated hash"
-    end
+    #   assert html =~ "Sample updated successfully"
+    #   assert html =~ "some updated hash"
+    # end
 
     @tag :skip
     test "deletes sample in listing", %{conn: conn, sample: sample} do
@@ -105,26 +105,26 @@ defmodule VxUndergroundWeb.SampleLiveTest do
     end
 
     @tag :skip
-    test "updates sample within modal", %{conn: conn, sample: sample} do
-      {:ok, show_live, _html} = live(conn, ~p"/samples/#{sample}")
+    # test "updates sample within modal", %{conn: conn, sample: sample} do
+    #   {:ok, show_live, _html} = live(conn, ~p"/samples/#{sample}")
 
-      assert show_live |> element("a", "Edit") |> render_click() =~
-               "Edit Sample"
+    #   assert show_live |> element("a", "Edit") |> render_click() =~
+    #            "Edit Sample"
 
-      assert_patch(show_live, ~p"/samples/#{sample}/show/edit")
+    #   assert_patch(show_live, ~p"/samples/#{sample}/show/edit")
 
-      assert show_live
-             |> form("#sample-form", sample: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
+    #   assert show_live
+    #          |> form("#sample-form", sample: @invalid_attrs)
+    #          |> render_change() =~ "can&#39;t be blank"
 
-      {:ok, _, html} =
-        show_live
-        |> form("#sample-form", sample: @update_attrs)
-        |> render_submit()
-        |> follow_redirect(conn, ~p"/samples/#{sample}")
+    #   {:ok, _, html} =
+    #     show_live
+    #     |> form("#sample-form", sample: @update_attrs)
+    #     |> render_submit()
+    #     |> follow_redirect(conn, ~p"/samples/#{sample}")
 
-      assert html =~ "Sample updated successfully"
-      assert html =~ "some updated hash"
-    end
+    #   assert html =~ "Sample updated successfully"
+    #   assert html =~ "some updated hash"
+    # end
   end
 end
