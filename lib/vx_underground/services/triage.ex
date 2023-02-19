@@ -48,9 +48,7 @@ defmodule VxUnderground.Services.Triage do
       {:ok, %Tesla.Env{body: body, status: 200}} ->
         {:ok, body["id"]}
 
-      error ->
-
-        IO.inspect(error)
+      _ ->
         {:error, :retries_failed}
     end
   end
