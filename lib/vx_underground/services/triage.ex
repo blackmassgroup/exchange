@@ -17,14 +17,13 @@ defmodule VxUnderground.Services.Triage do
   """
   use Tesla
 
-  @api_key System.get_env("TRIAGE_API_KEY")
   @public_url "https://tria.ge/api/v0/"
 
   plug Tesla.Middleware.BaseUrl, @public_url
 
   plug Tesla.Middleware.Headers, [
     {"Content-Type", "application/json"},
-    {"Authorization", "Bearer #{@api_key}"}
+    {"Authorization", "Bearer #{System.get_env("TRIAGE_API_KEY")}"}
   ]
 
   plug Tesla.Middleware.JSON
