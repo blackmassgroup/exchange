@@ -8,7 +8,7 @@ defmodule VxUndergroundWeb.UserConfirmationLive do
     <div class="mx-auto max-w-sm">
       <.header class="text-center">Confirm Account</.header>
 
-      <.simple_form :let={f} for={:user} id="confirmation_form" phx-submit="confirm_account">
+      <.simple_form :let={f} for={%{}} as={:user} id="confirmation_form" phx-submit="confirm_account">
         <.input field={{f, :token}} type="hidden" value={@token} />
         <:actions>
           <.button phx-disable-with="Confirming..." class="w-full">Confirm my account</.button>

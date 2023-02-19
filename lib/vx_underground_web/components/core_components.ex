@@ -179,7 +179,7 @@ defmodule VxUndergroundWeb.CoreComponents do
 
   ## Examples
 
-      <.simple_form :let={f} for={:user} phx-change="validate" phx-submit="save">
+      <.simple_form :let={f} for={%{}} as={:user} phx-change="validate" phx-submit="save">
         <.input field={{f, :email}} label="Email"/>
         <.input field={{f, :username}} label="Username" />
         <:actions>

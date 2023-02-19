@@ -18,7 +18,8 @@ defmodule VxUndergroundWeb.UserLoginLive do
       <.simple_form
         :let={f}
         id="login_form"
-        for={:user}
+        as={:user}
+        for={%{}}
         action={~p"/users/log_in"}
         as={:user}
         phx-update="ignore"
