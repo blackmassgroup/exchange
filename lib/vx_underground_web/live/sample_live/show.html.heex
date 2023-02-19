@@ -4,9 +4,9 @@
 
   <:actions>
     <%= if @current_user.role.name == "Admin" do %>
-      <.link patch={~p"/samples/#{@sample}/show/edit"} phx-click={JS.push_focus()}>
-        <.button>Edit sample</.button>
-      </.link>
+    <.link phx-click={JS.push("delete", value: %{id: @sample.id})} data-confirm="Are you sure?">
+      <.button>Delete</.button>
+    </.link>
     <% end %>
   </:actions>
 </.header>

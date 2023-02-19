@@ -87,8 +87,8 @@ defmodule VxUndergroundWeb.Router do
       live "/tags/:id/edit", TagLive.Index, :edit
       live "/tags/:id/show/edit", TagLive.Show, :edit
 
-      live "/samples/:id/edit", SampleLive.Index, :edit
-      live "/samples/:id/show/edit", SampleLive.Show, :edit
+      # live "/samples/:id/edit", SampleLive.Index, :edit
+      # live "/samples/:id/show/edit", SampleLive.Show, :edit
 
       live "/roles", RoleLive.Index, :index
       live "/roles/new", RoleLive.Index, :new
