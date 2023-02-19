@@ -35,27 +35,29 @@
   <:col :let={sample} label="Size"><%= Number.Delimit.number_to_delimited(sample.size, precision: 0) %> KB</:col>
   <:col :let={sample} label="Type"><%= sample.type %></:col>
   <:col :let={sample} label="First seen"><%= sample.first_seen %></:col>
-  <:col :let={sample} label="S3 object key">
-    <a
-      href={generate_url_for_file(@socket, sample.s3_object_key)}
-      download={generate_url_for_file(@socket, sample.s3_object_key)}
+  <:col :let={sample} label="Download">
+    <.link
+      href={generate_url_for_file(sample.s3_object_key)}
+      download={generate_url_for_file(sample.s3_object_key)}
       target="_blank"
     >
-      <%= sample.s3_object_key %>
-    </a>
+      <.button>Download File</.button>
+    </.link>
   </:col>
-  <:col :let={sample} label="Tags"><%= sample.tags %></:col>
+
+  <:col :let={sample} label={nil}> 
+   <%= if @current_user.role.name == "Admin" do %>
+    <.link phx-click={JS.push("delete", value: %{id: sample.id})} data-confirm="Are you sure?">
+      <.button>Delete</.button>
+    </.link>
+    <% end %>
+  </:col>
+  <%!-- <:col :let={sample} label="Tags"><%= sample.tags %></:col> --%>
 
   <:action :let={sample} :if={@current_user.role.name == "Admin"}>
     <div class="sr-only">
       <.link navigate={~p"/samples/#{sample}"}>Show</.link>
     </div>
-    <.link patch={~p"/samples/#{sample}/edit"}>Edit</.link>
-  </:action>
-  <:action :let={sample} :if={@current_user.role.name == "Admin"}>
-    <.link phx-click={JS.push("delete", value: %{id: sample.id})} data-confirm="Are you sure?">
-      Delete
-    </.link>
   </:action>
 </.table>
 
