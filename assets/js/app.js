@@ -20,6 +20,7 @@ import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
+import InfinityScroll from "./infinity-scroll";
 import topbar from "../vendor/topbar"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
@@ -43,9 +44,25 @@ Uploaders.S3 = function (entries, onViewError) {
   })
 }
 
+let Hooks = {};
+Hooks.InfinityScroll = InfinityScroll;
+
+Hooks.ScrollToTop = {
+  mounted() {
+    this.el.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+    });
+  },
+};
+
 let liveSocket = new LiveSocket("/live", Socket, {
   uploaders: Uploaders,
-  params: { _csrf_token: csrfToken }
+  params: { _csrf_token: csrfToken }, 
+  hooks: Hooks
 })
 
 // Show progress bar on live navigation and form submits

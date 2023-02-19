@@ -17,13 +17,16 @@ defmodule VxUnderground.Samples do
       [%Sample{}, ...]
 
   """
-  def list_samples(opts \\ []) do
-    from(s in Sample)
+  def list_samples(offset, limit, opts \\ []) do
+    base_query()
     |> filter(opts)
     |> sort(opts)
+    |> limit(^limit)
+    |> offset(^offset)
     |> Repo.all()
   end
 
+  defp base_query(), do: from(s in Sample)
   defp sort(query, %{sort_by: sort_by, sort_dir: sort_dir})
        when sort_by in [
               :id,
@@ -70,6 +73,17 @@ defmodule VxUnderground.Samples do
   end
 
   defp filter_by_hash(query, _), do: query
+
+  def infinity_scroll_query_aggregate(nil) do
+    from(s in Sample)
+    |> Repo.aggregate(:count)
+  end
+
+  def infinity_scroll_query_aggregate(search) do
+    from(s in Sample)
+    |> filter(%{hash: search})
+    |> Repo.aggregate(:count)
+  end
 
   @doc """
   Gets a single sample.

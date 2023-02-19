@@ -485,6 +485,7 @@ defmodule VxUndergroundWeb.CoreComponents do
   attr :rows, :list, required: true
   attr :sorting_headers, :boolean
   attr :sorting, :map
+  attr :phx_update, :atom
 
   slot :col, required: true do
     attr :label, :string || nil
@@ -515,7 +516,12 @@ defmodule VxUndergroundWeb.CoreComponents do
             <th class="relative p-0 pb-4"><span class="sr-only"><%= gettext("Actions") %></span></th>
           </tr>
         </thead>
-        <tbody class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700">
+        <tbody
+          id="sample-table"
+          class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700"
+          phx-update={@phx_update}
+          phx-hook="InfinityScroll"
+        >
           <tr
             :for={row <- @rows}
             id={"#{@id}-#{Phoenix.Param.to_param(row)}"}

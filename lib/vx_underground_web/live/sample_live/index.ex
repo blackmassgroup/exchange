@@ -7,13 +7,19 @@ defmodule VxUndergroundWeb.SampleLive.Index do
   alias VxUndergroundWeb.SampleLive.SortingForm
   alias VxUndergroundWeb.SampleLive.FilterForm
 
+  @starting_limit 5
+
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, :samples, list_samples())}
+    count = Samples.infinity_scroll_query_aggregate(nil)
+
+    {:ok, assign(socket, offset: 0, limit: @starting_limit, count: count, phx_update: :append)}
   end
 
   @impl true
   def handle_params(params, _url, socket) do
+    count = Samples.infinity_scroll_query_aggregate(get_in(socket.assigns, [:filter, :hash]))
+
     socket =
       parse_params(socket, params)
       |> assign_samples()
@@ -34,9 +40,10 @@ defmodule VxUndergroundWeb.SampleLive.Index do
   end
 
   defp assign_samples(socket) do
+    %{offset: offset, limit: limit} = socket.assigns
     params = merge_and_sanitize_params(socket)
 
-    samples = list_samples(params)
+    samples = list_samples(offset, limit, params)
     tags = Tags.list_tags() |> Enum.map(&[value: &1.id, key: &1.name])
 
     socket
@@ -64,10 +71,28 @@ defmodule VxUndergroundWeb.SampleLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
+    %{offset: offset, limit: limit} = socket.assigns
     sample = Samples.get_sample!(id)
     {:ok, _} = Samples.delete_sample(sample)
 
-    {:noreply, assign(socket, :samples, list_samples())}
+    {:noreply, assign(socket, :samples, list_samples(offset, limit))}
+  end
+
+  def handle_event("load-more", _params, %{assigns: %{limit: limit, count: count}} = socket)
+      when limit >= count,
+      do: {:noreply, assign(socket, :phx_update, :append)}
+
+  def handle_event("load-more", _params, socket) do
+    %{offset: offset, limit: limit, count: count} = socket.assigns
+
+    socket =
+      if offset < count do
+        socket |> assign(offset: offset + limit, phx_update: :append) |> assign_samples()
+      else
+        socket
+      end
+
+    {:noreply, socket}
   end
 
   defp merge_and_sanitize_params(socket, overrides \\ %{}) do
@@ -107,14 +132,16 @@ defmodule VxUndergroundWeb.SampleLive.Index do
     assign(socket, :filter, FilterForm.default_values(overrides))
   end
 
-  defp list_samples(params \\ %{}) do
-    Samples.list_samples(params)
+  defp list_samples(offset, limit, params \\ %{}) do
+    Samples.list_samples(offset, limit, params)
   end
 
   @impl true
   def handle_info({:update, opts}, socket) do
     params = merge_and_sanitize_params(socket, opts)
     path = "/samples?" <> URI.encode_query(params)
+    addl_assigns = %{phx_update: :replace, offset: 0, limit: @starting_limit, count: nil}
+    socket = assign(socket, addl_assigns)
 
     {:noreply, push_patch(socket, to: path, replace: true)}
   end

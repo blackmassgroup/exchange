@@ -2,4 +2,20 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+.scroll-to-top-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 100;
+  opacity: 0;
+  transform: translateY(100px);
+  transition: all 0.5s ease;
+  padding: 15px;
+}
+
+.show-scroll-to-top-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* This file is for your main application CSS */

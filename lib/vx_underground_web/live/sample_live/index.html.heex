@@ -19,6 +19,7 @@
   row_click={&JS.navigate(~p"/samples/#{&1}")}
   sorting_headers={true}
   sorting={@sorting}
+  phx_update={@phx_update}
 >
   <:col :let={sample} label="Hashes">
     <p class="font-thin">
@@ -79,3 +80,7 @@
     tags={@tags}
   />
 </.modal>
+
+<button id="infinity-scroll-scroll-to-top" class="scroll-to-top-btn" phx-hook="ScrollToTop">
+  <Heroicons.arrow_up_circle mini class="h-6 w-6" />
+</button>
