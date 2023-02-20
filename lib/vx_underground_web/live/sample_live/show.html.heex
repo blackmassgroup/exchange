@@ -31,6 +31,9 @@
   <:item title="First seen"><%= @sample.first_seen %></:item>
   <:item title="Names"><%= @sample.names %></:item>
   <:item title="Tags"><%= @sample.tags %></:item>
+  <:item title="Virus Total">
+    <pre><%= Poison.encode!(@virus_total, pretty: true) %></pre>
+  </:item>
 </.list>
 
 <.back navigate={~p"/samples"}>Back to samples</.back>

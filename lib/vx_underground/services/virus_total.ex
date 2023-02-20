@@ -6,39 +6,54 @@ defmodule VxUnderground.Services.VirusTotal do
 
   --- WIP ---
   """
-  @api_key System.get_env("VIRUS_TOTAL_API_KEY")
+  use Tesla
 
   @public_url "https://www.virustotal.com/api/v3"
 
-  @get_headers [
+  plug Tesla.Middleware.BaseUrl, @public_url
+
+  plug Tesla.Middleware.Headers, [
     {"Content-Type", "application/json"},
-    {"x-apikey", "#{@api_key}"}
+    {"x-apikey", "#{System.get_env("VIRUS_TOTAL_API_KEY")}"}
   ]
 
-  @post_headers [
-    {"accept", "application/json"},
-    {"content-type", "multipart/form-data"},
-    {"x-apikey", "#{@api_key}"}
-  ]
+  # maybe this was missing
+  plug Tesla.Middleware.JSON
 
-  def submit_for_processing(file) do
-    _http_client(@post_headers)
-    |> Tesla.post(@public_url <> "/files", %{file: file})
-  end
+  # @post_headers [
+  #   {"accept", "application/json"},
+  #   {"content-type", "multipart/form-data"},
+  #   {"x-apikey", "#{@api_key}"}
+  # ]
+
+  # def submit_for_processing(file) do
+  #   _http_client(@post_headers)
+  #   |> Tesla.post(@public_url <> "/files", %{file: file})
+  # end
+
+  def get_sample(nil), do: nil
 
   def get_sample(sha_256) do
-    _http_client(@get_headers)
-    |> Tesla.get("/files/" <> sha_256)
+    url = "/files/" <> sha_256
+
+    # _http_client(@get_headers)
+    # |> Tesla.get(url)
+
+    case get(url) do
+      {:ok, %Tesla.Env{body: body, status: 200}} ->
+        {:ok, body["data"]}
+
+      _ ->
+        {:error, :retries_failed}
+    end
   end
 
-  @doc """
-  Setup the Telsa HTTP Client and return it
-  """
-  def _http_client(headers) do
-    middlewares = [
-      {Tesla.Middleware.Headers, headers}
-    ]
+  # @doc """
+  # Setup the Telsa HTTP Client and return it
+  # """
+  # def _http_client(headers) do
+  #   middlewares = [{Tesla.Middleware.Headers, headers}]
 
-    Tesla.client(middlewares, {Tesla.Adapter.Mint, timeout: 240_000})
-  end
+  #   Tesla.client([{Tesla.Middleware.Headers, headers}], Tesla.Adapter.Hackney)
+  # end
 end

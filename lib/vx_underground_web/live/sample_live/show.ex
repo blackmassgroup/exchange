@@ -1,6 +1,7 @@
 defmodule VxUndergroundWeb.SampleLive.Show do
   use VxUndergroundWeb, :live_view
 
+  alias VxUnderground.Services.VirusTotal
   alias VxUnderground.{Samples, Tags}
 
   @impl true
@@ -10,11 +11,20 @@ defmodule VxUndergroundWeb.SampleLive.Show do
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
+    sample = Samples.get_sample!(id)
+
+    virus_total =
+      case VirusTotal.get_sample(sample.sha256) do
+        {:ok, virus_total} -> virus_total
+        {:error, _} -> "File doesn't exist on Virus Total yet."
+      end
+
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:sample, Samples.get_sample!(id))
-     |> assign(:tags, Tags.list_tags() |> Enum.map(&[value: &1.id, key: &1.name]))}
+     |> assign(:sample, sample)
+     |> assign(:tags, Tags.list_tags() |> Enum.map(&[value: &1.id, key: &1.name]))
+     |> assign(:virus_total, virus_total)}
   end
 
   defp page_title(:show), do: "Show Sample"
