@@ -163,8 +163,8 @@ defmodule VxUndergroundWeb.SampleLive.Index do
     with(
       {:ok, presigned_url} <-
         ExAws.Config.new(:s3) |> ExAws.S3.presigned_url(:get, "vxug", "#{upload.client_name}"),
-      {:ok, id} <- VxUnderground.Services.Triage.upload(presigned_url),
-      {:ok, hashes} <- VxUnderground.Services.Triage.get_sample(id),
+      {:ok, triage_resp} <- VxUnderground.Services.Triage.upload(presigned_url),
+      {:ok, hashes} <- VxUnderground.Services.Triage.get_sample(triage_resp["id"]),
       {:ok, complete_params} <- build_complete_sample_params(hashes),
       {:ok, _sample} <- Samples.update_sample(sample, complete_params)
     ) do

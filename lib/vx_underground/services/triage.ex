@@ -41,7 +41,7 @@ defmodule VxUnderground.Services.Triage do
   def upload(url) do
     case post("/samples", %{kind: "fetch", url: url}) do
       {:ok, %Tesla.Env{body: body, status: 200}} ->
-        {:ok, body["id"]}
+        {:ok, body}
 
       _ ->
         {:error, :retries_failed}

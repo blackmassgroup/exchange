@@ -10,7 +10,7 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
     <div>
       <.header>
         <%= @title %>
-        <:subtitle>Use this form to manage sample records in your database.</:subtitle>
+        <:subtitle>Something new? Interesting...</:subtitle>
       </.header>
 
       <.simple_form

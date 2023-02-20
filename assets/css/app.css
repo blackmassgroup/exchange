@@ -18,4 +18,9 @@
   transform: translateY(0);
 }
 
+pre {
+  max-height: 400px;
+  overflow: scroll;
+  width: 100%;
+}
 /* This file is for your main application CSS */

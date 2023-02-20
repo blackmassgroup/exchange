@@ -32,7 +32,15 @@
   <:item title="Names"><%= @sample.names %></:item>
   <:item title="Tags"><%= @sample.tags %></:item>
   <:item title="Virus Total">
+    <a href="@virus_total.links.self" target="_blank" class="mb-5">
+      <.button>Visit on Virus Total</.button>
+    </a>
+    <br />
+    <br />
     <pre><%= Poison.encode!(@virus_total, pretty: true) %></pre>
+  </:item>
+  <:item title="Triage">
+    <pre><%= Poison.encode!(@triage, pretty: true) %></pre>
   </:item>
 </.list>
 
