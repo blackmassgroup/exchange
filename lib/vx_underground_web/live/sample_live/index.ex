@@ -147,8 +147,10 @@ defmodule VxUndergroundWeb.SampleLive.Index do
     {:noreply, push_patch(socket, to: path, replace: true)}
   end
 
-  def handle_info({:triage_report_complete, _}, socket) do
-    socket = assign_samples(socket) |> put_flash(:info, "Sample finished processing.")
+  def handle_info({:triage_report_complete, %{sample: sample}}, socket) do
+    socket =
+      assign_samples(socket)
+      |> put_flash(:info, "Sample #{sample.sha256}(sha256) finished processing.")
 
     {:noreply, socket}
   end
@@ -166,7 +168,7 @@ defmodule VxUndergroundWeb.SampleLive.Index do
       {:ok, triage_resp} <- VxUnderground.Services.Triage.upload(presigned_url),
       {:ok, _hashes} <- VxUnderground.Services.Triage.get_sample(triage_resp["id"])
     ) do
-      send(self(), {:triage_report_complete, %{}})
+      send(self(), {:triage_report_complete, %{sample: sample}})
     else
       _ ->
         :error
