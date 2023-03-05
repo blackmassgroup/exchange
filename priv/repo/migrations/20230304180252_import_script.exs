@@ -1,5 +1,5 @@
 defmodule VxUnderground.Repo.Migrations.ImportScript do
-  alias VxUnderground.Samples
+  # alias VxUnderground.Samples
   use Ecto.Migration
 
   NimbleCSV.define(MyParser, separator: ",", escape: "\"")
