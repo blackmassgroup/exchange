@@ -19,10 +19,6 @@ defmodule VxUndergroundWeb.SampleLive.Show do
           virus_total
 
         {:error, _} ->
-          # ExAws.S3.get_object("vx-ug", sample.s3_object_key)
-          # |> ExAws.request!()
-          # |> Map.get(:body)
-          # |> VirusTotalPost.submit_for_processing()
           "File doesn't exist on virus total yet."
       end
 

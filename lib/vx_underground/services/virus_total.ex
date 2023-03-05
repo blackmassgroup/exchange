@@ -18,15 +18,16 @@ defmodule VxUnderground.Services.VirusTotal do
   ]
 
   plug Tesla.Middleware.JSON
-  def get_sample(nil), do: nil
+  def get_sample(nil), do: {:error, :nil_sent}
 
   def get_sample(sha_256) do
     url = "/files/" <> sha_256
+
     case get(url) do
       {:ok, %Tesla.Env{body: body, status: 200}} ->
         {:ok, body["data"]}
 
-      _->
+      _ ->
         {:error, :retries_failed}
     end
   end

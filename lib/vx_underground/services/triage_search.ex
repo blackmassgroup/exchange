@@ -28,6 +28,8 @@ defmodule VxUnderground.Services.TriageSearch do
 
   plug Tesla.Middleware.JSON
 
+  def search(nil), do: {:error, :nil_sent}
+
   def search(sha256) do
     case get("/search?query=sha256:" <> sha256) do
       {:ok, result} -> {:ok, result.body}

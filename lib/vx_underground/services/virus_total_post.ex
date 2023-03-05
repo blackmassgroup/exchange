@@ -23,8 +23,8 @@ defmodule VxUnderground.Services.VirusTotalPost do
 
   def submit_for_processing(file) do
     mp =
-    Multipart.new()
-    |> Multipart.add_file(file, [name: "file", filename: "file"])
+      Multipart.new()
+      |> Multipart.add_file(file, name: "file", filename: "file")
 
     case post(@public_url <> "/files", mp) do
       {:ok, %Tesla.Env{body: body, status: 200}} ->
@@ -34,5 +34,4 @@ defmodule VxUnderground.Services.VirusTotalPost do
         {:error, :retries_failed}
     end
   end
-
 end
