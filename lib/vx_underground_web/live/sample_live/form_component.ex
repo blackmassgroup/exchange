@@ -176,7 +176,7 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
         Enum.map(socket.assigns.uploads.s3_object_key.entries, fn upload ->
           sample = Map.get(samples, upload.client_name)
 
-          send(self(), {:kickoff_triage_report, %{upload: upload, sample: sample}})
+          send(self(), {:kickoff_triage_report, %{sample: sample}})
         end)
 
         socket =
@@ -196,12 +196,62 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
   defp build_complete_sample_params(upload, _params) do
     type = if upload.client_type == "", do: "unknown", else: upload.client_type
 
-    %Sample{
-      type: type,
-      size: upload.client_size,
-      names: [upload.client_name],
-      s3_object_key: upload.client_name,
-      first_seen: DateTime.utc_now() |> DateTime.truncate(:second)
-    }
+    s3_object =
+      ExAws.S3.get_object("vxug", upload.client_name)
+      |> ExAws.request!()
+      |> Map.get(:body)
+
+    md5 =
+      :crypto.hash(:md5, s3_object)
+      |> Base.encode16()
+      |> String.downcase()
+
+    sha1 =
+      :crypto.hash(:sha, s3_object)
+      |> Base.encode16()
+      |> String.downcase()
+
+    sha256 =
+      :crypto.hash(:sha256, s3_object)
+      |> Base.encode16()
+      |> String.downcase()
+
+    sha512 =
+      :crypto.hash(:sha3_512, s3_object)
+      |> Base.encode16()
+      |> String.downcase()
+
+    case rename_uploaded_file(sha256, upload.client_name) do
+      {:ok, _} ->
+        %Sample{
+          md5: md5,
+          sha1: sha1,
+          sha256: sha256,
+          sha512: sha512,
+          type: type,
+          size: upload.client_size,
+          names: [upload.client_name],
+          s3_object_key: upload.client_name,
+          first_seen: DateTime.utc_now() |> DateTime.truncate(:second)
+        }
+
+      {:error, _} ->
+        {:error, :s3_rename_error}
+    end
+  end
+
+  defp rename_uploaded_file(sha256, original_file_name) do
+    bucket = "vxug"
+
+    with(
+      {:ok, _body} <-
+        ExAws.S3.put_object_copy(bucket, sha256, bucket, original_file_name) |> ExAws.request(),
+      {:ok, _body} <- ExAws.S3.delete_object(bucket, original_file_name) |> ExAws.request()
+    ) do
+      {:ok, :success}
+    else
+      _ ->
+        {:error, :s3_file_rename_failure}
+    end
   end
 end

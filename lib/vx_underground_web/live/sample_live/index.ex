@@ -153,36 +153,24 @@ defmodule VxUndergroundWeb.SampleLive.Index do
     {:noreply, socket}
   end
 
-  def handle_info({:kickoff_triage_report, %{upload: upload, sample: sample}}, socket) do
-    kickoff_triage_report(upload, sample)
+  def handle_info({:kickoff_triage_report, %{sample: sample}}, socket) do
+    kickoff_triage_report(sample)
 
     {:noreply, socket}
   end
 
-  defp kickoff_triage_report(upload, sample) do
+  defp kickoff_triage_report(sample) do
     with(
       {:ok, presigned_url} <-
-        ExAws.Config.new(:s3) |> ExAws.S3.presigned_url(:get, "vxug", "#{upload.client_name}"),
+        ExAws.Config.new(:s3) |> ExAws.S3.presigned_url(:get, "vxug", "#{sample.sha256}"),
       {:ok, triage_resp} <- VxUnderground.Services.Triage.upload(presigned_url),
-      {:ok, hashes} <- VxUnderground.Services.Triage.get_sample(triage_resp["id"]),
-      {:ok, complete_params} <- build_complete_sample_params(hashes),
-      {:ok, _sample} <- Samples.update_sample(sample, complete_params)
+      {:ok, _hashes} <- VxUnderground.Services.Triage.get_sample(triage_resp["id"])
     ) do
       send(self(), {:triage_report_complete, %{}})
     else
       _ ->
         :error
     end
-  end
-
-  defp build_complete_sample_params(hashes) do
-    {:ok,
-     %{
-       "md5" => hashes["md5"],
-       "sha1" => hashes["sha1"],
-       "sha256" => hashes["sha256"],
-       "sha512" => hashes["sha512"]
-     }}
   end
 
   def truncate_hash(nil), do: ""

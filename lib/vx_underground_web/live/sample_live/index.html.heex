@@ -35,8 +35,8 @@
   <:col :let={sample} label="First seen"><%= sample.first_seen %></:col>
   <:col :let={sample} label="Download">
     <.link
-      href={generate_url_for_file(sample.s3_object_key)}
-      download={generate_url_for_file(sample.s3_object_key)}
+      href={generate_url_for_file(sample.sha256)}
+      download={generate_url_for_file(sample.sha256)}
       target="_blank"
     >
       <.button>Download File</.button>
