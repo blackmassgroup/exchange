@@ -7,6 +7,8 @@ defmodule VxUnderground.Application do
 
   @impl true
   def start(_type, _args) do
+    topologies = Application.get_env(:libcluster, :topologies) || []
+
     children = [
       # Start the Telemetry supervisor
       VxUndergroundWeb.Telemetry,
@@ -17,9 +19,10 @@ defmodule VxUnderground.Application do
       # Start Finch
       {Finch, name: VxUnderground.Finch},
       # Start the Endpoint (http/https)
-      VxUndergroundWeb.Endpoint
+      VxUndergroundWeb.Endpoint,
       # Start a worker by calling: VxUnderground.Worker.start_link(arg)
       # {VxUnderground.Worker, arg}
+      {Cluster.Supervisor, [topologies, [name: VxUnderground.ClusterSupervisor]]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

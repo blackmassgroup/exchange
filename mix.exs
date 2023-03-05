@@ -60,7 +60,8 @@ defmodule VxUnderground.MixProject do
       {:sweet_xml, "~> 0.6.6"},
       {:tesla, "~> 1.4"},
       {:number, "~> 1.0.1"},
-      {:nimble_csv, "~> 1.1"}
+      {:nimble_csv, "~> 1.1"},
+      {:libcluster, "~> 3.3"}
     ]
   end
 
