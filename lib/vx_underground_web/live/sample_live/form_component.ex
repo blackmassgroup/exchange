@@ -195,11 +195,7 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
 
   defp build_complete_sample_params(upload, _params) do
     type = if upload.client_type == "", do: "unknown", else: upload.client_type
-
-    s3_object =
-      ExAws.S3.get_object("vxug", upload.client_name)
-      |> ExAws.request!()
-      |> Map.get(:body)
+    s3_object = get_s3_object({:error, :starting}, upload.client_name)
 
     md5 =
       :crypto.hash(:md5, s3_object)
@@ -238,6 +234,16 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
       {:error, _} ->
         {:error, :s3_rename_error}
     end
+  end
+
+  defp get_s3_object({:error, _}, client_name) do
+    ExAws.S3.get_object("vxug", client_name)
+    |> ExAws.request()
+    |> get_s3_object(client_name)
+  end
+
+  defp get_s3_object({:ok, response}, _client_name) do
+    Map.get(response, :body)
   end
 
   defp rename_uploaded_file(sha256, original_file_name) do
