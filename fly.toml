@@ -12,6 +12,7 @@ processes = []
   PHX_HOST = "vx.fly.dev"
   PORT = "8080"
   PRIMARY_REGION = "lhr"
+  RELEASE_COOKIE="iHw000MHvKwjeH3tl6LSOOcbe8asKzaxYBav0BJ8QoFIP3AqJUoceA=="
 
 [experimental]
   auto_rollback = true
