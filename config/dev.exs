@@ -1,7 +1,7 @@
 import Config
 
 # Configure your database
-config :vx_underground, VxUnderground.Repo,
+config :vx_underground, VxUnderground.Repo.Local,
   username: "postgres",
   password: "postgres",
   hostname: "localhost",

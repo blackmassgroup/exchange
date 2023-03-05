@@ -61,7 +61,8 @@ defmodule VxUnderground.MixProject do
       {:tesla, "~> 1.4"},
       {:number, "~> 1.0.1"},
       {:nimble_csv, "~> 1.1"},
-      {:libcluster, "~> 3.3"}
+      {:libcluster, "~> 3.3"},
+      {:fly_postgres, "~> 0.3.0"}
     ]
   end
 

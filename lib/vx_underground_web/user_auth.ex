@@ -91,7 +91,7 @@ defmodule VxUndergroundWeb.UserAuth do
   def fetch_current_user(conn, _opts) do
     {user_token, conn} = ensure_user_token(conn)
     user = user_token && Accounts.get_user_by_session_token(user_token)
-    assign(conn, :current_user, VxUnderground.Repo.preload(user, :role))
+    assign(conn, :current_user, VxUnderground.Repo.Local.preload(user, :role))
   end
 
   defp ensure_user_token(conn) do
@@ -177,7 +177,7 @@ defmodule VxUndergroundWeb.UserAuth do
       %{"user_token" => user_token} ->
         Phoenix.Component.assign_new(socket, :current_user, fn ->
           Accounts.get_user_by_session_token(user_token)
-          |> VxUnderground.Repo.preload(:role)
+          |> VxUnderground.Repo.Local.preload(:role)
         end)
 
       %{} ->

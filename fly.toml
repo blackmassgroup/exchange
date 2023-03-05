@@ -11,6 +11,7 @@ processes = []
 [env]
   PHX_HOST = "vx.fly.dev"
   PORT = "8080"
+  PRIMARY_REGION = "lhr"
 
 [experimental]
   auto_rollback = true

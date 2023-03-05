@@ -170,7 +170,7 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
       build_complete_sample_params(upload, params)
       |> then(&(acc |> Ecto.Multi.insert(upload.client_name, &1)))
     end)
-    |> VxUnderground.Repo.transaction()
+    |> VxUnderground.Repo.Local.transaction()
     |> case do
       {:ok, samples} ->
         Enum.map(socket.assigns.uploads.s3_object_key.entries, fn upload ->

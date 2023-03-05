@@ -13,7 +13,7 @@ defmodule VxUndergroundWeb.AccountLive.User.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:user, Accounts.get_user!(id) |> VxUnderground.Repo.preload(:role))
+     |> assign(:user, Accounts.get_user!(id) |> VxUnderground.Repo.Local.preload(:role))
      |> assign(:roles, Accounts.list_roles() |> Enum.map(&[value: &1.id, key: &1.name]))}
   end
 

@@ -12,8 +12,12 @@ defmodule VxUnderground.Application do
     children = [
       # Start the Telemetry supervisor
       VxUndergroundWeb.Telemetry,
+      # Start the RPC server
+      {Fly.RPC, []},
       # Start the Ecto repository
-      VxUnderground.Repo,
+      VxUnderground.Repo.Local,
+      # Start the supervisor for LSN tracking
+      {Fly.Postgres.LSN.Supervisor, repo: VxUnderground.Repo.Local},
       # Start the PubSub system
       {Phoenix.PubSub, name: VxUnderground.PubSub},
       # Start Finch

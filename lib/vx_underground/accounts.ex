@@ -4,7 +4,7 @@ defmodule VxUnderground.Accounts do
   """
 
   import Ecto.Query, warn: false
-  alias VxUnderground.Repo
+  alias VxUnderground.Repo.Local, as: Repo
 
   alias VxUnderground.Accounts.{User, UserToken, UserNotifier}
 

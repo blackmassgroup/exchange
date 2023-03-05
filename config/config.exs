@@ -8,7 +8,9 @@
 import Config
 
 config :vx_underground,
-  ecto_repos: [VxUnderground.Repo]
+  ecto_repos: [VxUnderground.Repo.Local]
+
+config :vx_underground, VxUnderground.Repo.Local, priv: "priv/repo"
 
 # Configures the endpoint
 config :vx_underground, VxUndergroundWeb.Endpoint,

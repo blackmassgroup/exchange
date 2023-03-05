@@ -5,7 +5,7 @@ defmodule VxUndergroundWeb.UserForgotPasswordLiveTest do
   import VxUnderground.AccountsFixtures
 
   alias VxUnderground.Accounts
-  alias VxUnderground.Repo
+  alias VxUnderground.Repo.Local, as: Repo
 
   describe "Forgot password page" do
     test "renders email page", %{conn: conn} do

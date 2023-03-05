@@ -83,7 +83,7 @@ defmodule VxUnderground.Accounts.User do
   defp maybe_validate_unique_email(changeset, opts) do
     if Keyword.get(opts, :validate_email, true) do
       changeset
-      |> unsafe_validate_unique(:email, VxUnderground.Repo)
+      |> unsafe_validate_unique(:email, VxUnderground.Repo.Local)
       |> unique_constraint(:email)
     else
       changeset

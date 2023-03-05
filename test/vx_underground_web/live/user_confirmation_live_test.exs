@@ -5,7 +5,7 @@ defmodule VxUndergroundWeb.UserConfirmationLiveTest do
   import VxUnderground.AccountsFixtures
 
   alias VxUnderground.Accounts
-  alias VxUnderground.Repo
+  alias VxUnderground.Repo.Local, as: Repo
 
   setup do
     %{user: user_fixture()}

@@ -18,7 +18,7 @@ defmodule VxUnderground.DataCase do
 
   using do
     quote do
-      alias VxUnderground.Repo
+      alias VxUnderground.Repo.Local, as: Repo
 
       import Ecto
       import Ecto.Changeset
@@ -36,7 +36,9 @@ defmodule VxUnderground.DataCase do
   Sets up the sandbox based on the test tags.
   """
   def setup_sandbox(tags) do
-    pid = Ecto.Adapters.SQL.Sandbox.start_owner!(VxUnderground.Repo, shared: not tags[:async])
+    pid =
+      Ecto.Adapters.SQL.Sandbox.start_owner!(VxUnderground.Repo.Local, shared: not tags[:async])
+
     on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
   end
 

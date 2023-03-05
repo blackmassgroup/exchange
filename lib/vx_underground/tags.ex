@@ -4,7 +4,7 @@ defmodule VxUnderground.Tags do
   """
 
   import Ecto.Query, warn: false
-  alias VxUnderground.Repo
+  alias VxUnderground.Repo.Local, as: Repo
 
   alias VxUnderground.Tags.Tag
 
