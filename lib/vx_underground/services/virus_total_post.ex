@@ -1,4 +1,4 @@
-defmodule VxUnderground.Services.VirusTotal do
+defmodule VxUnderground.Services.VirusTotalPost do
   @moduledoc """
   Module for interacting with the Virus Total API
 
@@ -6,6 +6,7 @@ defmodule VxUnderground.Services.VirusTotal do
 
   --- WIP ---
   """
+  alias Tesla.Multipart
   use Tesla
 
   @public_url "https://www.virustotal.com/api/v3"
@@ -13,21 +14,25 @@ defmodule VxUnderground.Services.VirusTotal do
   plug Tesla.Middleware.BaseUrl, @public_url
 
   plug Tesla.Middleware.Headers, [
-    {"Content-Type", "application/json"},
+    {"accept", "application/json"},
+    {"content-type", "multipart/form-data"},
     {"x-apikey", "#{System.get_env("VIRUS_TOTAL_API_KEY")}"}
   ]
 
   plug Tesla.Middleware.JSON
-  def get_sample(nil), do: nil
 
-  def get_sample(sha_256) do
-    url = "/files/" <> sha_256
-    case get(url) do
+  def submit_for_processing(file) do
+    mp =
+    Multipart.new()
+    |> Multipart.add_file(file, [name: "file", filename: "file"])
+
+    case post(@public_url <> "/files", mp) do
       {:ok, %Tesla.Env{body: body, status: 200}} ->
         {:ok, body["data"]}
 
-      _->
+      _ ->
         {:error, :retries_failed}
     end
   end
+
 end

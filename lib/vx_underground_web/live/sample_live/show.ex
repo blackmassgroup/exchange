@@ -1,7 +1,7 @@
 defmodule VxUndergroundWeb.SampleLive.Show do
   use VxUndergroundWeb, :live_view
 
-  alias VxUnderground.Services.{Triage, TriageSearch, VirusTotal}
+  alias VxUnderground.Services.{TriageSearch, VirusTotal}
   alias VxUnderground.{Samples, Tags}
 
   @impl true
@@ -15,8 +15,15 @@ defmodule VxUndergroundWeb.SampleLive.Show do
 
     virus_total =
       case VirusTotal.get_sample(sample.sha256) do
-        {:ok, virus_total} -> virus_total
-        {:error, _} -> "File doesn't exist on Virus Total yet."
+        {:ok, virus_total} ->
+          virus_total
+
+        {:error, _} ->
+          # ExAws.S3.get_object("vx-ug", sample.s3_object_key)
+          # |> ExAws.request!()
+          # |> Map.get(:body)
+          # |> VirusTotalPost.submit_for_processing()
+          "File doesn't exist on virus total yet."
       end
 
     triage =
@@ -24,9 +31,8 @@ defmodule VxUndergroundWeb.SampleLive.Show do
         {:ok, %{"data" => data}} ->
           data
 
-
         {:error, _} ->
-          "Error"
+          "Could not process file with Triage. Please try again later."
       end
 
     {:noreply,
