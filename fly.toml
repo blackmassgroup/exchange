@@ -1,44 +1,40 @@
-# fly.toml file generated for vx on 2023-02-06T21:10:36-05:00
-
-app = "vx"
+# fly.toml file generated for vxu on 2023-03-05T18:54:06-05:00
+app = "vxu"
 kill_signal = "SIGTERM"
 kill_timeout = 5
-processes = []
+
+[experimental]
+  auto_rollback = true
 
 [deploy]
   release_command = "/app/bin/migrate"
 
 [env]
-  PHX_HOST = "vx.fly.dev"
+  PHX_HOST = "vxu.fly.dev"
   PORT = "8080"
   PRIMARY_REGION = "lhr"
   RELEASE_COOKIE="iHw000MHvKwjeH3tl6LSOOcbe8asKzaxYBav0BJ8QoFIP3AqJUoceA=="
 
-[experimental]
-  auto_rollback = true
-
 [[services]]
-  http_checks = []
+  protocol = "tcp"
   internal_port = 8080
   processes = ["app"]
-  protocol = "tcp"
-  script_checks = []
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
   [services.concurrency]
+    type = "connections"
     hard_limit = 1000
     soft_limit = 1000
-    type = "connections"
-
-  [[services.ports]]
-    force_https = true
-    handlers = ["http"]
-    port = 80
-
-  [[services.ports]]
-    handlers = ["tls", "http"]
-    port = 443
 
   [[services.tcp_checks]]
-    grace_period = "1s"
     interval = "15s"
-    restart_limit = 0
     timeout = "2s"
+    grace_period = "1s"
+    restart_limit = 0
