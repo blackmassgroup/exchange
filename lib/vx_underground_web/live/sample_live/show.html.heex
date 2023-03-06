@@ -14,14 +14,10 @@
 <.list>
   <:item title="Hashes">
     <p class="font-thin">
-      <%= if @sample.md5 do %>
-        <strong>MD5:</strong> <%= @sample.md5 %> <br /> <strong>SHA1:</strong> <%= @sample.sha1 %>
-        <br />
-        <strong>SHA256:</strong> <%= @sample.sha256 %>
-        <br /> <strong>SHA512:</strong> <%= @sample.sha512 %>
-      <% else %>
-        Processing...
-      <% end %>
+      <strong>MD5:</strong> <%= @sample.md5 %> <br /> <strong>SHA1:</strong> <%= @sample.sha1 %>
+      <br />
+      <strong>SHA256:</strong> <%= @sample.sha256 %>
+      <br /> <strong>SHA512:</strong> <%= @sample.sha512 %>
     </p>
   </:item>
   <:item title="Size">
@@ -33,11 +29,17 @@
   <:item title="Tags"><%= @sample.tags %></:item>
   <:item title="Virus Total">
     <a href="@virus_total.links.self" target="_blank" class="mb-5">
-      <.button>Visit on Virus Total</.button>
+      <.button :if={@virus_total != "File doesn't exist on virus total yet."}>
+        Visit on Virus Total
+      </.button>
     </a>
     <br />
     <br />
-    <pre><%= Poison.encode!(@virus_total, pretty: true) %></pre>
+    <%= if @virus_total != "File doesn't exist on virus total yet." do %>
+      <pre><%= Poison.encode!(@virus_total, pretty: true) %></pre>
+    <% else %>
+      <p>File doesn't exist on virus total yet.</p>
+    <% end %>
   </:item>
   <:item title="Triage">
     <pre><%= Poison.encode!(@triage, pretty: true) %></pre>
