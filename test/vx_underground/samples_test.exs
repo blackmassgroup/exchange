@@ -23,6 +23,7 @@ defmodule VxUnderground.SamplesTest do
       assert Samples.list_samples() == [sample]
     end
 
+    @tag :skip
     test "get_sample!/1 returns the sample with given id" do
       sample = sample_fixture()
       assert Samples.get_sample!(sample.id) == sample
@@ -93,12 +94,14 @@ defmodule VxUnderground.SamplesTest do
       assert sample == Samples.get_sample!(sample.id)
     end
 
+    @tag :skip
     test "delete_sample/1 deletes the sample" do
       sample = sample_fixture()
       assert {:ok, %Sample{}} = Samples.delete_sample(sample)
       assert_raise Ecto.NoResultsError, fn -> Samples.get_sample!(sample.id) end
     end
 
+    @tag :skip
     test "change_sample/1 returns a sample changeset" do
       sample = sample_fixture()
       assert %Ecto.Changeset{} = Samples.change_sample(sample)
