@@ -28,7 +28,7 @@ defmodule VxUnderground.Services.VirusTotal do
         {:ok, body["data"]}
 
       _ ->
-        {:error, :retries_failed}
+        {:error, :does_not_exist}
     end
   end
 end

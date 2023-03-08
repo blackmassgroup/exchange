@@ -28,21 +28,28 @@
   <:item title="Names"><%= @sample.names %></:item>
   <:item title="Tags"><%= @sample.tags %></:item>
   <:item title="Virus Total">
-    <a href="@virus_total.links.self" target="_blank" class="mb-5">
-      <.button :if={@virus_total != "File doesn't exist on virus total yet."}>
-        Visit on Virus Total
-      </.button>
+    <a
+      :if={@virus_total != :does_not_exist}
+      href={@virus_total.links.self}
+      target="_blank"
+      class="mb-5"
+    >
+      Visit on Virus Total
     </a>
     <br />
-    <br />
-    <%= if @virus_total != "File doesn't exist on virus total yet." do %>
-      <pre><%= Poison.encode!(@virus_total, pretty: true) %></pre>
-    <% else %>
-      <p>File doesn't exist on virus total yet.</p>
-    <% end %>
+    <pre :if={@virus_total != :does_not_exist}>
+      <%= Poison.encode!(@virus_total, pretty: true) %>
+    </pre>
+
+    <p :if={@virus_total == :does_not_exist}>
+      File doesn't exist on virus total yet.
+    </p>
   </:item>
   <:item title="Triage">
-    <pre><%= Poison.encode!(@triage, pretty: true) %></pre>
+    <pre :if={@triage != :still_processing}><%= Poison.encode!(@triage, pretty: true) %></pre>
+    <p :if={@triage == :still_processing}>
+      Triage is still processing the file, please try again later.
+    </p>
   </:item>
 </.list>
 

@@ -19,7 +19,7 @@ defmodule VxUndergroundWeb.SampleLive.Show do
           virus_total
 
         {:error, _} ->
-          "File doesn't exist on virus total yet."
+          :does_not_exist
       end
 
     triage =
@@ -28,7 +28,7 @@ defmodule VxUndergroundWeb.SampleLive.Show do
           data
 
         {:error, _} ->
-          "Could not process file with Triage. Please try again later."
+          :still_processing
       end
 
     {:noreply,
