@@ -1,6 +1,7 @@
 defmodule VxUndergroundWeb.SampleLive.Index do
   use VxUndergroundWeb, :live_view
 
+  alias VxUndergroundWeb.SampleChannel
   alias VxUnderground.Tags
   alias VxUnderground.Samples
   alias VxUnderground.Samples.Sample
@@ -12,6 +13,8 @@ defmodule VxUndergroundWeb.SampleLive.Index do
   @impl true
   def mount(_params, _session, socket) do
     count = Samples.infinity_scroll_query_aggregate(nil)
+
+    SampleChannel.join("sample:lobby", %{}, socket)
 
     {:ok,
      assign(socket,
@@ -166,24 +169,12 @@ defmodule VxUndergroundWeb.SampleLive.Index do
     {:noreply, socket}
   end
 
-  def handle_info({:kickoff_triage_report, %{sample: sample}}, socket) do
-    kickoff_triage_report(sample)
+  def handle_info({:triage_processing_complete, %{sample: sample}}, socket) do
+    %{sample: sample}
+    |> VxUnderground.ObanJobs.TriageUpload.new()
+    |> Oban.insert()
 
     {:noreply, socket}
-  end
-
-  defp kickoff_triage_report(sample) do
-    with(
-      {:ok, presigned_url} <-
-        ExAws.Config.new(:s3) |> ExAws.S3.presigned_url(:get, "vxug", "#{sample.sha256}"),
-      {:ok, triage_resp} <- VxUnderground.Services.Triage.upload(presigned_url),
-      {:ok, _hashes} <- VxUnderground.Services.Triage.get_sample(triage_resp["id"])
-    ) do
-      send(self(), {:triage_report_complete, %{sample: sample}})
-    else
-      _ ->
-        :error
-    end
   end
 
   def get_shown_number(size, :KB), do: size

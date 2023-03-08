@@ -28,6 +28,10 @@ defmodule VxUndergroundWeb.SampleLive.Show do
           data
 
         {:error, _} ->
+          %{sample: sample}
+          |> VxUnderground.ObanJobs.TriageUpload.new()
+          |> Oban.insert()
+
           :still_processing
       end
 

@@ -46,8 +46,8 @@
     </p>
   </:item>
   <:item title="Triage">
-    <pre :if={@triage != :still_processing}><%= Poison.encode!(@triage, pretty: true) %></pre>
-    <p :if={@triage == :still_processing}>
+    <pre :if={@triage not in [:still_processing, []]}><%= Poison.encode!(@triage, pretty: true) %></pre>
+    <p :if={@triage in [:still_processing, []]}>
       Triage is still processing the file, please try again later.
     </p>
   </:item>

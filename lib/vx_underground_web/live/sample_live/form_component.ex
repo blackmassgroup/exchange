@@ -176,7 +176,9 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
         Enum.map(socket.assigns.uploads.s3_object_key.entries, fn upload ->
           sample = Map.get(samples, upload.client_name)
 
-          send(self(), {:kickoff_triage_report, %{sample: sample}})
+          %{sample: sample}
+          |> VxUnderground.ObanJobs.TriageUpload.new()
+          |> Oban.insert()
         end)
 
         socket =
