@@ -15,6 +15,7 @@
   sorting={@sorting}
   phx_update={@phx_update}
   filter={@filter}
+  size={@size}
 >
   <:col :let={sample} label="Hashes">
     <p class="font-thin">
@@ -29,7 +30,7 @@
     </p>
   </:col>
   <:col :let={sample} label="Size">
-    <%= Number.Delimit.number_to_delimited(sample.size, precision: 0) %> KB
+    <%= get_shown_number(sample.size, @size) |> Number.Delimit.number_to_delimited(precision: 0) %> <%= @size %>
   </:col>
   <:col :let={sample} label="Type"><%= sample.type %></:col>
   <:col :let={sample} label="First seen"><%= sample.first_seen %></:col>

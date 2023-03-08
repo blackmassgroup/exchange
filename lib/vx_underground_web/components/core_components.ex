@@ -150,7 +150,7 @@ defmodule VxUndergroundWeb.CoreComponents do
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
       class={[
-        "fixed hidden top-2 right-2 w-80 sm:w-96 z-50 rounded-lg p-3 shadow-md shadow-zinc-900/5 ring-1",
+        "fixed hidden top-2 right-2 w-80 sm:w-fit z-50 rounded-lg p-3 shadow-md shadow-zinc-900/5 ring-1",
         @kind == :info && "bg-emerald-50 text-emerald-800 ring-emerald-500 fill-cyan-900",
         @kind == :error && "bg-rose-50 p-3 text-rose-900 shadow-md ring-rose-500 fill-rose-900"
       ]}
@@ -487,6 +487,7 @@ defmodule VxUndergroundWeb.CoreComponents do
   attr :sorting, :map
   attr :filter, :map
   attr :phx_update, :atom
+  attr :size, :atom
 
   slot :col, required: true do
     attr :label, :string || nil
@@ -501,29 +502,42 @@ defmodule VxUndergroundWeb.CoreComponents do
         <thead class="text-left text-[0.8125rem] leading-6 text-zinc-500">
           <tr>
             <%= for col <- @col do %>
-              <%= if col[:label] in ["Download", ""] do %>
-                <th class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></th>
-              <% else %>
-                <%= if col[:label] == "Hashes" do %>
-                  <th class="p-0 pb-4 pr-6 font-normal">
-                    <%= col[:label] %>
-                    <.live_component
-                      module={VxUndergroundWeb.SampleLive.FilterComponent}
-                      id="filter"
-                      filter={@filter}
+              <th :if={col[:label] in ["Download", ""]} class="p-0 pb-4 pr-6 font-normal">
+                <%= col[:label] %>
+              </th>
+
+              <th :if={col[:label] == "Hashes"} class="p-0 pb-4 pr-6 font-normal">
+                <%= col[:label] %>
+                <.live_component
+                  module={VxUndergroundWeb.SampleLive.FilterComponent}
+                  id="filter"
+                  filter={@filter}
+                />
+              </th>
+
+              <th
+                :if={col[:label] not in ["Download", "", "Hashes"]}
+                class="p-0 pb-4 pr-6 font-normal"
+              >
+                <div :if={col[:label] == "Size"}>
+                  <.form for={%{}} phx-change="size-change" class="float-right w-28">
+                    <.input
+                      type="select"
+                      options={[KB: "KB", MB: "MB", GB: "GB"]}
+                      name="size"
+                      id="size-change"
+                      value={@size}
+                      errors={[]}
                     />
-                  </th>
-                <% else %>
-                  <th class="p-0 pb-4 pr-6 font-normal">
-                    <.live_component
-                      module={VxUndergroundWeb.SampleLive.SortingComponent}
-                      id={"th-#{col[:label]}"}
-                      key={col[:label]}
-                      sorting={@sorting}
-                    />
-                  </th>
-                <% end %>
-              <% end %>
+                  </.form>
+                </div>
+                <.live_component
+                  module={VxUndergroundWeb.SampleLive.SortingComponent}
+                  id={"th-#{col[:label]}"}
+                  key={col[:label]}
+                  sorting={@sorting}
+                />
+              </th>
             <% end %>
             <th class="relative p-0 pb-4"><span class="sr-only"><%= gettext("Actions") %></span></th>
           </tr>

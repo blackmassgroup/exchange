@@ -13,7 +13,14 @@ defmodule VxUndergroundWeb.SampleLive.Index do
   def mount(_params, _session, socket) do
     count = Samples.infinity_scroll_query_aggregate(nil)
 
-    {:ok, assign(socket, offset: 0, limit: @starting_limit, count: count, phx_update: :append)}
+    {:ok,
+     assign(socket,
+       offset: 0,
+       limit: @starting_limit,
+       count: count,
+       phx_update: :append,
+       size: :KB
+     )}
   end
 
   @impl true
@@ -96,6 +103,10 @@ defmodule VxUndergroundWeb.SampleLive.Index do
     {:noreply, socket}
   end
 
+  def handle_event("size-change", params, socket) do
+    {:noreply, assign(socket, :size, String.to_atom(params["size"]))}
+  end
+
   defp merge_and_sanitize_params(socket, overrides \\ %{}) do
     %{sorting: sorting, filter: filter} = socket.assigns
 
@@ -174,6 +185,12 @@ defmodule VxUndergroundWeb.SampleLive.Index do
         :error
     end
   end
+
+  def get_shown_number(size, :KB), do: size
+
+  def get_shown_number(size, :MB), do: div(size, 1024)
+
+  def get_shown_number(size, :GB), do: div(size, 1024) |> div(1024)
 
   def truncate_hash(nil), do: ""
 
