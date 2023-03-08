@@ -7,6 +7,11 @@
 # General application configuration
 import Config
 
+config :vx_underground, Oban,
+  repo: VxUnderground.Repo.Local,
+  plugins: [Oban.Plugins.Pruner],
+  queues: [default: 10]
+
 config :vx_underground,
   ecto_repos: [VxUnderground.Repo.Local]
 
