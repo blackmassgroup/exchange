@@ -221,7 +221,7 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
 
     case rename_uploaded_file(sha256, upload.client_name) do
       {:ok, _} ->
-        %Sample{
+        attrs = %{
           md5: md5,
           sha1: sha1,
           sha256: sha256,
@@ -232,6 +232,9 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
           s3_object_key: upload.client_name,
           first_seen: DateTime.utc_now() |> DateTime.truncate(:second)
         }
+
+        %Sample{}
+        |> Sample.changeset(attrs)
 
       {:error, _} ->
         {:error, :s3_rename_error}

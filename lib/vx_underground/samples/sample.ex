@@ -39,7 +39,10 @@ defmodule VxUnderground.Samples.Sample do
     |> validate_length(:sha1, is: 40)
     |> validate_length(:sha256, is: 64)
     |> validate_length(:sha512, is: 128)
-
-    # |> validate_required(@required)
+    |> unique_constraint(:md5)
+    |> unique_constraint(:sha1, name: :samples_sha1_index)
+    |> unique_constraint(:sha256)
+    |> unique_constraint(:sha512)
+    |> validate_required(@required)
   end
 end
