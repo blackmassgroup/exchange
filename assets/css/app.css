@@ -24,3 +24,16 @@ pre {
   width: 100%;
 }
 /* This file is for your main application CSS */
+
+.highlight-animation {
+  animation: highlight 5s ease-in-out;
+}
+
+@keyframes highlight {
+  0%, 100% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: yellow;
+  }
+}

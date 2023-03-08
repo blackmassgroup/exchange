@@ -552,6 +552,7 @@ defmodule VxUndergroundWeb.CoreComponents do
             :for={row <- @rows}
             id={"#{@id}-#{Phoenix.Param.to_param(row)}"}
             class="group hover:bg-zinc-50"
+            phx-mounted={JS.transition("highlight-animation", time: 5000)}
           >
             <td
               :for={{col, i} <- Enum.with_index(@col)}

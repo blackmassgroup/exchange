@@ -183,15 +183,21 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
 
         socket =
           socket
-          |> put_flash(:info, "Samples created successfully")
+          |> put_flash(:info, "Sample(s) created successfully, Triage processing has started.")
           |> push_patch(to: ~p(/samples))
 
         {:noreply, socket}
 
-      {:error, _failed_operation, _failed_value, _changes_so_far} ->
-        message = "There was a problem with one or more of your uploads, please try again."
+      {:error, failed_operation, failed_value, _changes_so_far} ->
+        errors =
+          Enum.map(failed_value.errors, fn {field, {msg, _}} ->
+            "#{failed_operation} #{field} #{msg}"
+          end)
+          |> Enum.join(". ")
 
-        {:noreply, put_flash(socket, :error, message)}
+        message = "There was a problem with one or more of your uploads. #{errors}"
+
+        {:noreply, put_flash(socket, :error, message) |> push_patch(to: ~p(/samples))}
     end
   end
 

@@ -14,7 +14,9 @@ defmodule VxUnderground.Samples.Sample do
     :sha512
   ]
 
-  # @required [:first_seen, :size, :type, :names]
+  @required [:first_seen, :size, :type, :names]
+
+  @derive {Jason.Encoder, only: @allowed}
 
   schema "samples" do
     field :first_seen, :utc_datetime
