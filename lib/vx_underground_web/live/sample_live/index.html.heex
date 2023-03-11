@@ -1,8 +1,8 @@
 <.header>
-  Malware Samples
+  <span class="dark:text-slate-200">Malware Samples</span>
   <:actions>
     <.link patch={~p"/samples/new"}>
-      <.button>New Sample</.button>
+      <.button class="dark:bg-zinc-700 dark:hover:bg-zinc-800">New Sample</.button>
     </.link>
   </:actions>
 </.header>
@@ -39,6 +39,7 @@
       href={generate_url_for_file(sample.sha256)}
       download={generate_url_for_file(sample.sha256)}
       target="_blank"
+      class="dark:bg-zinc-700 dark:border-zinc-800"
     >
       <.button>Download File</.button>
     </.link>
@@ -78,5 +79,5 @@
 </.modal>
 
 <button id="infinity-scroll-scroll-to-top" class="scroll-to-top-btn" phx-hook="ScrollToTop">
-  <Heroicons.arrow_up_circle mini class="h-6 w-6" />
+  <Heroicons.arrow_up_circle mini class="h-6 w-6 dark:text-slate-50" />
 </button>

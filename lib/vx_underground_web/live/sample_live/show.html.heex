@@ -1,6 +1,8 @@
 <.header>
-  Sample <%= @sample.md5 %>
-  <:subtitle>This is a malware sample found in the wild.</:subtitle>
+  <span class="dark:text-zinc-200">Sample <%= @sample.md5 %></span>
+  <:subtitle>
+    <span class="dark:text-zinc-300">This is a malware sample found in the wild.</span>
+  </:subtitle>
 
   <:actions>
     <%= if @current_user.role.name == "Admin" do %>
@@ -13,7 +15,7 @@
 
 <.list>
   <:item title="Hashes">
-    <p class="font-thin">
+    <p class="font-thin dark:text-slate-200">
       <strong>MD5:</strong> <%= @sample.md5 %> <br /> <strong>SHA1:</strong> <%= @sample.sha1 %>
       <br />
       <strong>SHA256:</strong> <%= @sample.sha256 %>

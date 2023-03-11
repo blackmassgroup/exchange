@@ -9,8 +9,8 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
     ~H"""
     <div>
       <.header>
-        <%= @title %>
-        <:subtitle>Something new? Interesting...</:subtitle>
+        <span class="dark:text-slate-200"><%= @title %></span>
+        <:subtitle><span class="dark:text-slate-300"> Something new? Interesting...</span></:subtitle>
       </.header>
 
       <.simple_form
@@ -32,7 +32,7 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
         >
           <label
             for="dropzone-file"
-            class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-slate-50"
+            class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-slate-50 dark:bg-zinc-800 dark:border-zinc-600 dark:text-slate-200"
           >
             <div class="flex flex-col items-center justify-center pt-5 pb-6">
               <svg

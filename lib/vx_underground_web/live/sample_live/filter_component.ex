@@ -19,7 +19,7 @@ defmodule VxUndergroundWeb.SampleLive.FilterComponent do
             <div class="relative z-0 mb-3 group">
               <%= for filter <- @changeset.data |> Map.keys() do %>
                 <.focus_wrap id="focus-wrap">
-                  <.input field={{f, filter}} label={} />
+                  <.input field={{f, filter}} label={} class="dark:bg-zinc-600" />
                 </.focus_wrap>
               <% end %>
             </div>

@@ -5,7 +5,7 @@ defmodule VxUndergroundWeb.UserSettingsLive do
 
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-prose bg-slate-50 p-6 mb-5">
+    <div class="mx-auto max-w-prose bg-slate-50 p-6 mb-5 dark:bg-zinc-800 dark:bg-zinc-800  dark:text-slate-200">
       <.header>
         <strong>User Role:</strong> <%= if @current_user.role != nil,
           do: @current_user.role.name,
@@ -18,7 +18,7 @@ defmodule VxUndergroundWeb.UserSettingsLive do
         do: Jason.encode!(@current_user.custom_permissions),
         else: "No custom permissions." %>
     </div>
-    <div class="mx-auto max-w-prose bg-slate-50 p-6 mb-5">
+    <div class="mx-auto max-w-prose bg-slate-50 p-6 mb-5  dark:bg-zinc-800">
       <.header>Change Email</.header>
 
       <.simple_form
@@ -49,7 +49,7 @@ defmodule VxUndergroundWeb.UserSettingsLive do
       </.simple_form>
     </div>
 
-    <div class="mx-auto max-w-prose bg-slate-50 p-6 mb-5">
+    <div class="mx-auto max-w-prose bg-slate-50 p-6 mb-5  dark:bg-zinc-800">
       <.header>Change Password</.header>
 
       <.simple_form
