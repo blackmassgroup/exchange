@@ -29,6 +29,9 @@
   <:item title="First seen"><%= @sample.first_seen %></:item>
   <:item title="Names"><%= @sample.names %></:item>
   <:item title="Tags"><%= @sample.tags %></:item>
+  <:item title="Download File">
+    <%= generate_url_for_file(@sample.sha256) %>
+  </:item>
   <:item title="Virus Total">
     <a
       :if={@virus_total != :does_not_exist}

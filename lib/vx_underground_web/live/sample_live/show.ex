@@ -4,6 +4,8 @@ defmodule VxUndergroundWeb.SampleLive.Show do
   alias VxUnderground.Services.{TriageSearch, VirusTotal}
   alias VxUnderground.{Samples, Tags}
 
+  import VxUndergroundWeb.SampleLive.Index, only: [generate_url_for_file: 1]
+
   @impl true
   def mount(_params, _session, socket) do
     {:ok, socket}

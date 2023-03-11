@@ -39,7 +39,7 @@ defmodule VxUndergroundWeb.SampleLive.Index do
     {:noreply, socket}
   end
 
-  defp generate_url_for_file(s3_object_key) do
+  def generate_url_for_file(s3_object_key) do
     opts = [expires_in: 300]
 
     ExAws.Config.new(:s3)
