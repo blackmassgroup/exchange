@@ -17,6 +17,9 @@ defmodule VxUnderground.Samples do
       [%Sample{}, ...]
 
   """
+
+  def list_samples(), do: base_query() |> Repo.all()
+
   def list_samples(offset, limit, opts \\ []) do
     base_query()
     |> filter(opts)
