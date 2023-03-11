@@ -236,7 +236,7 @@ defmodule VxUndergroundWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3 dark:bg-zinc-700 dark:border-zinc-800 dark:hover:bg-zinc-800/90",
+        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3 dark:bg-zinc-700 dark:border-zinc-800 dark:hover:bg-zinc-900/90",
         "text-sm font-semibold leading-6 text-white active:text-white/80",
         @class
       ]}
@@ -509,12 +509,14 @@ defmodule VxUndergroundWeb.CoreComponents do
         <thead class="text-left text-[0.8125rem] leading-6 text-zinc-500">
           <tr>
             <%= for col <- @col do %>
-              <th :if={col[:label] in ["Download", ""]} class="p-0 pb-4 pr-6 font-normal">
+              <th :if={col[:label] in ["Download", ""]} class="p-0 pr-6 font-normal">
                 <%= col[:label] %>
               </th>
 
-              <th :if={col[:label] == "Hashes"} class="p-0 pb-4 pr-6 font-normal">
-                <%= col[:label] %>
+              <th :if={col[:label] == "Hashes"} class="p-0 pr-6 font-normal">
+                <span class="float-left pt-4 pr-5">
+                  <%= col[:label] %>
+                </span>
                 <.live_component
                   module={VxUndergroundWeb.SampleLive.FilterComponent}
                   id="filter"
@@ -522,10 +524,7 @@ defmodule VxUndergroundWeb.CoreComponents do
                 />
               </th>
 
-              <th
-                :if={col[:label] not in ["Download", "", "Hashes"]}
-                class="p-0 pb-4 pr-6 font-normal"
-              >
+              <th :if={col[:label] not in ["Download", "", "Hashes"]} class="p-0 pr-6 font-normal">
                 <div :if={col[:label] == "Size"}>
                   <.form for={%{}} phx-change="size-change" class="float-right w-28">
                     <.input
@@ -573,12 +572,12 @@ defmodule VxUndergroundWeb.CoreComponents do
                 </span>
               </div>
             </td>
-            <td :if={@action != []} class="relative p-0 w-14">
-              <div class="relative whitespace-nowrap py-4 text-right text-sm font-medium">
-                <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 sm:rounded-r-xl" />
+            <td :if={@action != []} class="relative p-0 w-14 dark:group-hover:bg-zinc-800">
+              <div class="relative whitespace-nowrap py-4 text-right text-sm font-medium dark:group-hover:bg-zinc-800">
+                <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 dark:group-hover:bg-zinc-800 sm:rounded-r-xl" />
                 <span
                   :for={action <- @action}
-                  class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+                  class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700 dark:group-hover:bg-zinc-800"
                 >
                   <%= render_slot(action, row) %>
                 </span>
@@ -597,7 +596,7 @@ defmodule VxUndergroundWeb.CoreComponents do
       <table class="mt-11 w-[40rem] sm:w-full">
         <thead class="text-left text-[0.8125rem] leading-6 text-zinc-500">
           <tr>
-            <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></th>
+            <th :for={col <- @col} class="p-0 pr-6 font-normal"><%= col[:label] %></th>
             <th class="relative p-0 pb-4"><span class="sr-only"><%= gettext("Actions") %></span></th>
           </tr>
         </thead>

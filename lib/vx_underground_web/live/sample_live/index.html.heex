@@ -39,19 +39,17 @@
       href={generate_url_for_file(sample.sha256)}
       download={generate_url_for_file(sample.sha256)}
       target="_blank"
-      class="dark:bg-zinc-700 dark:border-zinc-800"
     >
       <.button>Download File</.button>
     </.link>
   </:col>
 
-  <:col :let={sample} label="">
-    <%= if @current_user.role.name == "Admin" do %>
-      <.link phx-click={JS.push("delete", value: %{id: sample.id})} data-confirm="Are you sure?">
-        <.button>Delete</.button>
-      </.link>
-    <% end %>
+  <:col :let={sample} :if={@current_user.role.name == "Admin"} label="">
+    <.link phx-click={JS.push("delete", value: %{id: sample.id})} data-confirm="Are you sure?">
+      <.button>Delete</.button>
+    </.link>
   </:col>
+
   <%!-- <:col :let={sample} label="Tags"><%= sample.tags %></:col> --%>
 
   <:action :let={sample} :if={@current_user.role.name == "Admin"}>

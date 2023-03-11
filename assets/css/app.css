@@ -13,6 +13,10 @@
   padding: 15px;
 }
 
+.flash {
+  min-width: 300px;
+}
+
 .show-scroll-to-top-btn {
   opacity: 1;
   transform: translateY(0);
@@ -26,7 +30,16 @@ pre {
 /* This file is for your main application CSS */
 
 .highlight-animation {
-  animation: highlight 5s ease-in-out;
+  animation: pulse 5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
 }
 
 @keyframes highlight {
@@ -34,6 +47,6 @@ pre {
     background-color: transparent;
   }
   50% {
-    background-color: yellow;
+    background-color: rgb(254 249 195);
   }
 }
