@@ -49,6 +49,34 @@ defmodule VxUnderground.Samples do
   end
 
   defp filter_by_hash(query, %{hash: hash})
+       when is_binary(hash) and hash != "" and byte_size(hash) == 32 do
+    query_string = "%#{hash}%"
+
+    where(query, [s], ilike(s.md5, ^query_string))
+  end
+
+  defp filter_by_hash(query, %{hash: hash})
+       when is_binary(hash) and hash != "" and byte_size(hash) == 40 do
+    query_string = "%#{hash}%"
+
+    where(query, [s], ilike(s.sha1, ^query_string))
+  end
+
+  defp filter_by_hash(query, %{hash: hash})
+       when is_binary(hash) and hash != "" and byte_size(hash) == 64 do
+    query_string = "%#{hash}%"
+
+    where(query, [s], ilike(s.sha256, ^query_string))
+  end
+
+  defp filter_by_hash(query, %{hash: hash})
+       when is_binary(hash) and hash != "" and byte_size(hash) == 128 do
+    query_string = "%#{hash}%"
+
+    where(query, [s], ilike(s.sha512, ^query_string))
+  end
+
+  defp filter_by_hash(query, %{hash: hash})
        when is_binary(hash) and hash != "" do
     query_string = "%#{hash}%"
 
