@@ -54,7 +54,7 @@ defmodule VxUnderground.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:ex_aws, "~> 2.0"},
       {:ex_aws_s3, "~> 2.0"},
-      {:poison, "~> 3.0"},
+      {:poison, "~> 5.0"},
       {:hackney, "~> 1.9"},
       # optional dependency
       {:sweet_xml, "~> 0.6.6"},
