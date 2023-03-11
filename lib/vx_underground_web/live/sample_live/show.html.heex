@@ -30,7 +30,9 @@
   <:item title="Names"><%= @sample.names %></:item>
   <:item title="Tags"><%= @sample.tags %></:item>
   <:item title="Download File">
-    <%= generate_url_for_file(@sample.sha256) %>
+    <.link href={generate_url_for_file(@sample.sha256)}>
+      <.button>Download File</.button>
+    </.link>
   </:item>
   <:item title="Virus Total">
     <a
