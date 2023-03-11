@@ -64,7 +64,7 @@
   - https://hexdocs.pm/phoenix_live_view/uploads-external.html
 - Generates presigned urls for secure download
 - Calculates file hashes with [`:crypto.hash/2`](https://www.erlang.org/doc/man/crypto.html#hash-2)
-- Uploads to [Triage](https://tria.ge/) on upload to Vx Underground via [Oban Job Scheduler](https://hexdocs.pm/oban/Oban.html).
+- Uploads to [Triage](https://tria.ge/) on upload to Vx Underground via [Oban Job Scheduler](https://hexdocs.pm/oban/Oban.html) and notifies the user of completion with `Phoenix.Channels`.
 - Checks for VT Report on load of the `Sample` show page.
 - Uses [`libcluster`](https://fly.io/docs/elixir/the-basics/clustering/#adding-libcluster) and [`fly_postgres`](https://hexdocs.pm/fly_postgres/readme.html) for scalability
 - Has [CI/CD](https://fly.io/docs/elixir/advanced-guides/github-actions-elixir-ci-cd/) setup and is deployed on Fly.io.
