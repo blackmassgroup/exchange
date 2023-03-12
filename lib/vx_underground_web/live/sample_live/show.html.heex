@@ -36,8 +36,11 @@
   </:item>
   <:item title="Virus Total">
     <a
-      :if={@virus_total != :does_not_exist and Map.get(@virus_total, :links) != nil}
-      href={@virus_total.links.self}
+      :if={
+        @virus_total != :does_not_exist and
+          Map.get(@virus_total, "links", %{}) |> Map.get("self") != nil
+      }
+      href={Map.get(@virus_total, "links") |> Map.get("self")}
       target="_blank"
       class="mb-5"
     >
