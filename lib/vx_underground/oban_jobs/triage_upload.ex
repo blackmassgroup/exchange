@@ -1,5 +1,6 @@
 defmodule VxUnderground.ObanJobs.TriageUpload do
   alias VxUndergroundWeb.SampleChannel
+  alias VxUnderground.Services.S3
 
   use Oban.Worker,
     queue: :default,
@@ -11,7 +12,8 @@ defmodule VxUnderground.ObanJobs.TriageUpload do
   def perform(%Oban.Job{args: %{"sample" => sample}}) do
     with(
       {:ok, presigned_url} <-
-        ExAws.Config.new(:s3) |> ExAws.S3.presigned_url(:get, "vxug", "#{sample["sha256"]}"),
+        ExAws.Config.new(:s3)
+        |> ExAws.S3.presigned_url(:get, S3.get_bucket(), "#{sample["sha256"]}"),
       {:ok, triage_resp} <- VxUnderground.Services.Triage.upload(presigned_url),
       {:ok, _hashes} <- VxUnderground.Services.Triage.get_sample(triage_resp["id"])
     ) do

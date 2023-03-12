@@ -3,6 +3,7 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
 
   alias VxUnderground.Samples
   alias VxUnderground.Samples.Sample
+  alias VxUnderground.Services.S3
 
   @impl true
   def render(assigns) do
@@ -125,7 +126,7 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
   end
 
   defp presign_upload(entry, socket) do
-    bucket = "vxug"
+    bucket = S3.get_bucket()
     key = "#{entry.client_name}"
 
     {:ok, presigned_url} = ExAws.Config.new(:s3) |> ExAws.S3.presigned_url(:put, bucket, key)
@@ -248,7 +249,8 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
   end
 
   defp get_s3_object({:error, _}, client_name) do
-    ExAws.S3.get_object("vxug", client_name)
+    S3.get_bucket()
+    |> ExAws.S3.get_object(client_name)
     |> ExAws.request()
     |> get_s3_object(client_name)
   end
@@ -258,7 +260,7 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
   end
 
   defp rename_uploaded_file(sha256, original_file_name) do
-    bucket = "vxug"
+    bucket = S3.get_bucket()
 
     with(
       {:ok, _body} <-
