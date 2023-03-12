@@ -86,7 +86,11 @@ defmodule VxUndergroundWeb.SampleLive.Index do
     sample = Samples.get_sample!(id)
     {:ok, _} = Samples.delete_sample(sample)
 
-    {:noreply, assign(socket, :samples, list_samples(offset, limit))}
+    socket =
+      assign(socket, :samples, list_samples(offset, limit))
+      |> assign(:phx_update, :replace)
+
+    {:noreply, socket}
   end
 
   def handle_event("load-more", _params, %{assigns: %{limit: limit, count: count}} = socket)

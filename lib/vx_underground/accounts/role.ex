@@ -17,7 +17,7 @@ defmodule VxUnderground.Accounts.Role do
   def changeset(role, attrs) do
     role
     |> cast(attrs, [:name, :permissions])
-    |> validate_required([:name, :permissions])
+    |> validate_required([:name])
     |> unique_constraint(:name)
     |> validate_at_least_one_permission()
     |> Accounts.Permissions.validate_permissions(:permissions)
