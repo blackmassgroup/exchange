@@ -2,26 +2,51 @@ defmodule VxUndergroundWeb.RoleLiveTest do
   use VxUndergroundWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import VxUnderground.AccountsFixtures
 
-  @create_attrs %{name: "some name", permissions: %{}}
-  @update_attrs %{name: "some updated name", permissions: %{}}
-  @invalid_attrs %{name: nil, permissions: nil}
+  @create_attrs %{
+    name: "some name",
+    permissions:
+      %{
+        "samples" => ["create", "read", "update"],
+        "tags" => ["create", "read"]
+      }
+      |> Jason.encode!()
+  }
+  @update_attrs %{
+    name: "some updated name",
+    permissions:
+      %{
+        "samples" => ["create", "read", "update"],
+        "tags" => ["read"]
+      }
+      |> Jason.encode!()
+  }
+  @invalid_attrs %{name: nil, permissions: %{}}
 
-  defp create_role(_) do
-    role = role_fixture()
-    %{role: role}
+  defp login_admin_user(%{conn: conn}) do
+    {:ok, user} =
+      VxUnderground.Accounts.register_user(%{email: "test@test.com", password: "Password123!"})
+
+    {:ok, admin_user} = VxUnderground.Accounts.add_role_to_user(user, "Admin")
+
+    conn =
+      conn
+      |> Map.replace!(:secret_key_base, VxUndergroundWeb.Endpoint.config(:secret_key_base))
+      |> init_test_session(%{})
+
+    %{
+      conn: VxUndergroundWeb.ConnCase.log_in_user(conn, admin_user),
+      role: VxUnderground.Accounts.get_role!(1)
+    }
   end
 
   describe "Index" do
-    setup [:create_role]
+    setup [:login_admin_user]
 
-    @tag :skip
-    test "lists all roles", %{conn: conn, role: role} do
+    test "lists all roles", %{conn: conn} do
       {:ok, _index_live, html} = live(conn, ~p"/roles")
 
       assert html =~ "Listing Roles"
-      assert html =~ role.name
     end
 
     @tag :skip
@@ -37,7 +62,7 @@ defmodule VxUndergroundWeb.RoleLiveTest do
              |> form("#role-form", role: @invalid_attrs)
              |> render_change() =~ "can&#39;t be blank"
 
-      {:ok, _, html} =
+      {:ok, _view, html} =
         index_live
         |> form("#role-form", role: @create_attrs)
         |> render_submit()
@@ -70,9 +95,9 @@ defmodule VxUndergroundWeb.RoleLiveTest do
       assert html =~ "some updated name"
     end
 
-    @tag :skip
-    test "deletes role in listing", %{conn: conn, role: role} do
+    test "deletes role in listing", %{conn: conn} do
       {:ok, index_live, _html} = live(conn, ~p"/roles")
+      role = VxUnderground.Accounts.get_role_by_name!("User")
 
       assert index_live |> element("#roles-#{role.id} a", "Delete") |> render_click()
       refute has_element?(index_live, "#roles-#{role.id}")
@@ -80,9 +105,8 @@ defmodule VxUndergroundWeb.RoleLiveTest do
   end
 
   describe "Show" do
-    setup [:create_role]
+    setup [:login_admin_user]
 
-    @tag :skip
     test "displays role", %{conn: conn, role: role} do
       {:ok, _show_live, html} = live(conn, ~p"/roles/#{role}")
 

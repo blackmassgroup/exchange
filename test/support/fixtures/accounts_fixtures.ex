@@ -37,7 +37,27 @@ defmodule VxUnderground.AccountsFixtures do
       attrs
       |> Enum.into(%{
         name: "some name",
-        permissions: %{}
+        permissions: %{
+          "samples" => ["create", "read", "update", "delete"],
+          "roles" => ["read", "update", "update", "delete"],
+          "tags" => ["create", "read", "update", "delete"]
+        }
+      })
+      |> VxUnderground.Accounts.create_role()
+
+    role
+  end
+
+  def admin_role_fixture(attrs \\ %{}) do
+    {:ok, role} =
+      attrs
+      |> Enum.into(%{
+        name: "Admin",
+        permissions: %{
+          "samples" => ["create", "read", "update", "delete"],
+          "roles" => ["read", "update", "update", "delete"],
+          "tags" => ["create", "read", "update", "delete"]
+        }
       })
       |> VxUnderground.Accounts.create_role()
 

@@ -13,10 +13,25 @@ defmodule VxUndergroundWeb.TagLiveTest do
     %{tag: tag}
   end
 
-  describe "Index" do
-    setup [:create_tag]
+  defp login_admin_user(%{conn: conn}) do
+    {:ok, user} =
+      VxUnderground.Accounts.register_user(%{email: "test@test.com", password: "Password123!"})
 
-    @tag :skip
+    {:ok, admin_user} = VxUnderground.Accounts.add_role_to_user(user, "Admin")
+
+    conn =
+      conn
+      |> Map.replace!(:secret_key_base, VxUndergroundWeb.Endpoint.config(:secret_key_base))
+      |> init_test_session(%{})
+
+    %{
+      conn: VxUndergroundWeb.ConnCase.log_in_user(conn, admin_user)
+    }
+  end
+
+  describe "Index" do
+    setup [:create_tag, :login_admin_user]
+
     test "lists all tags", %{conn: conn, tag: tag} do
       {:ok, _index_live, html} = live(conn, ~p"/tags")
 
@@ -24,7 +39,6 @@ defmodule VxUndergroundWeb.TagLiveTest do
       assert html =~ tag.kind
     end
 
-    @tag :skip
     test "saves new tag", %{conn: conn} do
       {:ok, index_live, _html} = live(conn, ~p"/tags")
 
@@ -47,7 +61,6 @@ defmodule VxUndergroundWeb.TagLiveTest do
       assert html =~ "some kind"
     end
 
-    @tag :skip
     test "updates tag in listing", %{conn: conn, tag: tag} do
       {:ok, index_live, _html} = live(conn, ~p"/tags")
 
@@ -70,7 +83,6 @@ defmodule VxUndergroundWeb.TagLiveTest do
       assert html =~ "some updated kind"
     end
 
-    @tag :skip
     test "deletes tag in listing", %{conn: conn, tag: tag} do
       {:ok, index_live, _html} = live(conn, ~p"/tags")
 
@@ -80,9 +92,8 @@ defmodule VxUndergroundWeb.TagLiveTest do
   end
 
   describe "Show" do
-    setup [:create_tag]
+    setup [:create_tag, :login_admin_user]
 
-    @tag :skip
     test "displays tag", %{conn: conn, tag: tag} do
       {:ok, _show_live, html} = live(conn, ~p"/tags/#{tag}")
 
@@ -90,7 +101,6 @@ defmodule VxUndergroundWeb.TagLiveTest do
       assert html =~ tag.kind
     end
 
-    @tag :skip
     test "updates tag within modal", %{conn: conn, tag: tag} do
       {:ok, show_live, _html} = live(conn, ~p"/tags/#{tag}")
 

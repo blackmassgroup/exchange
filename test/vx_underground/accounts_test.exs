@@ -525,56 +525,69 @@ defmodule VxUnderground.AccountsTest do
 
     @invalid_attrs %{name: nil, permissions: nil}
 
-    @tag :skip
     test "list_roles/0 returns all roles" do
-      role = role_fixture()
-      assert Accounts.list_roles() == [role]
+      assert Accounts.list_roles() |> Enum.map(& &1.id) == [1, 2]
     end
 
-    @tag :skip
     test "get_role!/1 returns the role with given id" do
       role = role_fixture()
       assert Accounts.get_role!(role.id) == role
     end
 
-    @tag :skip
     test "create_role/1 with valid data creates a role" do
-      valid_attrs = %{name: "some name", permissions: %{}}
+      valid_attrs = %{
+        name: "some name",
+        permissions: %{
+          "samples" => ["create", "read", "update"],
+          "tags" => ["create", "read"]
+        }
+      }
 
       assert {:ok, %Role{} = role} = Accounts.create_role(valid_attrs)
       assert role.name == "some name"
-      assert role.permissions == %{}
+
+      assert role.permissions == %{
+               "samples" => ["create", "read", "update"],
+               "tags" => ["create", "read"]
+             }
     end
 
     test "create_role/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Accounts.create_role(@invalid_attrs)
     end
 
-    @tag :skip
     test "update_role/2 with valid data updates the role" do
       role = role_fixture()
-      update_attrs = %{name: "some updated name", permissions: %{}}
+
+      update_attrs = %{
+        name: "some updated name",
+        permissions: %{
+          "samples" => ["create", "read", "update"],
+          "tags" => ["create", "read"]
+        }
+      }
 
       assert {:ok, %Role{} = role} = Accounts.update_role(role, update_attrs)
       assert role.name == "some updated name"
-      assert role.permissions == %{}
+
+      assert role.permissions == %{
+               "samples" => ["create", "read", "update"],
+               "tags" => ["create", "read"]
+             }
     end
 
-    @tag :skip
     test "update_role/2 with invalid data returns error changeset" do
       role = role_fixture()
       assert {:error, %Ecto.Changeset{}} = Accounts.update_role(role, @invalid_attrs)
       assert role == Accounts.get_role!(role.id)
     end
 
-    @tag :skip
     test "delete_role/1 deletes the role" do
       role = role_fixture()
       assert {:ok, %Role{}} = Accounts.delete_role(role)
       assert_raise Ecto.NoResultsError, fn -> Accounts.get_role!(role.id) end
     end
 
-    @tag :skip
     test "change_role/1 returns a role changeset" do
       role = role_fixture()
       assert %Ecto.Changeset{} = Accounts.change_role(role)

@@ -1,41 +1,69 @@
 defmodule VxUndergroundWeb.SampleLiveTest do
   use VxUndergroundWeb.ConnCase
 
+  @moduletag capture_log: true
+
   import Phoenix.LiveViewTest
   import VxUnderground.SamplesFixtures
 
   @create_attrs %{
-    first_seen: "2023-02-04T17:21:00Z",
-    hash: "some hash",
-    s3_object_key: "some s3_object_key",
-    size: 42,
-    tags: [1, 2],
-    type: "some type"
+    names: ["Test Name"],
+    first_seen: ~U[2023-02-05 17:21:00Z],
+    s3_object_key: "some new s3_object_key",
+    size: 43,
+    tags: [%VxUnderground.Tags.Tag{name: "Test"}],
+    type: "some new type",
+    md5: "8f1e3ebe78bf1e81b9d278dfdf278f24",
+    sha1: "261ce8aa87bd3c520c577290ce3073d83509e343",
+    sha256: "adf8e94bced4691aadc5b7695116929289623cd925bbf087165c6a7e6e3dd6e2",
+    sha512:
+      "38ae7e95990689ff4f209f765452a164ef22ce5fd805ebc185278b8aa03196b3f7e76df17da6d755d3e4cd58caae8c485e4cd01c913b91d14de68b6e701dbe81"
   }
-  # @update_attrs %{
-  #   first_seen: "2023-02-05T17:21:00Z",
-  #   hash: "some updated hash",
-  #   s3_object_key: "some updated s3_object_key",
-  #   size: 43,
-  #   tags: [1],
-  #   type: "some updated type"
-  # }
-  @invalid_attrs %{first_seen: nil, hash: nil, s3_object_key: nil, size: nil, tags: [], type: nil}
+  @update_attrs %{
+    names: ["updated Test Name"],
+    first_seen: ~U[2023-02-05 17:21:00Z],
+    s3_object_key: "some updated s3_object_key",
+    size: 43,
+    tags: [%VxUnderground.Tags.Tag{name: "Test"}],
+    type: "some updated type",
+    md5: "8f1e3ebe78bf1e81b9d278dfdf278f2f",
+    sha1: "261ce8aa87bd3c520c577290ce3073d83509e34a",
+    sha256: "adf8e94bced4691aadc5b7695116929289623cd925bbf087165c6a7e6e3dd6e5",
+    sha512:
+      "38ae7e95990689ff4f209f765452a164ef22ce5fd805ebc185278b8aa03196b3f7e76df17da6d755d3e4cd58caae8c485e4cd01c913b91d14de68b6e701dbe83"
+  }
+
+  @invalid_attrs %{first_seen: nil, s3_object_key: nil, size: nil, tags: [], type: nil}
 
   defp create_sample(_) do
     sample = sample_fixture()
     %{sample: sample}
   end
 
-  describe "Index" do
-    setup [:create_sample]
+  defp login_admin_user(%{conn: conn}) do
+    {:ok, user} =
+      VxUnderground.Accounts.register_user(%{email: "test@test.com", password: "Password123!"})
 
-    @tag :skip
+    {:ok, admin_user} = VxUnderground.Accounts.add_role_to_user(user, "Admin")
+
+    conn =
+      conn
+      |> Map.replace!(:secret_key_base, VxUndergroundWeb.Endpoint.config(:secret_key_base))
+      |> init_test_session(%{})
+
+    %{
+      conn: VxUndergroundWeb.ConnCase.log_in_user(conn, admin_user)
+    }
+  end
+
+  describe "Index" do
+    setup [:create_sample, :login_admin_user]
+
     test "lists all samples", %{conn: conn, sample: sample} do
       {:ok, _index_live, html} = live(conn, ~p"/samples")
 
       assert html =~ "Listing Samples"
-      assert html =~ sample.hash
+      assert html =~ sample.sha1
     end
 
     @tag :skip
@@ -62,69 +90,68 @@ defmodule VxUndergroundWeb.SampleLiveTest do
     end
 
     @tag :skip
-    # test "updates sample in listing", %{conn: conn, sample: sample} do
-    #   {:ok, index_live, _html} = live(conn, ~p"/samples")
+    test "updates sample in listing", %{conn: conn, sample: sample} do
+      {:ok, index_live, _html} = live(conn, ~p"/samples")
 
-    #   assert index_live |> element("#samples-#{sample.id} a", "Edit") |> render_click() =~
-    #            "Edit Sample"
+      assert index_live |> element("#samples-#{sample.id} a", "Edit") |> render_click() =~
+               "Edit Sample"
 
-    #   assert_patch(index_live, ~p"/samples/#{sample}/edit")
+      # assert_patch(index_live, ~p"/samples/#{sample}/edit")
 
-    #   assert index_live
-    #          |> form("#sample-form", sample: @invalid_attrs)
-    #          |> render_change() =~ "can&#39;t be blank"
+      assert index_live
+             |> form("#sample-form", sample: @invalid_attrs)
+             |> render_change() =~ "can&#39;t be blank"
 
-    #   {:ok, _, html} =
-    #     index_live
-    #     |> form("#sample-form", sample: @update_attrs)
-    #     |> render_submit()
-    #     |> follow_redirect(conn, ~p"/samples")
+      {:ok, _, html} =
+        index_live
+        |> form("#sample-form", sample: @update_attrs)
+        |> render_submit()
+        |> follow_redirect(conn, ~p"/samples")
 
-    #   assert html =~ "Sample updated successfully"
-    #   assert html =~ "some updated hash"
-    # end
+      assert html =~ "Sample updated successfully"
+      assert html =~ "some updated hash"
+    end
 
-    @tag :skip
     test "deletes sample in listing", %{conn: conn, sample: sample} do
       {:ok, index_live, _html} = live(conn, ~p"/samples")
 
       assert index_live |> element("#samples-#{sample.id} a", "Delete") |> render_click()
+
       refute has_element?(index_live, "#samples-#{sample.id}")
     end
   end
 
   describe "Show" do
-    setup [:create_sample]
+    setup [:create_sample, :login_admin_user]
 
-    @tag :skip
     test "displays sample", %{conn: conn, sample: sample} do
       {:ok, _show_live, html} = live(conn, ~p"/samples/#{sample}")
 
       assert html =~ "Show Sample"
-      assert html =~ sample.hash
+      assert html =~ sample.sha1
     end
 
     @tag :skip
-    # test "updates sample within modal", %{conn: conn, sample: sample} do
-    #   {:ok, show_live, _html} = live(conn, ~p"/samples/#{sample}")
+    test "updates sample within modal", %{conn: conn, sample: sample} do
+      {:ok, show_live, _html} = live(conn, ~p"/samples/#{sample}")
 
-    #   assert show_live |> element("a", "Edit") |> render_click() =~
-    #            "Edit Sample"
+      assert show_live |> element("a", "Edit") |> render_click() =~
+               "Edit Sample"
 
-    #   assert_patch(show_live, ~p"/samples/#{sample}/show/edit")
+      # assert_patch(show_live, ~p"/samples/#{sample}/show/edit")
 
-    #   assert show_live
-    #          |> form("#sample-form", sample: @invalid_attrs)
-    #          |> render_change() =~ "can&#39;t be blank"
+      assert show_live
+             |> form("#sample-form", sample: @invalid_attrs)
+             |> render_change() =~ "can&#39;t be blank"
 
-    #   {:ok, _, html} =
-    #     show_live
-    #     |> form("#sample-form", sample: @update_attrs)
-    #     |> render_submit()
-    #     |> follow_redirect(conn, ~p"/samples/#{sample}")
+      {:ok, _, html} =
+        show_live
+        |> form("#sample-form", sample: @update_attrs)
+        |> render_submit()
+        |> follow_redirect(conn, ~p"/samples/#{sample}")
 
-    #   assert html =~ "Sample updated successfully"
-    #   assert html =~ "some updated hash"
-    # end
+      assert html =~ "Sample updated successfully"
+      assert html =~ "some updated hash"
+    end
   end
 end
