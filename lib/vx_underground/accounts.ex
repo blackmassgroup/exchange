@@ -572,8 +572,16 @@ defmodule VxUnderground.Accounts do
 
   @doc """
   Deletes a user
+
+    ## Examples
+
+      iex> delete_user(suer)
+      {:ok, %User{}}
+
+      iex> delete_user(suer)
+      {:error, %Ecto.Changeset{}}
   """
   def delete_user(user) do
-    Repo.delete(User, user.id)
+    Repo.delete(user)
   end
 end
