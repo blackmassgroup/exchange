@@ -1,6 +1,6 @@
 defmodule VxUnderground.Services.S3 do
   @bucket "testing-herbs"
-  @region "eu-central-1"
+  @region "us-east-1"
   @provider "wasabisys"
 
   @base_url "http://#{@bucket}.s3.#{@region}.#{@provider}.com/"
