@@ -121,6 +121,21 @@ defmodule VxUnderground.Samples do
   def get_sample!(id), do: Repo.get!(Sample, id)
 
   @doc """
+  Gets a single sample.
+
+
+  ## Examples
+
+      iex> get_sample!(123)
+      %Sample{}
+
+      iex> get_sample!(456)
+      nil
+
+  """
+  def get_sample(id), do: Repo.get(Sample, id)
+
+  @doc """
   Creates a sample.
 
   ## Examples

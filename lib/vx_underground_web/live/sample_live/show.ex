@@ -13,37 +13,44 @@ defmodule VxUndergroundWeb.SampleLive.Show do
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
-    sample = Samples.get_sample!(id)
+    sample = Samples.get_sample(id)
 
-    virus_total =
-      case VirusTotal.get_sample(sample.sha256) do
-        {:ok, virus_total} ->
-          virus_total
+    case sample do
+      nil ->
+        {:noreply,
+         put_flash(socket, :error, "Sample does not exist") |> push_navigate(to: ~p(/samples))}
 
-        {:error, _} ->
-          :does_not_exist
-      end
+      _ ->
+        virus_total =
+          case VirusTotal.get_sample(sample.sha256) do
+            {:ok, virus_total} ->
+              virus_total
 
-    triage =
-      case TriageSearch.search(sample.sha256) do
-        {:ok, %{"data" => data}} ->
-          data
+            {:error, _} ->
+              :does_not_exist
+          end
 
-        {:error, _} ->
-          %{sample: sample}
-          |> VxUnderground.ObanJobs.TriageUpload.new()
-          |> Oban.insert()
+        triage =
+          case TriageSearch.search(sample.sha256) do
+            {:ok, %{"data" => data}} ->
+              data
 
-          :still_processing
-      end
+            {:error, _} ->
+              %{sample: sample}
+              |> VxUnderground.ObanJobs.TriageUpload.new()
+              |> Oban.insert()
 
-    {:noreply,
-     socket
-     |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:sample, sample)
-     |> assign(:tags, Tags.list_tags() |> Enum.map(&[value: &1.id, key: &1.name]))
-     |> assign(:virus_total, virus_total)
-     |> assign(:triage, triage)}
+              :still_processing
+          end
+
+        {:noreply,
+         socket
+         |> assign(:page_title, page_title(socket.assigns.live_action))
+         |> assign(:sample, sample)
+         |> assign(:tags, Tags.list_tags() |> Enum.map(&[value: &1.id, key: &1.name]))
+         |> assign(:virus_total, virus_total)
+         |> assign(:triage, triage)}
+    end
   end
 
   defp page_title(:show), do: "Show Sample"
