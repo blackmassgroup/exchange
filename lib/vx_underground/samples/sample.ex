@@ -14,7 +14,7 @@ defmodule VxUnderground.Samples.Sample do
     :sha512
   ]
 
-  @required [:first_seen, :size, :type, :names]
+  @required []
 
   @derive {Jason.Encoder, only: @allowed}
 

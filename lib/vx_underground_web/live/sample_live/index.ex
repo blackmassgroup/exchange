@@ -9,7 +9,7 @@ defmodule VxUndergroundWeb.SampleLive.Index do
   alias VxUndergroundWeb.SampleLive.SortingForm
   alias VxUndergroundWeb.SampleLive.FilterForm
 
-  @starting_limit 5
+  @starting_limit 30
 
   @impl true
   def mount(_params, _session, socket) do

@@ -67,11 +67,11 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 config :ex_aws,
-  region: "eu-central-1",
+  region: "us-east-1",
   s3: [
     scheme: "https://",
-    host: "s3.eu-central-1.wasabisys.com",
-    region: "eu-central-1"
+    host: "s3.us-east-1.wasabisys.com",
+    region: "us-east-1"
   ]
 
 # Import environment specific config. This must remain at the bottom
