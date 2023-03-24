@@ -13,7 +13,8 @@ defmodule VxUnderground.SamplesTest do
       s3_object_key: nil,
       size: nil,
       tags: [%VxUnderground.Tags.Tag{name: "Test"}],
-      type: nil
+      type: nil,
+      md5: "A STRING THATS TOO LONG TO BE A MD5"
     }
 
     test "list_samples/0 returns all samples" do
