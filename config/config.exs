@@ -15,7 +15,9 @@ config :vx_underground, Oban,
 config :vx_underground,
   ecto_repos: [VxUnderground.Repo.Local]
 
-config :vx_underground, VxUnderground.Repo.Local, priv: "priv/repo"
+config :vx_underground, VxUnderground.Repo.Local,
+  priv: "priv/repo",
+  timeout: :infinity
 
 # Configures the endpoint
 config :vx_underground, VxUndergroundWeb.Endpoint,
