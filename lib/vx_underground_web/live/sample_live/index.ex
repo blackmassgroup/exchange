@@ -9,32 +9,17 @@ defmodule VxUndergroundWeb.SampleLive.Index do
   alias VxUndergroundWeb.SampleLive.SortingForm
   alias VxUndergroundWeb.SampleLive.FilterForm
 
-  @starting_limit 30
-
   @impl true
   def mount(_params, _session, socket) do
-    count = Samples.infinity_scroll_query_aggregate(nil)
-
     SampleChannel.join("sample:lobby", %{}, socket)
 
-    {:ok,
-     assign(socket,
-       offset: 0,
-       limit: @starting_limit,
-       count: count,
-       phx_update: :append,
-       size: :KB
-     )}
+    {:ok, assign(socket, size: :KB) |> assign_samples()}
   end
 
   @impl true
   def handle_params(params, _url, socket) do
-    count = Samples.infinity_scroll_query_aggregate(get_in(socket.assigns, [:filter, :hash]))
-
     socket =
       parse_params(socket, params)
-      |> assign_samples()
-      |> assign(:count, count)
       |> apply_action(socket.assigns.live_action, params)
 
     {:noreply, socket}
@@ -53,10 +38,7 @@ defmodule VxUndergroundWeb.SampleLive.Index do
   end
 
   defp assign_samples(socket) do
-    %{offset: offset, limit: limit} = socket.assigns
-    params = merge_and_sanitize_params(socket)
-
-    samples = list_samples(offset, limit, params)
+    samples = list_samples()
     tags = Tags.list_tags() |> Enum.map(&[value: &1.id, key: &1.name])
 
     socket
@@ -84,32 +66,10 @@ defmodule VxUndergroundWeb.SampleLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    %{offset: offset, limit: limit} = socket.assigns
     sample = Samples.get_sample!(id)
     {:ok, _} = Samples.delete_sample(sample)
 
-    socket =
-      assign(socket, :samples, list_samples(offset, limit))
-      |> assign(:phx_update, :replace)
-
-    {:noreply, socket}
-  end
-
-  def handle_event("load-more", _params, %{assigns: %{limit: limit, count: count}} = socket)
-      when limit >= count,
-      do: {:noreply, assign(socket, :phx_update, :append)}
-
-  def handle_event("load-more", _params, socket) do
-    %{offset: offset, limit: limit, count: count} = socket.assigns
-
-    socket =
-      if offset < count do
-        socket |> assign(offset: offset + limit, phx_update: :append) |> assign_samples()
-      else
-        socket
-      end
-
-    {:noreply, socket}
+    {:noreply, assign(socket, :samples, list_samples())}
   end
 
   def handle_event("size-change", params, socket) do
@@ -123,7 +83,6 @@ defmodule VxUndergroundWeb.SampleLive.Index do
     |> Map.merge(sorting)
     |> Map.merge(filter)
     |> Map.merge(overrides)
-    |> Map.drop([:total_count])
     |> Enum.reject(fn {_key, value} -> is_nil(value) end)
     |> Map.new()
   end
@@ -153,18 +112,17 @@ defmodule VxUndergroundWeb.SampleLive.Index do
     assign(socket, :filter, FilterForm.default_values(overrides))
   end
 
-  defp list_samples(offset, limit, params \\ %{}) do
-    Samples.list_samples(offset, limit, params)
+  defp list_samples(params \\ %{}) do
+    Samples.list_samples(params)
   end
 
-  @impl true
   def handle_info({:update, opts}, socket) do
-    params = merge_and_sanitize_params(socket, opts)
-    path = "/samples?" <> URI.encode_query(params)
-    addl_assigns = %{phx_update: :replace, offset: 0, limit: @starting_limit, count: nil}
-    socket = assign(socket, addl_assigns)
+    samples =
+      merge_and_sanitize_params(socket, opts)
+      |> IO.inspect(label: :waldo_5)
+      |> list_samples()
 
-    {:noreply, push_patch(socket, to: path, replace: true)}
+    {:noreply, assign(socket, :samples, samples)}
   end
 
   def handle_info({:triage_report_complete, %{sample: sample}}, socket) do

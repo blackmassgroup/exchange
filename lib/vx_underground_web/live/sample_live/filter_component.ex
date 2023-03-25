@@ -19,7 +19,8 @@ defmodule VxUndergroundWeb.SampleLive.FilterComponent do
             <div class="relative z-0 mb-3 group">
               <%= for filter <- @changeset.data |> Map.keys() do %>
                 <.focus_wrap id="focus-wrap">
-                  <.input field={{f, filter}} label={} class="dark:bg-zinc-600" />
+                  <.input field={{f, filter}} label={} class="dark:bg-zinc-600" phx-debounce="blur" />
+                  <span>Searches on blur of the input</span>
                 </.focus_wrap>
               <% end %>
             </div>

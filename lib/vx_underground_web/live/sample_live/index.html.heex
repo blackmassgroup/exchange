@@ -13,7 +13,6 @@
   row_click={&JS.navigate(~p"/samples/#{&1}")}
   sorting_headers={true}
   sorting={@sorting}
-  phx_update={@phx_update}
   filter={@filter}
   size={@size}
 >
@@ -58,6 +57,10 @@
     </div>
   </:action>
 </.table>
+
+<p class="text-center dark:text-slate-200 mt-6">
+  What are you going to scroll for days? Use the search box.
+</p>
 
 <.modal
   :if={@live_action in [:new, :edit]}

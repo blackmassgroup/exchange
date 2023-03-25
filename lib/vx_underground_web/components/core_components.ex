@@ -493,7 +493,6 @@ defmodule VxUndergroundWeb.CoreComponents do
   attr :sorting_headers, :boolean
   attr :sorting, :map
   attr :filter, :map
-  attr :phx_update, :atom
   attr :size, :atom
 
   slot :col, required: true do
@@ -537,12 +536,7 @@ defmodule VxUndergroundWeb.CoreComponents do
                     />
                   </.form>
                 </div>
-                <.live_component
-                  module={VxUndergroundWeb.SampleLive.SortingComponent}
-                  id={"th-#{col[:label]}"}
-                  key={col[:label]}
-                  sorting={@sorting}
-                />
+                <%= col[:label] %>
               </th>
             <% end %>
             <th class="relative p-0 pb-4"><span class="sr-only"><%= gettext("Actions") %></span></th>
@@ -551,8 +545,6 @@ defmodule VxUndergroundWeb.CoreComponents do
         <tbody
           id="sample-table"
           class="relative divide-y divide-zinc-100 border-t border-zinc-200 dark:divide-zinc-700 dark:border-zinc-700 text-sm leading-6 text-zinc-700"
-          phx-update={@phx_update}
-          phx-hook="InfinityScroll"
         >
           <tr
             :for={row <- @rows}

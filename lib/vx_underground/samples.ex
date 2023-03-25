@@ -18,14 +18,15 @@ defmodule VxUnderground.Samples do
 
   """
 
-  def list_samples(), do: base_query() |> Repo.all()
+  # def list_samples(params), do: base_query() |> filter(params) |> limit(50) |> Repo.all()
 
-  def list_samples(offset, limit, opts \\ []) do
+  # def list_samples(), do: base_query() |> limit(50) |> Repo.all()
+
+  def list_samples(opts \\ []) do
     base_query()
     |> filter(opts)
     |> sort(opts)
-    |> limit(^limit)
-    |> offset(^offset)
+    |> limit(10)
     |> Repo.all()
   end
 
@@ -53,41 +54,31 @@ defmodule VxUnderground.Samples do
 
   defp filter_by_hash(query, %{hash: hash})
        when is_binary(hash) and hash != "" and byte_size(hash) == 32 do
-    query_string = "%#{hash}%"
-
-    where(query, [s], s.md5 == ^query_string)
+    where(query, [s], s.md5 == ^hash)
   end
 
   defp filter_by_hash(query, %{hash: hash})
        when is_binary(hash) and hash != "" and byte_size(hash) == 40 do
-    query_string = "%#{hash}%"
-
-    where(query, [s], s.sha1 == ^query_string)
+    where(query, [s], s.sha1 == ^hash)
   end
 
   defp filter_by_hash(query, %{hash: hash})
        when is_binary(hash) and hash != "" and byte_size(hash) == 64 do
-    query_string = "%#{hash}%"
-
-    where(query, [s], s.sha256 == ^query_string)
+    where(query, [s], s.sha256 == ^hash)
   end
 
   defp filter_by_hash(query, %{hash: hash})
        when is_binary(hash) and hash != "" and byte_size(hash) == 128 do
-    query_string = "%#{hash}%"
-
-    where(query, [s], s.sha512 == ^query_string)
+    where(query, [s], s.sha512 == ^hash)
   end
 
   defp filter_by_hash(query, %{hash: hash})
        when is_binary(hash) and hash != "" do
-    query_string = "%#{hash}%"
-
     where(
       query,
       [s],
-      ilike(s.md5, ^query_string) or ilike(s.sha1, ^query_string) or
-        ilike(s.sha256, ^query_string) or ilike(s.sha512, ^query_string)
+      s.md5 == ^hash or s.sha1 == ^hash or
+        s.sha256 == ^hash or s.sha512 == ^hash
     )
   end
 

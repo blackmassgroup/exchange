@@ -1,7 +1,6 @@
 defmodule VxUnderground.Repo.Local.Migrations.AddUniqueIndexesBack do
   use Ecto.Migration
 
-
   def change do
     create unique_index(:samples, :sha1)
     create unique_index(:samples, :sha256)
