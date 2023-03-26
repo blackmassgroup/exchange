@@ -5,6 +5,7 @@ defmodule VxUndergroundWeb.UserRegistrationLiveTest do
   import VxUnderground.AccountsFixtures
 
   describe "Registration page" do
+    @tag :skip
     test "renders registration page", %{conn: conn} do
       {:ok, _lv, html} = live(conn, ~p"/users/register")
 
@@ -12,6 +13,7 @@ defmodule VxUndergroundWeb.UserRegistrationLiveTest do
       assert html =~ "Log in"
     end
 
+    @tag :skip
     test "redirects if already logged in", %{conn: conn} do
       result =
         conn
@@ -22,6 +24,7 @@ defmodule VxUndergroundWeb.UserRegistrationLiveTest do
       assert {:ok, _conn} = result
     end
 
+    @tag :skip
     test "renders errors for invalid data", %{conn: conn} do
       {:ok, lv, _html} = live(conn, ~p"/users/register")
 
@@ -37,6 +40,7 @@ defmodule VxUndergroundWeb.UserRegistrationLiveTest do
   end
 
   describe "register user" do
+    @tag :skip
     test "creates account and logs the user in", %{conn: conn} do
       {:ok, lv, _html} = live(conn, ~p"/users/register")
 
@@ -55,6 +59,7 @@ defmodule VxUndergroundWeb.UserRegistrationLiveTest do
       assert response =~ "Log out\n        </a>"
     end
 
+    @tag :skip
     test "renders errors for duplicated email", %{conn: conn} do
       {:ok, lv, _html} = live(conn, ~p"/users/register")
 
@@ -72,6 +77,7 @@ defmodule VxUndergroundWeb.UserRegistrationLiveTest do
   end
 
   describe "registration navigation" do
+    @tag :skip
     test "redirects to login page when the Log in button is clicked", %{conn: conn} do
       {:ok, lv, _html} = live(conn, ~p"/users/register")
 

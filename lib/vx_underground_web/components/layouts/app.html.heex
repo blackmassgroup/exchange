@@ -76,12 +76,12 @@
         </.link>
         <span class="text-zinc-900 dark:text-slate-200"><%= @current_user.email %></span>
       <% else %>
-        <.link
+        <%!-- <.link
           href={~p"/users/register"}
           class="text-[0.8125rem] font-semibold leading-6 text-zinc-900 hover:text-zinc-700 dark:text-slate-200"
         >
           Register
-        </.link>
+        </.link> --%>
 
         <.link
           href={~p"/users/log_in"}
