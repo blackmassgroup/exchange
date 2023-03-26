@@ -13,8 +13,7 @@ config :vx_underground, Oban,
   queues: [default: 10]
 
 config :vx_underground,
-  ecto_repos: [VxUnderground.Repo.Local],
-  s3_bucket_name: System.get_env("S3_BUCKET_NAME")
+  ecto_repos: [VxUnderground.Repo.Local]
 
 config :vx_underground, VxUnderground.Repo.Local,
   priv: "priv/repo",
@@ -76,6 +75,8 @@ config :ex_aws,
     host: "s3.us-east-1.wasabisys.com",
     region: "us-east-1"
   ]
+
+config :vx_underground, s3_bucket_name: System.get_env("S3_BUCKET_NAME")
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
