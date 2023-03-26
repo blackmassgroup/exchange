@@ -12,7 +12,7 @@ kill_timeout = 5
 [env]
   PHX_HOST = "vxu.fly.dev"
   PORT = "8080"
-  PRIMARY_REGION = "lhr"
+  PRIMARY_REGION = "ewr"
   RELEASE_COOKIE="iHw000MHvKwjeH3tl6LSOOcbe8asKzaxYBav0BJ8QoFIP3AqJUoceA=="
 
 [[services]]
