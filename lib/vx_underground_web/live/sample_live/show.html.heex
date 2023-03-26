@@ -41,17 +41,16 @@
     </.link>
   </:item>
   <:item title="Virus Total">
-    <a
-      :if={
-        @virus_total != :does_not_exist and
-          Map.get(@virus_total, "links", %{}) |> Map.get("self") != nil
-      }
-      href={Map.get(@virus_total, "links") |> Map.get("self")}
+    <.link
+      :if={@virus_total != :does_not_exist}
+      href={"https://www.virustotal.com/gui/file/#{@sample.sha256}"}
       target="_blank"
       class="mb-5"
     >
-      Visit on Virus Total
-    </a>
+      <.button>
+        Visit on Virus Total
+      </.button>
+    </.link>
     <br />
     <pre :if={@virus_total != :does_not_exist}>
       <%= Poison.encode!(@virus_total, pretty: true) %>
