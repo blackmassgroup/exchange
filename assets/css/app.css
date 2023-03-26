@@ -43,16 +43,18 @@ pre {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
-    opacity: .5;
+    opacity: 0.5;
   }
 }
 
 @keyframes highlight {
-  0%, 100% {
+  0%,
+  100% {
     background-color: transparent;
   }
   50% {

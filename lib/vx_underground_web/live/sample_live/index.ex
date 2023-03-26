@@ -76,7 +76,7 @@ defmodule VxUndergroundWeb.SampleLive.Index do
     {:noreply, assign(socket, :size, String.to_atom(params["size"]))}
   end
 
-  defp merge_and_sanitize_params(socket, overrides \\ %{}) do
+  defp merge_and_sanitize_params(socket, overrides) do
     %{sorting: sorting, filter: filter} = socket.assigns
 
     %{}
@@ -116,10 +116,10 @@ defmodule VxUndergroundWeb.SampleLive.Index do
     Samples.list_samples(params)
   end
 
+  @impl true
   def handle_info({:update, opts}, socket) do
     samples =
       merge_and_sanitize_params(socket, opts)
-      |> IO.inspect(label: :waldo_5)
       |> list_samples()
 
     {:noreply, assign(socket, :samples, samples)}
