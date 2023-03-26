@@ -490,10 +490,8 @@ defmodule VxUndergroundWeb.CoreComponents do
   attr :id, :string, required: true
   attr :row_click, :any, default: nil
   attr :rows, :list, required: true
-  attr :sorting_headers, :boolean
-  attr :sorting, :map
-  attr :filter, :map
-  attr :size, :atom
+  attr :search, :string, default: ""
+  attr :size, :atom, default: :KB
 
   slot :col, required: true do
     attr :label, :string || nil
@@ -501,95 +499,50 @@ defmodule VxUndergroundWeb.CoreComponents do
 
   slot :action, doc: "the slot for showing user actions in the last table column"
 
-  def table(%{sorting_headers: true} = assigns) do
-    ~H"""
-    <div id={@id} class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
-      <table class="mt-11 w-[40rem] sm:w-full p-5">
-        <thead class="text-left text-[0.8125rem] leading-6 text-zinc-500">
-          <tr>
-            <%= for col <- @col do %>
-              <th :if={col[:label] in ["Download", ""]} class="p-0 pr-6 font-normal">
-                <%= col[:label] %>
-              </th>
-
-              <th :if={col[:label] == "Hashes"} class="p-0 pr-6 font-normal">
-                <span class="float-left pt-4 pr-5">
-                  <%= col[:label] %>
-                </span>
-                <.live_component
-                  module={VxUndergroundWeb.SampleLive.FilterComponent}
-                  id="filter"
-                  filter={@filter}
-                />
-              </th>
-
-              <th :if={col[:label] not in ["Download", "", "Hashes"]} class="p-0 pr-6 font-normal">
-                <div :if={col[:label] == "Size"}>
-                  <.form for={%{}} phx-change="size-change" class="float-right w-28">
-                    <.input
-                      type="select"
-                      options={[KB: "KB", MB: "MB", GB: "GB"]}
-                      name="size"
-                      id="size-change"
-                      value={@size}
-                      errors={[]}
-                    />
-                  </.form>
-                </div>
-                <%= col[:label] %>
-              </th>
-            <% end %>
-            <th class="relative p-0 pb-4"><span class="sr-only"><%= gettext("Actions") %></span></th>
-          </tr>
-        </thead>
-        <tbody
-          id="sample-table"
-          class="relative divide-y divide-zinc-100 border-t border-zinc-200 dark:divide-zinc-700 dark:border-zinc-700 text-sm leading-6 text-zinc-700"
-        >
-          <tr
-            :for={row <- @rows}
-            id={"#{@id}-#{Phoenix.Param.to_param(row)}"}
-            class="group hover:bg-zinc-50 dark:text-slate-200 dark:border-zinc-700"
-            phx-mounted={JS.transition("highlight-animation")}
-          >
-            <td
-              :for={{col, i} <- Enum.with_index(@col)}
-              phx-click={@row_click && @row_click.(row)}
-              class={["relative p-0", @row_click && "hover:cursor-pointer"]}
-            >
-              <div class="block py-4 pr-6">
-                <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-5 dark:group-hover:bg-zinc-800 sm:rounded-l-xl" />
-                <span class={["relative", i == 0 && "font-semibold text-zinc-900 dark:text-slate-200"]}>
-                  <%= render_slot(col, row) %>
-                </span>
-              </div>
-            </td>
-            <td :if={@action != []} class="relative p-0 w-14 dark:group-hover:bg-zinc-800">
-              <div class="relative whitespace-nowrap py-4 text-right text-sm font-medium dark:group-hover:bg-zinc-800">
-                <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 dark:group-hover:bg-zinc-800 sm:rounded-r-xl" />
-                <span
-                  :for={action <- @action}
-                  class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700 dark:group-hover:bg-zinc-800"
-                >
-                  <%= render_slot(action, row) %>
-                </span>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    """
-  end
-
   def table(assigns) do
     ~H"""
     <div id={@id} class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
       <table class="mt-11 w-[40rem] sm:w-full">
         <thead class="text-left text-[0.8125rem] leading-6 text-zinc-500">
           <tr>
-            <th :for={col <- @col} class="p-0 pr-6 font-normal"><%= col[:label] %></th>
-            <th class="relative p-0 pb-4"><span class="sr-only"><%= gettext("Actions") %></span></th>
+            <th :for={col <- @col} :if={col[:label] != "Hash"} class="p-0 pr-6 font-normal">
+              <div :if={col[:label] == "Size"}>
+                <.form for={%{}} phx-change="size-change" class="w-28">
+                  <.input
+                    type="select"
+                    options={[KB: "KB", MB: "MB", GB: "GB"]}
+                    name="size"
+                    id="size-change"
+                    value={@size}
+                    errors={[]}
+                    label="Size"
+                  />
+                </.form>
+              </div>
+              <div :if={col[:label] == "Hashes"} class="p-0 pr-6 font-normal">
+                <div id="table-filter">
+                  <div class="pt-1 flex">
+                    <div class="w-64">
+                      <div class="relative z-0 mb-3 group">
+                        <.form for={%{}} phx-change="search" class="">
+                          <.focus_wrap id="focus-wrap">
+                            <.input
+                              id="hashes-input"
+                              name="Hashes"
+                              label="Hashes"
+                              class="dark:bg-zinc-600"
+                              value={@search}
+                              errors={[]}
+                            />
+                          </.focus_wrap>
+                        </.form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <span :if={col[:label] not in ["Hashes", "Size"]}><%= col[:label] %></span>
+            </th>
           </tr>
         </thead>
         <tbody class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700 dark:border-zinc-700 dark:text-zinc-300 dark:divide-zinc-700">

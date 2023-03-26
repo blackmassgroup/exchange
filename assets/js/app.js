@@ -16,44 +16,45 @@
 //
 
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
-import "phoenix_html"
+import "phoenix_html";
 // Establish Phoenix Socket and LiveView configuration.
-import {Socket} from "phoenix"
-import {LiveSocket} from "phoenix_live_view"
-import InfinityScroll from "./infinity-scroll";
-import topbar from "../vendor/topbar"
+import { Socket } from "phoenix";
+import { LiveSocket } from "phoenix_live_view";
+import topbar from "../vendor/topbar";
 
-let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
+let csrfToken = document
+  .querySelector("meta[name='csrf-token']")
+  .getAttribute("content");
 
-let Uploaders = {}
+let Uploaders = {};
 
 Uploaders.S3 = function (entries, onViewError) {
-  entries.forEach(entry => {
-    let xhr = new XMLHttpRequest()
-    onViewError(() => xhr.abort())
-    xhr.onload = () => (xhr.status === 200 ? entry.progress(100) : entry.error())
-    xhr.onerror = () => entry.error()
-    xhr.upload.addEventListener("progress", event => {
+  entries.forEach((entry) => {
+    let xhr = new XMLHttpRequest();
+    onViewError(() => xhr.abort());
+    xhr.onload = () =>
+      xhr.status === 200 ? entry.progress(100) : entry.error();
+    xhr.onerror = () => entry.error();
+    xhr.upload.addEventListener("progress", (event) => {
       if (event.lengthComputable) {
-        let percent = Math.round((event.loaded / event.total) * 100)
-        entry.progress(percent)
+        let percent = Math.round((event.loaded / event.total) * 100);
+        entry.progress(percent);
       }
-    })
-    xhr.open("PUT", entry.meta.url, true)
-    xhr.send(entry.file)
-  })
-}
+    });
+    xhr.open("PUT", entry.meta.url, true);
+    xhr.send(entry.file);
+  });
+};
 
 let Hooks = {};
-Hooks.InfinityScroll = InfinityScroll;
 
 Hooks.ScrollToTop = {
   mounted() {
-    this.el.addEventListener('click', () => {
+    this.el.addEventListener("click", () => {
       window.scrollTo({
         top: 0,
         left: 0,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     });
   },
@@ -61,21 +62,22 @@ Hooks.ScrollToTop = {
 
 let liveSocket = new LiveSocket("/live", Socket, {
   uploaders: Uploaders,
-  params: { _csrf_token: csrfToken }, 
-  hooks: Hooks
-})
+  params: { _csrf_token: csrfToken },
+  hooks: Hooks,
+});
 
 // Show progress bar on live navigation and form submits
-topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
-window.addEventListener("phx:page-loading-start", _info => topbar.delayedShow(200))
-window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
+topbar.config({ barColors: { 0: "#29d" }, shadowColor: "rgba(0, 0, 0, .3)" });
+window.addEventListener("phx:page-loading-start", (_info) =>
+  topbar.delayedShow(200)
+);
+window.addEventListener("phx:page-loading-stop", (_info) => topbar.hide());
 
 // connect if there are any LiveViews on the page
-liveSocket.connect()
+liveSocket.connect();
 
 // expose liveSocket on window for web console debug logs and latency simulation:
 // >> liveSocket.enableDebug()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
-window.liveSocket = liveSocket
-
+window.liveSocket = liveSocket;

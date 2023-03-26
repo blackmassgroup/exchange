@@ -3,28 +3,28 @@
 @import "tailwindcss/utilities";
 
 .scroll-to-top-btn {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
+  position: relative;
+  margin: 0 auto;
+  display: block;
   z-index: 100;
-  opacity: 0;
-  transform: translateY(100px);
-  transition: all 0.5s ease;
+  opacity: 1;
   padding: 15px;
+}
+
+#search-text {
+  position: relative;
+  bottom: 0;
+  width: 300px;
+  left: calc(50% - 150px);
+  
 }
 
 .flash {
   min-width: 300px;
 }
 
-.show-scroll-to-top-btn {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 .home-img-bg {
   background: url(/assets/images/vxu.jpg);
-
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
