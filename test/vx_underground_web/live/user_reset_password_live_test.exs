@@ -105,7 +105,7 @@ defmodule VxUndergroundWeb.UserResetPasswordLiveTest do
       assert conn.resp_body =~ "Log in"
     end
 
-@tag :skip
+    @tag :skip
     test "redirects to password reset page when the Register button is clicked", %{
       conn: conn,
       token: token
@@ -116,7 +116,8 @@ defmodule VxUndergroundWeb.UserResetPasswordLiveTest do
         lv
         |> element(~s|main a:fl-contains("Register")|)
         |> render_click()
-        # |> follow_redirect(conn, ~p"/users/register")
+
+      # |> follow_redirect(conn, ~p"/users/register")
 
       assert conn.resp_body =~ "Register"
     end
