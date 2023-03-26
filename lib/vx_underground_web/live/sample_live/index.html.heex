@@ -29,8 +29,6 @@
   <:col :let={sample} label="Size">
     <%= get_shown_number(sample.size, @size) |> Number.Delimit.number_to_delimited(precision: 0) %> <%= @size %>
   </:col>
-  <:col :let={sample} label="Type"><%= sample.type %></:col>
-  <:col :let={sample} label="First seen"><%= sample.first_seen %></:col>
   <:col :let={sample} label="Download">
     <.link
       href={generate_url_for_file(sample.sha256)}
