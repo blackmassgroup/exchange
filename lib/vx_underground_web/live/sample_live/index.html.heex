@@ -7,7 +7,22 @@
   </:actions>
 </.header>
 
+<div :if={not connected?(@socket)} class="p-6 m-6 animate-pulse">
+  <div class="h-4 bg-gray-200 mb-6 rounded dark:bg-zinc-500"></div>
+  <div class="h-4 bg-gray-300 mb-6 rounded dark:bg-zinc-600"></div>
+  <div class="h-4 bg-gray-200 mb-6 rounded dark:bg-zinc-500"></div>
+  <div class="h-4 bg-gray-300 mb-6 rounded dark:bg-zinc-600"></div>
+  <div class="h-4 bg-gray-200 mb-6 rounded dark:bg-zinc-500"></div>
+  <div class="h-4 bg-gray-200 mb-6 rounded dark:bg-zinc-500"></div>
+  <div class="h-4 bg-gray-300 mb-6 rounded dark:bg-zinc-600"></div>
+  <div class="h-4 bg-gray-200 mb-6 rounded dark:bg-zinc-500"></div>
+  <div class="h-4 bg-gray-300 mb-6 rounded dark:bg-zinc-600"></div>
+  <div class="h-4 bg-gray-200 mb-6 rounded dark:bg-zinc-500"></div>
+  <div class="h-4 bg-gray-200 mb-6 rounded dark:bg-zinc-500"></div>
+</div>
+
 <.table
+  :if={connected?(@socket)}
   id="samples"
   rows={@samples}
   row_click={&JS.navigate(~p"/samples/#{&1}")}
@@ -46,7 +61,11 @@
   </:col>
 </.table>
 
-<p :if={@search == ""} class="text-center dark:text-slate-200 mt-6" id="search-text">
+<p
+  :if={@search == "" and length(@samples) > 5}
+  class="text-center dark:text-slate-200 mt-6"
+  id="search-text"
+>
   What are you going to scroll for days? Use the search box.
 </p>
 
