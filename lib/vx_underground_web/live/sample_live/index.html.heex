@@ -70,7 +70,7 @@
 </.modal>
 
 <button
-  :if={@samples != []}
+  :if={length(@samples) > 5}
   id="scroll-to-top-btn"
   class="scroll-to-top-btn"
   phx-hook="ScrollToTop"
