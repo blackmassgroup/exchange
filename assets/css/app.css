@@ -22,6 +22,15 @@
   transform: translateY(0);
 }
 
+.home-img-bg {
+  background: url(/assets/images/vxu.jpg);
+
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #191919;
+}
+
 pre {
   max-height: 400px;
   overflow: scroll;
