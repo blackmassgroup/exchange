@@ -18,9 +18,11 @@
     const checkbox = document.querySelector("#checkbox");
     const html = document.querySelector("html");
     const toggleDarkMode = function () {
+      if checkbox != null {
       checkbox.checked
         ? html.classList.add("dark")
         : html.classList.remove("dark");
+        }
     }
     //calling the function directly
     toggleDarkMode();

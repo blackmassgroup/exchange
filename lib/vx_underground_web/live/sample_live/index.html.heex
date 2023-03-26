@@ -69,6 +69,11 @@
   />
 </.modal>
 
-<button id="scroll-to-top-btn" class="scroll-to-top-btn" phx-hook="ScrollToTop" :if={@samples != []}>
+<button
+  :if={@samples != []}
+  id="scroll-to-top-btn"
+  class="scroll-to-top-btn"
+  phx-hook="ScrollToTop"
+>
   <Heroicons.arrow_up_circle mini class="h-6 w-6 dark:text-slate-50" />
 </button>
