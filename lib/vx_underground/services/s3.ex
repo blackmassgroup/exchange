@@ -1,5 +1,5 @@
 defmodule VxUnderground.Services.S3 do
-  @bucket "testing-herbs"
+  @bucket Application.compile_env!(:vx_underground, :s3_bucket_name)
   @region "us-east-1"
   @provider "wasabisys"
 

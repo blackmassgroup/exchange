@@ -13,7 +13,8 @@ config :vx_underground, Oban,
   queues: [default: 10]
 
 config :vx_underground,
-  ecto_repos: [VxUnderground.Repo.Local]
+  ecto_repos: [VxUnderground.Repo.Local],
+  s3_bucket_name: System.get_env("S3_BUCKET_NAME")
 
 config :vx_underground, VxUnderground.Repo.Local,
   priv: "priv/repo",
