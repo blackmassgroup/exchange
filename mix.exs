@@ -63,7 +63,12 @@ defmodule VxUnderground.MixProject do
       {:nimble_csv, "~> 1.1"},
       {:libcluster, "~> 3.3"},
       {:fly_postgres, "~> 0.3.0"},
-      {:oban, "~> 2.14"}
+      {:oban, "~> 2.14"},
+      {:nostrum, git: "https://github.com/Kraigie/nostrum"},
+      {:cowlib, "~> 2.11", hex: :remedy_cowlib, override: true},
+      {:gun, "2.0.1", hex: :remedy_gun, override: true},
+      {:logger_discord_backend, git: "https://github.com/herbedev/logger_discord_backend"}
+
     ]
   end
 
