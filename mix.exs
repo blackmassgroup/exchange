@@ -4,7 +4,7 @@ defmodule VxUnderground.MixProject do
   def project do
     [
       app: :vx_underground,
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -64,11 +64,11 @@ defmodule VxUnderground.MixProject do
       {:libcluster, "~> 3.3"},
       {:fly_postgres, "~> 0.3.0"},
       {:oban, "~> 2.14"},
-      {:nostrum, git: "https://github.com/Kraigie/nostrum"},
+      {:nostrum, git: "https://github.com/Kraigie/nostrum", only: :prod},
+      {:logger_discord_backend,
+       github: "herbedev/logger_discord_backend", branch: "master", only: :prod},
       {:cowlib, "~> 2.11", hex: :remedy_cowlib, override: true},
-      {:gun, "2.0.1", hex: :remedy_gun, override: true},
-      {:logger_discord_backend, git: "https://github.com/herbedev/logger_discord_backend"}
-
+      {:gun, "2.0.1", hex: :remedy_gun, override: true}
     ]
   end
 
