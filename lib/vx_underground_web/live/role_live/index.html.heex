@@ -16,11 +16,6 @@
     </div>
     <.link patch={~p"/roles/#{role}/edit"}>Edit</.link>
   </:action>
-  <:action :let={role}>
-    <.link phx-click={JS.push("delete", value: %{id: role.id})} data-confirm="Are you sure?">
-      Delete
-    </.link>
-  </:action>
 </.table>
 
 <.modal

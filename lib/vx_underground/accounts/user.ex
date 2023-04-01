@@ -6,6 +6,8 @@ defmodule VxUnderground.Accounts.User do
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true, redact: true
+    field :tier, :string
+    field :username, :string
     belongs_to :role, Role
 
     field :custom_permissions, :map, default: %{}

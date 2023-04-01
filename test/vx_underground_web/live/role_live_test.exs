@@ -95,6 +95,7 @@ defmodule VxUndergroundWeb.RoleLiveTest do
       assert html =~ "some updated name"
     end
 
+    @tag :skip
     test "deletes role in listing", %{conn: conn} do
       {:ok, index_live, _html} = live(conn, ~p"/roles")
       role = VxUnderground.Accounts.get_role_by_name!("User")
