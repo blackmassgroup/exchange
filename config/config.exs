@@ -78,19 +78,6 @@ config :ex_aws,
 
 config :vx_underground, s3_bucket_name: System.get_env("S3_BUCKET_NAME")
 
-config :nostrum,
-  token: System.get_env("DISCORD_BOT_TOKEN"),
-  num_shards: 1
-
-config :logger,
-  backends: [LoggerDiscordBackend],
-  level: :error
-
-config :logger, LoggerDiscordBackend,
-  level: :error,
-  format: "```$date $time [$level] $message```",
-  recipient_id: System.get_env("DISCORD_CHANNEL_ID")
-
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

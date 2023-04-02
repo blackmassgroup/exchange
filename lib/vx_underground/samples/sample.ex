@@ -28,7 +28,6 @@ defmodule VxUnderground.Samples.Sample do
     field :s3_object_key, :string
     field :size, :integer
     field :type, :string
-    field :tags, {:array, :integer}
 
     timestamps()
   end

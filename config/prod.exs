@@ -18,7 +18,12 @@ config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: VxUnderground.Fi
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :logger, backends: [:console, {VxUnderground.DiscordLogger, :discord}]
 
+config :logger, :discord,
+  level: :info,
+  bot_token: System.get_env("DISCORD_BOT_TOKEN"),
+  channel_id: System.get_env("DISCORD_CHANNEL_ID")
 
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.
