@@ -4,8 +4,9 @@ defmodule VxUnderground.Accounts.Permissions do
   def all() do
     %{
       "samples" => ["create", "read", "update", "delete"],
-      "roles" => ["read", "update", "update", "delete"],
-      "tags" => ["create", "read", "update", "delete"]
+      "roles" => ["create", "read", "update", "delete"],
+      "tags" => ["create", "read", "update", "delete"],
+      "users" => ["create", "read", "update", "delete"]
     }
   end
 

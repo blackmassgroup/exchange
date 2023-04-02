@@ -266,7 +266,7 @@ defmodule VxUndergroundWeb.CoreComponents do
   attr :type, :string,
     default: "text",
     values: ~w(checkbox color date datetime-local email file hidden month number password
-               range radio search select tel text textarea time url week json)
+               range radio search select tel text textarea time url week json permissions)
 
   attr :value, :any
   attr :field, :any, doc: "a %Phoenix.HTML.Form{}/field name tuple, for example: {f, :email}"
@@ -275,8 +275,12 @@ defmodule VxUndergroundWeb.CoreComponents do
   attr :prompt, :string, default: nil, doc: "the prompt for select inputs"
   attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
   attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
-  attr :rest, :global, include: ~w(autocomplete cols disabled form max maxlength min minlength
-                                   pattern placeholder readonly required rows size step)
+
+  attr :rest, :global,
+    include:
+      ~w(autocomplete cols disabled form max maxlength min minlength
+                                   pattern placeholder readonly required rows size step phx-target)
+
   slot :inner_block
 
   def input(%{field: {f, field}} = assigns) do
@@ -373,16 +377,45 @@ defmodule VxUndergroundWeb.CoreComponents do
     """
   end
 
+  def input(%{type: "permissions"} = assigns) do
+    all_permissions = VxUnderground.Accounts.DefaultRoles.all() |> hd() |> Map.get(:permissions)
+    assigns = Map.put(assigns, :all_permissions, all_permissions)
+
+    ~H"""
+    <div :for={{section_name, permissions} <- @all_permissions}>
+      <h1 class="dark:text-gray-500"><%= String.capitalize(section_name) %></h1>
+      <label
+        :for={permission <- permissions}
+        phx-feedback-for={@name}
+        class="flex items-center gap-4 text-sm leading-6 text-zinc-600"
+      >
+        <input
+          type="checkbox"
+          name={"[#{section_name}][#{permission}]"}
+          checked={permission in Map.get(@value, section_name, [])}
+          id={"#{@id}[#{section_name}][#{permission}]"}
+          class="rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900"
+          phx-change={nil}
+          phx-click="role-permission-change"
+          phx-value-checked={permission in Map.get(@value, section_name, [])}
+          phx-value-resource={section_name}
+          phx-value-permission={permission}
+          {@rest}
+        />
+        <%= String.capitalize(permission) %>
+      </label>
+    </div>
+    """
+  end
+
   def input(%{type: "json"} = assigns) do
     ~H"""
     <div phx-feedback-for={@name}>
       <.label for={@id}><%= @label %></.label>
-      <input
-        type={@type}
+      <textarea
         name={@name}
         id={@id || @name}
         phx-update="ignore"
-        value={Jason.encode!(@value)}
         class={[
           input_border(@errors),
           "mt-2 block w-full rounded-lg border-zinc-300 py-[7px] px-[11px] dark:bg-zinc-700 dark:text-slate-300",

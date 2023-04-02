@@ -21,6 +21,8 @@ defmodule VxUndergroundWeb.AccountLive.User.FormComponent do
         phx-submit="save"
       >
         <.input field={{f, :email}} type="text" label="Email" />
+        <.input field={{f, :username}} type="text" label="Username" />
+        <.input field={{f, :tier}} type="text" label="Tier" />
         <.input field={{f, :role_id}} type="select" label="Role" options={@roles} />
 
         <:actions>
