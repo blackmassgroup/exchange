@@ -106,7 +106,7 @@ defmodule VxUndergroundWeb.RoleLive.FormComponent do
 
   defp save_role(socket, :new, role_params) do
     case Accounts.create_role(role_params) do
-      {:ok, role} ->
+      {:ok, _role} ->
         {:noreply,
          socket
          |> put_flash(:info, "Role created successfully")

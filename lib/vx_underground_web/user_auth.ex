@@ -241,6 +241,31 @@ defmodule VxUndergroundWeb.UserAuth do
     end
   end
 
+  @doc """
+  Used for routes that require the user role of admin to be authenticated.
+  """
+  def require_admin_or_uploader(conn, _opts) do
+    user = conn.assigns[:current_user]
+
+    if user do
+      if user.role.name in ["Admin", "Uploader"] do
+        conn
+      else
+        conn
+        |> put_flash(:error, "You do not have permission to access this page.")
+        |> maybe_store_return_to()
+        |> redirect(to: ~p"/samples")
+        |> halt()
+      end
+    else
+      conn
+      |> put_flash(:error, "You must log in to access this page.")
+      |> maybe_store_return_to()
+      |> redirect(to: ~p"/users/log_in")
+      |> halt()
+    end
+  end
+
   defp put_token_in_session(conn, token) do
     conn
     |> put_session(:user_token, token)

@@ -62,6 +62,17 @@ defmodule VxUndergroundWeb.Router do
   end
 
   scope "/", VxUndergroundWeb do
+    pipe_through [:browser, :require_authenticated_user, :require_admin_or_uploader]
+
+    live_session :require_admin_or_uploader,
+      on_mount: [{VxUndergroundWeb.UserAuth, :ensure_authenticated}] do
+      live "/tags/new", TagLive.Index, :new
+
+      live "/samples/new", SampleLive.Index, :new
+    end
+  end
+
+  scope "/", VxUndergroundWeb do
     pipe_through [:browser, :require_authenticated_user]
 
     live_session :require_authenticated_user,
@@ -70,11 +81,9 @@ defmodule VxUndergroundWeb.Router do
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
 
       live "/tags", TagLive.Index, :index
-      live "/tags/new", TagLive.Index, :new
       live "/tags/:id", TagLive.Show, :show
 
       live "/samples", SampleLive.Index, :index
-      live "/samples/new", SampleLive.Index, :new
       live "/samples/:id", SampleLive.Show, :show
     end
   end
