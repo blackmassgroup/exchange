@@ -33,7 +33,6 @@ defmodule VxUnderground.SamplesTest do
         first_seen: ~U[2023-02-05 17:21:00Z],
         s3_object_key: "some new s3_object_key",
         size: 43,
-        tags: [%VxUnderground.Tags.Tag{name: "Test"}],
         type: "some new type",
         md5: "8f1e3ebe78bf1e81b9d278dfdf278f24",
         sha1: "261ce8aa87bd3c520c577290ce3073d83509e343",
@@ -46,17 +45,6 @@ defmodule VxUnderground.SamplesTest do
       assert sample.first_seen == ~U[2023-02-05 17:21:00Z]
       assert sample.s3_object_key == "some new s3_object_key"
       assert sample.size == 43
-
-      # assert sample.tags == [
-      #          %VxUnderground.Tags.Tag{
-      #            id: nil,
-      #            kind: nil,
-      #            name: "Test",
-      #            inserted_at: nil,
-      #            updated_at: nil
-      #          },
-      #          2
-      #        ]
 
       assert sample.type == "some new type"
     end
@@ -74,7 +62,6 @@ defmodule VxUnderground.SamplesTest do
         hash: "some updated hash",
         s3_object_key: "some updated s3_object_key",
         size: 43,
-        tags: nil,
         type: "some updated type",
         md5: "",
         sha1: "",
@@ -86,7 +73,6 @@ defmodule VxUnderground.SamplesTest do
       assert sample.first_seen == ~U[2023-02-05 17:21:00Z]
       assert sample.s3_object_key == "some updated s3_object_key"
       assert sample.size == 43
-      assert sample.tags == nil
       assert sample.type == "some updated type"
     end
 

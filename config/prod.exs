@@ -20,10 +20,5 @@ config :logger, level: :info
 
 config :logger, backends: [:console, {VxUnderground.DiscordLogger, :discord}]
 
-config :logger, :discord,
-  level: :info,
-  bot_token: System.get_env("DISCORD_BOT_TOKEN"),
-  channel_id: System.get_env("DISCORD_CHANNEL_ID")
-
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.

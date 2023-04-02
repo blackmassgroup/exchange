@@ -71,7 +71,7 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
         <%= for entry <- @uploads.s3_object_key.entries do %>
           <article class="upload-entry">
             <figure>
-              <figcaption><%= entry.client_name %></figcaption>
+              <figcaption class="dark:text-gray-500"><%= entry.client_name %></figcaption>
             </figure>
 
             <%!-- entry.progress will update automatically for in-flight entries --%>

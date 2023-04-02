@@ -34,7 +34,6 @@
   <:item title="Type"><%= @sample.type %></:item>
   <:item title="First seen"><%= @sample.first_seen %></:item>
   <:item title="Names"><%= @sample.names %></:item>
-  <:item title="Tags"><%= @sample.tags %></:item>
   <:item title="Download File">
     <.link href={generate_url_for_file(@sample.sha256)}>
       <.button>Download File</.button>

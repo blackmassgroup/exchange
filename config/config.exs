@@ -78,6 +78,11 @@ config :ex_aws,
 
 config :vx_underground, s3_bucket_name: System.get_env("S3_BUCKET_NAME")
 
+config :logger, :discord,
+  level: :info,
+  bot_token: System.get_env("DISCORD_BOT_TOKEN"),
+  channel_id: System.get_env("DISCORD_CHANNEL_ID")
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
