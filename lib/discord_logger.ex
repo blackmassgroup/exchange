@@ -2,11 +2,6 @@ defmodule VxUnderground.DiscordLogger do
   use Tesla
 
   plug Tesla.Middleware.BaseUrl, "https://discord.com/api/v10"
-
-  plug Tesla.Middleware.Headers, [
-    {"authorization", "Bot #{Application.get_env(:logger, :discord) |> Keyword.get(:bot_token)}"}
-  ]
-
   plug Tesla.Middleware.JSON
 
   @behaviour :gen_event
@@ -40,23 +35,24 @@ defmodule VxUnderground.DiscordLogger do
   end
 
   defp is_level_okay(lvl, min_level) do
-    is_nil(min_level) or
-      Logger.compare_levels(lvl, min_level) != :lt |> IO.inspect(label: :is_level_okay?)
+    is_nil(min_level) or Logger.compare_levels(lvl, min_level) != :lt
   end
 
   def log_to_discord(channel_id, level, msg, ts, md) do
     formatted_msg = format_message(level, msg, ts, md)
     url = "/channels/#{channel_id}/messages"
-    body = %{"content" => formatted_msg} |> IO.inspect(label: :waldo_Body)
+    body = %{"content" => formatted_msg}
 
-    post(url, body)
-    # Tesla.post(url, body, headers: headers)
-    |> IO.inspect(label: :log_to_discord_bot)
+    headers = [
+      {"authorization",
+       "Bot #{Application.get_env(:logger, :discord) |> Keyword.get(:bot_token)}"}
+    ]
+
+    post(url, body, headers: headers)
     |> case do
-      %{status: status} when status in 200..299 -> :ok
       {:ok, %{status: status}} when status in 200..299 -> :ok
       {:error, reason} -> IO.inspect(reason, label: "Error sending log to Discord")
-      _ -> IO.inspect("Error sending log to Discord")
+      any -> IO.inspect(any, label: "Error sending log to Discord")
     end
   end
 

@@ -129,4 +129,9 @@ if config_env() == :prod do
     ]
 
   config :vx_underground, s3_bucket_name: System.get_env("S3_BUCKET_NAME")
+
+  config :logger, :discord,
+    level: :info,
+    bot_token: System.get_env("DISCORD_BOT_TOKEN"),
+    channel_id: System.get_env("DISCORD_CHANNEL_ID")
 end
