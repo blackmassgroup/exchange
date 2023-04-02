@@ -526,7 +526,7 @@ defmodule VxUnderground.AccountsTest do
     @invalid_attrs %{name: nil, permissions: nil}
 
     test "list_roles/0 returns all roles" do
-      assert Accounts.list_roles() |> Enum.map(& &1.id) == [1, 2]
+      assert Accounts.list_roles() |> Enum.map(& &1.id) == [1, 2, 3]
     end
 
     test "get_role!/1 returns the role with given id" do

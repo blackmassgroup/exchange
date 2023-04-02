@@ -9,8 +9,9 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+VxUnderground.Repo.delete_all(VxUnderground.Accounts.Role)
+
 for role <- VxUnderground.Accounts.DefaultRoles.all() do
-  unless VxUnderground.Accounts.get_role_by_name!(role.name) do
-    {:ok, _role} = VxUnderground.Accounts.create_role(role)
-  end
+  {:ok, _role} = VxUnderground.Accounts.create_role(role)
 end
