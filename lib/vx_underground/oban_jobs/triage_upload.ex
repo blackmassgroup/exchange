@@ -17,12 +17,11 @@ defmodule VxUnderground.ObanJobs.TriageUpload do
       {:ok, triage_resp} <- VxUnderground.Services.Triage.upload(presigned_url),
       {:ok, _hashes} <- VxUnderground.Services.Triage.get_sample(triage_resp["id"])
     ) do
-      SampleChannel.broadcast(:triage_processing_complete, %{sample: sample})
+      SampleChannel.broadcast("triage_report_complete", %{sample: sample})
 
       :ok
     else
-      _ ->
-        :error
+      msg -> {:error, msg}
     end
   end
 end

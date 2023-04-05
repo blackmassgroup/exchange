@@ -90,13 +90,6 @@ defmodule VxUndergroundWeb.SampleLive.Index do
     {:noreply, socket}
   end
 
-  def handle_info({:triage_processing_complete, %{sample: sample}}, socket) do
-    %{sample: sample}
-    |> VxUnderground.ObanJobs.TriageUpload.new()
-    |> Oban.insert()
-
-    {:noreply, socket}
-  end
 
   defp list_samples(params \\ %{}) do
     Samples.list_samples(params)

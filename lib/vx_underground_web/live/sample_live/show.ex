@@ -3,12 +3,15 @@ defmodule VxUndergroundWeb.SampleLive.Show do
 
   alias VxUnderground.Services.{TriageSearch, VirusTotal}
   alias VxUnderground.{Samples, Tags}
+  alias VxUndergroundWeb.SampleChannel
 
   import VxUndergroundWeb.SampleLive.Index, only: [generate_url_for_file: 1]
 
   @impl true
   def mount(%{"id" => sample_id} = _params, _session, socket) do
     if connected?(socket) do
+      SampleChannel.join("sample:lobby", %{}, socket)
+
       sample = Samples.get_sample(sample_id)
 
       case sample do
@@ -50,6 +53,14 @@ defmodule VxUndergroundWeb.SampleLive.Show do
     else
       {:ok, socket}
     end
+  end
+
+  def handle_info({:triage_report_complete, %{sample: sample}}, socket) do
+    socket =
+      assign(socket, :samples, [sample | socket.assigns.samples])
+      |> put_flash(:info, "Sample #{sample.sha256}(sha256) finished processing.")
+
+    {:noreply, socket}
   end
 
   defp page_title(:show), do: "Show Sample"
