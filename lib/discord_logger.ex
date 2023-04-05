@@ -60,7 +60,7 @@ defmodule VxUnderground.DiscordLogger do
     timestamp = DateTime.utc_now()
 
     source = md[:application]
-    msg = IO.iodata_to_binary(msg)
+    msg = IO.iodata_to_binary(msg) |> String.slice(0..1900)
 
     "[#{timestamp}] #{source} [#{level}] `#{msg}`"
   end
