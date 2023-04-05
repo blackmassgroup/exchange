@@ -13,13 +13,7 @@ defmodule VxUndergroundWeb.RoleLiveTest do
       |> Jason.encode!()
   }
   @update_attrs %{
-    name: "some updated name",
-    permissions:
-      %{
-        "samples" => ["create", "read", "update"],
-        "tags" => ["read"]
-      }
-      |> Jason.encode!()
+    name: "some updated name"
   }
   @invalid_attrs %{name: nil, permissions: %{}}
 

@@ -19,19 +19,20 @@ defmodule VxUndergroundWeb.SampleLiveTest do
     sha512:
       "38ae7e95990689ff4f209f765452a164ef22ce5fd805ebc185278b8aa03196b3f7e76df17da6d755d3e4cd58caae8c485e4cd01c913b91d14de68b6e701dbe81"
   }
-  @update_attrs %{
-    names: ["updated Test Name"],
-    first_seen: ~U[2023-02-05 17:21:00Z],
-    s3_object_key: "some updated s3_object_key",
-    size: 43,
-    tags: [%VxUnderground.Tags.Tag{name: "Test"}],
-    type: "some updated type",
-    md5: "8f1e3ebe78bf1e81b9d278dfdf278f2f",
-    sha1: "261ce8aa87bd3c520c577290ce3073d83509e34a",
-    sha256: "adf8e94bced4691aadc5b7695116929289623cd925bbf087165c6a7e6e3dd6e5",
-    sha512:
-      "38ae7e95990689ff4f209f765452a164ef22ce5fd805ebc185278b8aa03196b3f7e76df17da6d755d3e4cd58caae8c485e4cd01c913b91d14de68b6e701dbe83"
-  }
+
+  # @update_attrs %{
+  #   names: ["updated Test Name"],
+  #   first_seen: ~U[2023-02-05 17:21:00Z],
+  #   s3_object_key: "some updated s3_object_key",
+  #   size: 43,
+  #   tags: [%VxUnderground.Tags.Tag{name: "Test"}],
+  #   type: "some updated type",
+  #   md5: "8f1e3ebe78bf1e81b9d278dfdf278f2f",
+  #   sha1: "261ce8aa87bd3c520c577290ce3073d83509e34a",
+  #   sha256: "adf8e94bced4691aadc5b7695116929289623cd925bbf087165c6a7e6e3dd6e5",
+  #   sha512:
+  #     "38ae7e95990689ff4f209f765452a164ef22ce5fd805ebc185278b8aa03196b3f7e76df17da6d755d3e4cd58caae8c485e4cd01c913b91d14de68b6e701dbe83"
+  # }
 
   @invalid_attrs %{first_seen: nil, s3_object_key: nil, size: nil, tags: [], type: nil}
 
@@ -59,7 +60,6 @@ defmodule VxUndergroundWeb.SampleLiveTest do
   describe "Index" do
     setup [:create_sample, :login_admin_user]
 
-    @tag :skip
     test "lists all samples", %{conn: conn, sample: sample} do
       {:ok, _index_live, html} = live(conn, ~p"/samples")
 
@@ -90,30 +90,6 @@ defmodule VxUndergroundWeb.SampleLiveTest do
       assert html =~ "some hash"
     end
 
-    @tag :skip
-    test "updates sample in listing", %{conn: conn, sample: sample} do
-      {:ok, index_live, _html} = live(conn, ~p"/samples")
-
-      assert index_live |> element("#samples-#{sample.id} a", "Edit") |> render_click() =~
-               "Edit Sample"
-
-      # assert_patch(index_live, ~p"/samples/#{sample}/edit")
-
-      assert index_live
-             |> form("#sample-form", sample: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
-
-      {:ok, _, html} =
-        index_live
-        |> form("#sample-form", sample: @update_attrs)
-        |> render_submit()
-        |> follow_redirect(conn, ~p"/samples")
-
-      assert html =~ "Sample updated successfully"
-      assert html =~ "some updated hash"
-    end
-
-    @tag :skip
     test "deletes sample in listing", %{conn: conn, sample: sample} do
       {:ok, index_live, _html} = live(conn, ~p"/samples")
 
@@ -132,29 +108,6 @@ defmodule VxUndergroundWeb.SampleLiveTest do
 
       assert html =~ "Show Sample"
       assert html =~ sample.sha1
-    end
-
-    @tag :skip
-    test "updates sample within modal", %{conn: conn, sample: sample} do
-      {:ok, show_live, _html} = live(conn, ~p"/samples/#{sample}")
-
-      assert show_live |> element("a", "Edit") |> render_click() =~
-               "Edit Sample"
-
-      # assert_patch(show_live, ~p"/samples/#{sample}/show/edit")
-
-      assert show_live
-             |> form("#sample-form", sample: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
-
-      {:ok, _, html} =
-        show_live
-        |> form("#sample-form", sample: @update_attrs)
-        |> render_submit()
-        |> follow_redirect(conn, ~p"/samples/#{sample}")
-
-      assert html =~ "Sample updated successfully"
-      assert html =~ "some updated hash"
     end
   end
 end

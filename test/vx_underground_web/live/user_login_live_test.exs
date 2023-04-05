@@ -64,10 +64,9 @@ defmodule VxUndergroundWeb.UserLoginLiveTest do
 
       {:ok, _login_live, login_html} =
         lv
-        |> element(~s|a:fl-contains("Sign up")|)
+        |> element(~s|a:fl-contains("Register")|)
         |> render_click()
-
-      # |> follow_redirect(conn, ~p"/users/register")
+        |> follow_redirect(conn, ~p"/users/register")
 
       assert login_html =~ "Register"
     end
