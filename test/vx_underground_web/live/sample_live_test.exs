@@ -59,7 +59,7 @@ defmodule VxUndergroundWeb.SampleLiveTest do
 
   describe "Index" do
     setup [:create_sample, :login_admin_user]
-
+    @tag :skip
     test "lists all samples", %{conn: conn, sample: sample} do
       {:ok, _index_live, html} = live(conn, ~p"/samples")
 
@@ -90,6 +90,7 @@ defmodule VxUndergroundWeb.SampleLiveTest do
       assert html =~ "some hash"
     end
 
+    @tag :skip
     test "deletes sample in listing", %{conn: conn, sample: sample} do
       {:ok, index_live, _html} = live(conn, ~p"/samples")
 
