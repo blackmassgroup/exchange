@@ -1,4 +1,4 @@
-<.header>
+<.header :if={connected?(@socket)}>
   <span class="dark:text-zinc-200">Sample <%= @sample.sha256 %></span>
   <:subtitle>
     <span class="dark:text-zinc-300">This is a malware sample found in the wild.</span>
@@ -19,7 +19,7 @@
   </:actions>
 </.header>
 
-<.list>
+<.list :if={connected?(@socket)}>
   <:item title="Hashes">
     <p class="font-thin dark:text-slate-200">
       <strong>MD5:</strong> <%= @sample.md5 %> <br /> <strong>SHA1:</strong> <%= @sample.sha1 %>
@@ -70,7 +70,7 @@
 <.back navigate={~p"/samples"}>Back to samples</.back>
 
 <.modal
-  :if={@live_action == :edit}
+  :if={@live_action == :edit and connected?(@socket)}
   id="sample-modal"
   show
   on_cancel={JS.patch(~p"/samples/#{@sample}")}
