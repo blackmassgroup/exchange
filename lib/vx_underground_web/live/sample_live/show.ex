@@ -34,13 +34,15 @@ defmodule VxUndergroundWeb.SampleLive.Show do
               {:ok, %{"data" => data}} ->
                 data
 
-              {:error, _} ->
+              {:error, _} = response ->
+                Logger.error(response)
                 %{sample: sample}
                 |> VxUnderground.ObanJobs.TriageUpload.new()
                 |> Oban.insert()
 
                 :still_processing
             end
+            |> IO.inspect(label: :triage)
 
           {:ok,
            socket
