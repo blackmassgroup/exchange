@@ -7,6 +7,8 @@ defmodule VxUndergroundWeb.SampleLive.Show do
 
   import VxUndergroundWeb.SampleLive.Index, only: [generate_url_for_file: 1]
 
+  require Logger
+
   @impl true
   def mount(%{"id" => sample_id} = _params, _session, socket) do
     if connected?(socket) do
@@ -31,11 +33,20 @@ defmodule VxUndergroundWeb.SampleLive.Show do
 
           triage =
             case TriageSearch.search(sample.sha256) do
-              {:ok, %{"data" => data}} ->
-                data
+              {:ok, %{"data" => []}} ->
+                %{sample: sample}
+                |> VxUnderground.ObanJobs.TriageUpload.new()
+                |> Oban.insert()
+
+                :triage_has_no_data
+
+              {:ok, %{"data" => data} = response} ->
+                Logger.error("No triage search error just nil data")
+                response
 
               {:error, _} = response ->
-                Logger.error(response)
+                Logger.error(triage_search_error: response)
+
                 %{sample: sample}
                 |> VxUnderground.ObanJobs.TriageUpload.new()
                 |> Oban.insert()

@@ -32,8 +32,12 @@ defmodule VxUnderground.Services.TriageSearch do
 
   def search(sha256) do
     case get("/search?query=sha256:" <> sha256) do
-      {:ok, result} -> {:ok, result.body}
-      {:error, msg} -> {:error, msg}
+      {:ok, result} ->
+        {:ok, result.body}
+
+      {:error, msg} ->
+        Logger.error(msg)
+        {:error, msg}
     end
   end
 end

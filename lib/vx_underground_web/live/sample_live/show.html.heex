@@ -60,9 +60,12 @@
     </p>
   </:item>
   <:item title="Triage">
-    <pre :if={@triage not in [:still_processing, []]}><%= Poison.encode!(@triage, pretty: true) %></pre>
-    <p :if={@triage in [:still_processing, []]}>
+    <pre :if={@triage not in [[], :still_processing]}><%= Poison.encode!(@triage, pretty: true) %></pre>
+    <p :if={@triage === :still_processing}>
       Triage is still processing the file, please try again later.
+    </p>
+    <p :if={@triage == :triage_has_no_data}>
+      Triage has not data on the file, we have asked them to process it again please try again in a little bit.
     </p>
   </:item>
 </.list>
