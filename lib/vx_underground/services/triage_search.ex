@@ -16,6 +16,7 @@ defmodule VxUnderground.Services.TriageSearch do
   - https://private.tria.ge/api/v0/
   """
   use Tesla
+  require Logger
 
   @public_url "https://tria.ge/api/v0/"
 
@@ -37,6 +38,7 @@ defmodule VxUnderground.Services.TriageSearch do
 
       {:error, msg} ->
         Logger.error(msg)
+
         {:error, msg}
     end
   end
