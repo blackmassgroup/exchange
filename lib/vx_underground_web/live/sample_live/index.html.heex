@@ -1,6 +1,8 @@
 <.header>
   <span class="dark:text-slate-200">Malware Samples</span>
+
   <:actions>
+    <span class="counter dark:text-slate-200 mr-5"><%= @count %> samples and counting</span>
     <.link :if={@current_user.role.name in ["Admin", "Uploader"]} navigate={~p"/samples/new"}>
       <.button class="dark:bg-zinc-700 dark:hover:bg-zinc-800">New Sample</.button>
     </.link>

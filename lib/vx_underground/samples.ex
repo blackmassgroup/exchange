@@ -47,6 +47,8 @@ defmodule VxUnderground.Samples do
 
   defp filter_by_hash(query, _), do: query
 
+  def get_sample_count!(), do: Repo.aggregate(Sample, :count)
+
   @doc """
   Gets a single sample.
 

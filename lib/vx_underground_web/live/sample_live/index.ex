@@ -17,6 +17,9 @@ defmodule VxUndergroundWeb.SampleLive.Index do
         |> assign(:search, "")
         |> assign(:samples, Samples.list_samples())
         |> assign(:tags, Tags.list_tags())
+        |> assign(:count, :"counting...")
+
+      send(self(), :count)
 
       {:ok, socket}
     else
@@ -24,6 +27,7 @@ defmodule VxUndergroundWeb.SampleLive.Index do
         assign(socket, :samples, [])
         |> assign(:search, "")
         |> assign(:size, :KB)
+        |> assign(:count, :"counting...")
 
       {:ok, socket}
     end
@@ -90,6 +94,9 @@ defmodule VxUndergroundWeb.SampleLive.Index do
     {:noreply, socket}
   end
 
+  def handle_info(:count, socket) do
+    {:noreply, assign(socket, :count, Samples.get_sample_count!())}
+  end
 
   defp list_samples(params \\ %{}) do
     Samples.list_samples(params)
