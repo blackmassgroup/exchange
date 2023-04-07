@@ -54,13 +54,7 @@
     asdf plugin-add elixir
     asdf plugin-add nodejs
 
-    asdf install erlang latest
-    asdf install elixir latest
-    asdf install nodejs latest
-
-    asdf global erlang latest
-    asdf global elixir latest
-    asdf global nodejs latest
+    asdf install
    ```
 
 ### Installation
