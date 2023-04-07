@@ -101,10 +101,10 @@ if config_env() == :prod do
   # Also, you may need to configure the Swoosh API client of your choice if you
   # are not using SMTP. Here is an example of the configuration:
   #
-  config :vx_underground, VxUnderground.Mailer,
-    adapter: Swoosh.Adapters.Mailgun,
-    api_key: System.get_env("MAILGUN_API_KEY"),
-    domain: System.get_env("MAILGUN_DOMAIN")
+  # config :vx_underground, VxUnderground.Mailer,
+  #   adapter: Swoosh.Adapters.Mailgun,
+  #   api_key: System.get_env("MAILGUN_API_KEY"),
+  #   domain: System.get_env("MAILGUN_DOMAIN")
 
   #
   # For this example you need include a HTTP client required by Swoosh API client.
