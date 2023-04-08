@@ -33,7 +33,7 @@
           &nbsp; |
         </div>
 
-        <%= if @current_user.role.name ==  "Admin" do %>
+        <%= if @current_user.role && @current_user.role.name ==  "Admin" do %>
           <.link
             href={~p"/manage/users"}
             class="text-[0.8125rem] font-semibold leading-6 text-zinc-900 hover:text-zinc-700 dark:text-slate-200"
