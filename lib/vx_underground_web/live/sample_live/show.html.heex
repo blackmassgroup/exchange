@@ -60,6 +60,16 @@
     </p>
   </:item>
   <:item title="Triage">
+    <.link
+      :if={@triage not in [[], :still_processing, :triage_has_no_data]}
+      href={"https://tria.ge/#{@triage.sample}"}
+      target="_blank"
+      class="mb-5"
+    >
+      <.button>
+        Visit on Triage
+      </.button>
+    </.link>
     <pre :if={@triage not in [[], :still_processing]}><%= Poison.encode!(@triage, pretty: true) %></pre>
     <p :if={@triage === :still_processing}>
       Triage is still processing the file, please try again later.
