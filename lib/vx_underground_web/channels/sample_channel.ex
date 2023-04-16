@@ -2,8 +2,8 @@ defmodule VxUndergroundWeb.SampleChannel do
   use VxUndergroundWeb, :channel
 
   @impl true
-  def join("sample:lobby", payload, socket) do
-    if authorized?(payload) do
+  def join("sample:lobby", _payload, socket) do
+    if authorized?(socket) do
       {:ok, socket}
     else
       {:error, %{reason: "unauthorized"}}
@@ -13,8 +13,6 @@ defmodule VxUndergroundWeb.SampleChannel do
   def broadcast(msg, payload),
     do: VxUndergroundWeb.Endpoint.broadcast("sample:lobby", msg, payload)
 
-  # Add authorization logic here as required.
-  defp authorized?(_payload) do
-    true
-  end
+  defp authorized?(%{assigns: %{current_user: nil}}), do: false
+  defp authorized?(_socket), do: true
 end
