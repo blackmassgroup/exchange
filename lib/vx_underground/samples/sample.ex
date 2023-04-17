@@ -11,7 +11,9 @@ defmodule VxUnderground.Samples.Sample do
     :md5,
     :sha1,
     :sha256,
-    :sha512
+    :sha512,
+    :tags,
+    :id
   ]
 
   @required []
@@ -28,6 +30,7 @@ defmodule VxUnderground.Samples.Sample do
     field :s3_object_key, :string
     field :size, :integer
     field :type, :string
+    field :tags, {:array, :string}
 
     timestamps()
   end

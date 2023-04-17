@@ -16,7 +16,7 @@ defmodule VxUnderground.SamplesFixtures do
         hash: "some new hash",
         s3_object_key: "some new s3_object_key",
         size: 43,
-        tags: [%VxUnderground.Tags.Tag{name: "Test"}],
+        tags: ["Test Tag"],
         type: "some new type",
         md5: "8f1e3ebe78bf1e81b9d278dfdf278f26",
         sha1: "261ce8aa87bd3c520c577290ce3073d83509e349",
