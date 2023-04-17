@@ -11,7 +11,7 @@ defmodule VxUndergroundWeb.SampleLiveTest do
     first_seen: ~U[2023-02-05 17:21:00Z],
     s3_object_key: "some new s3_object_key",
     size: 43,
-    tags: [%VxUnderground.Tags.Tag{name: "Test"}],
+    tags: ["tag"],
     type: "some new type",
     md5: "8f1e3ebe78bf1e81b9d278dfdf278f24",
     sha1: "261ce8aa87bd3c520c577290ce3073d83509e343",
