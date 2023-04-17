@@ -73,7 +73,7 @@ pre {
 
 /* https://codepen.io/jesusbotella/pen/opmRrO */
 .splitflap-display {
-  background-color: #302f30;
+  
   color: #fff;
   height: 100%;
   font-family: "Cousine", monospace;
@@ -81,19 +81,19 @@ pre {
   margin: 10px;
   flex-wrap: wrap;
   align-items: center;
-  height: 100%;
+  width: 100%;
   justify-content: center;
   align-content: center;
 }
 
 .split-flap {
-  width: 60px;
-  height: 64px;
+  width: 30px;
+  height: 32px;
   border: 2px solid rgba(0, 0, 0, 0.2);
   position: relative;
   margin: 0 20px 20px 0;
-  font-size: 64px;
-  line-height: 70px;
+  font-size: 28px;
+  line-height: 35px;
   text-align: center;
   box-sizing: border-box;
   box-shadow: inset 2px 2px 0px 0px rgba(0, 0, 0, 0.5);

@@ -1,11 +1,57 @@
 <.header>
   <span class="dark:text-slate-200">Malware Samples</span>
-
+  <br />
+  <br />
+  <.link :if={@current_user.role.name in ["Admin", "Uploader"]} navigate={~p"/samples/new"}>
+    <.button class="dark:bg-zinc-700 dark:hover:bg-zinc-800">New Sample</.button>
+  </.link>
   <:actions>
-    <span class="counter dark:text-slate-200 mr-5"><%= @count %> samples and counting</span>
-    <.link :if={@current_user.role.name in ["Admin", "Uploader"]} navigate={~p"/samples/new"}>
-      <.button class="dark:bg-zinc-700 dark:hover:bg-zinc-800">New Sample</.button>
-    </.link>
+    <div
+      :if={@count !== :"counting..."}
+      class="splitflap-display"
+      phx-hook="SplitFlap"
+      id="SplitFlap"
+    >
+      <div
+        :for={digit <- @count |> Integer.to_string() |> String.graphemes()}
+        class="split-flap"
+        data-letter={digit}
+      />
+    </div>
+    <div
+      :if={@count !== :"counting..."}
+      class="splitflap-display"
+      phx-hook="SplitFlap"
+      id="SplitFlap2"
+    >
+      <div class="split-flap" data-letter="S" data-animation-delay="800ms" />
+      <div class="split-flap" data-letter="a" data-animation-delay="1200ms" />
+      <div class="split-flap" data-letter="m" data-animation-delay="1800ms" />
+      <div class="split-flap" data-letter="p" data-animation-delay="2000ms" />
+      <div class="split-flap" data-letter="l" data-animation-delay="2600ms" />
+      <div class="split-flap" data-letter="e" data-animation-delay="3000ms" />
+      <div class="split-flap" data-letter="s" data-animation-delay="3400ms" />
+      <div class="split-flap" data-letter="🏴‍☠️" data-animation-delay="3400ms" />
+    </div>
+
+    <div
+      :if={@count === :"counting..."}
+      class="splitflap-display"
+      phx-hook="SplitFlap"
+      id="SplitFlap"
+    >
+      <div class="split-flap" data-letter="C" data-animation-delay="800ms" />
+      <div class="split-flap" data-letter="o" data-animation-delay="1200ms" />
+      <div class="split-flap" data-letter="u" data-animation-delay="1800ms" />
+      <div class="split-flap" data-letter="n" data-animation-delay="2000ms" />
+      <div class="split-flap" data-letter="t" data-animation-delay="2200ms" />
+      <div class="split-flap" data-letter="i" data-animation-delay="2600ms" />
+      <div class="split-flap" data-letter="n" data-animation-delay="3000ms" />
+      <div class="split-flap" data-letter="g" data-animation-delay="3400ms" />
+      <div class="split-flap" data-letter="." data-animation-delay="3800ms" />
+      <div class="split-flap" data-letter="." data-animation-delay="4200ms" />
+      <div class="split-flap" data-letter="." data-animation-delay="4600ms" />
+    </div>
   </:actions>
 </.header>
 
