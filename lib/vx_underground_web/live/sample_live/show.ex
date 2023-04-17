@@ -2,7 +2,7 @@ defmodule VxUndergroundWeb.SampleLive.Show do
   use VxUndergroundWeb, :live_view
 
   alias VxUnderground.Services.{TriageSearch, VirusTotal}
-  alias VxUnderground.{Samples, Tags}
+  alias VxUnderground.Samples
   alias VxUndergroundWeb.SampleChannel
 
   import VxUndergroundWeb.SampleLive.Index, only: [generate_url_for_file: 1]
@@ -59,7 +59,6 @@ defmodule VxUndergroundWeb.SampleLive.Show do
            socket
            |> assign(:page_title, page_title(socket.assigns.live_action))
            |> assign(:sample, sample)
-           |> assign(:tags, Tags.list_tags() |> Enum.map(&[value: &1.id, key: &1.name]))
            |> assign(:virus_total, virus_total)
            |> assign(:triage, triage)}
       end

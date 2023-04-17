@@ -1,7 +1,6 @@
 defmodule VxUndergroundWeb.SampleLive.Index do
   use VxUndergroundWeb, :live_view
 
-  alias VxUnderground.Tags
   alias VxUnderground.Services.S3
   alias VxUndergroundWeb.SampleChannel
   alias VxUnderground.Samples
@@ -9,14 +8,13 @@ defmodule VxUndergroundWeb.SampleLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    SampleChannel.join("sample:lobby", %{}, socket)
-
     if connected?(socket) do
+      SampleChannel.join("sample:lobby", %{}, socket)
+
       socket =
         assign(socket, size: :KB)
         |> assign(:search, "")
         |> assign(:samples, Samples.list_samples())
-        |> assign(:tags, Tags.list_tags())
         |> assign(:count, :"counting...")
 
       send(self(), :count)

@@ -60,6 +60,60 @@ Hooks.ScrollToTop = {
   },
 };
 
+Hooks.SplitFlap = {
+  mounted() {
+    //codepen.io/jesusbotella/pen/opmRrO
+    function makeid() {
+      var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+      return possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+
+    function randomTime() {
+      return Math.round(Math.random() * 200);
+    }
+    function changeAnimationTime(element) {
+      var random = randomTime();
+      element.setAttribute("animation-delay", random + "ms");
+
+      console.log("animation-delay", random + "ms");
+    }
+
+    var mapFn = function (element) {
+      changeAnimationTime(element);
+      var i = 0;
+      var originalAttribute = element.getAttribute("data-letter");
+      var test = [
+        makeid(),
+        makeid(),
+        makeid(),
+        makeid(),
+        makeid(),
+        originalAttribute,
+      ];
+      element.addEventListener(
+        "animationend",
+        function () {
+          element.setAttribute("data-letter", originalAttribute);
+        },
+        false
+      );
+      element.addEventListener(
+        "animationiteration",
+        function () {
+          element.setAttribute("data-letter", test[i++]);
+        },
+        false
+      );
+    };
+
+    var changingElements = Array.from(
+      document.querySelectorAll("[data-letter]"),
+      mapFn
+    );
+  }
+}
+
 let liveSocket = new LiveSocket("/live", Socket, {
   uploaders: Uploaders,
   params: { _csrf_token: csrfToken },
