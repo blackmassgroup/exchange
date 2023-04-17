@@ -36,6 +36,9 @@ defmodule VxUnderground.Services.TriageSearch do
       {:ok, result} ->
         {:ok, result.body}
 
+      {:error, :econnrefused} ->
+        {:error, :econnrefused}
+
       {:error, msg} ->
         Logger.error(msg)
 

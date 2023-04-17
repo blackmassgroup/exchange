@@ -40,8 +40,7 @@ defmodule VxUndergroundWeb.SampleLive.Show do
 
                 :triage_has_no_data
 
-              {:ok, %{"data" => data} = response} ->
-                Logger.error("No triage search error just nil data")
+              {:ok, %{"data" => _} = response} ->
                 response
 
               {:error, _} = response ->
@@ -67,6 +66,7 @@ defmodule VxUndergroundWeb.SampleLive.Show do
     end
   end
 
+  @impl true
   def handle_info({:triage_report_complete, %{sample: sample}}, socket) do
     socket =
       assign(socket, :samples, [sample | socket.assigns.samples])
