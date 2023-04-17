@@ -17,13 +17,13 @@
 
 ### Built With
 
-- **Postgres** - 14.7.0
-- **erlang** - 25.2
-- [**Elixir**](https://hexdocs.pm/elixir/Kernel.html) - 1.14.3-otp-25
-- [**Phoenix**](https://hexdocs.pm/phoenix/Phoenix.html) - 1.7.2
-- [**Phoenix LiveView**](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html) - 0.18.17
-- **NodeJS** - 19.3.0
-- [**TailwindCSS**](https://tailwindcss.com/docs/installation) - 3.0.23
+- **Postgres** - ~ 15.2
+- **erlang** - ~ 25.2
+- [**Elixir**](https://hexdocs.pm/elixir/Kernel.html) - ~ 1.14.3-otp-25
+- [**Phoenix**](https://hexdocs.pm/phoenix/Phoenix.html) - ~ 1.7.2
+- [**Phoenix LiveView**](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html) - ~ 0.18.17
+- **NodeJS** - ~ 19.3.0
+- [**TailwindCSS**](https://tailwindcss.com/docs/installation) - ~ 3.0.23
 
 ### Screenshots
 
@@ -82,7 +82,7 @@
 
 - Setup Minio for Dev upload / download
 - Better file types
-- YARA Tags / Tags in general
+- YARA Tags 
 - API routes
 
 ## Database architecture 🗂
@@ -97,13 +97,10 @@ classDiagram
       +String sha512
       +String s3_object_key
       +Array names
+      +Array tags
       +DateTime first_seen
     }
-    class Tag {
-      +String name
-      +String kind
-      +Integer sample_id
-    }
+
     class Users {
      +String email
      +String username
