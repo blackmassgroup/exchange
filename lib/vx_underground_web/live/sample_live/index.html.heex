@@ -2,7 +2,7 @@
   <span class="dark:text-slate-200">Malware Samples</span>
   <br />
   <br />
-  <.link :if={@current_user.role.name in ["Admin", "Uploader"]} navigate={~p"/samples/new"}>
+  <.link :if={@current_user.role && @current_user.role.name in ["Admin", "Uploader"]} navigate={~p"/samples/new"}>
     <.button class="dark:bg-zinc-700 dark:hover:bg-zinc-800">New Sample</.button>
   </.link>
   <:actions>
@@ -102,7 +102,7 @@
     </.link>
   </:col>
 
-  <:col :let={sample} :if={@current_user.role.name == "Admin"} label="">
+  <:col :let={sample} :if={@current_user.role && @current_user.role.name == "Admin"} label="">
     <.link phx-click={JS.push("delete", value: %{id: sample.id})} data-confirm="Are you sure?">
       <.button>Delete</.button>
     </.link>
