@@ -93,7 +93,13 @@ defmodule VxUndergroundWeb.SampleLive.Index do
   end
 
   def handle_info(:count, socket) do
-    {:noreply, assign(socket, :count, Samples.get_sample_count!())}
+    {:noreply,
+     assign(
+       socket,
+       :count,
+       Samples.get_sample_count!()
+       |> Number.Delimit.number_to_delimited(delimiter: ",", precision: 0)
+     )}
   end
 
   defp list_samples(params \\ %{}) do

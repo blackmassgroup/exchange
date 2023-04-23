@@ -52,7 +52,6 @@ defmodule VxUndergroundWeb.SampleLive.Show do
 
                 :still_processing
             end
-            |> IO.inspect(label: :triage)
 
           {:ok,
            socket

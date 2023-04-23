@@ -34,7 +34,11 @@
   <:item title="Type"><%= @sample.type %></:item>
   <:item title="First seen"><%= @sample.first_seen %></:item>
   <:item title="Names"><%= @sample.names %></:item>
-  <:item title="Tags"><.button :for={tag <- @sample.tags}><%= tag %></.button></:item>
+  <:item title="Tags">
+    <div class="flex max-w-xs flex-wrap">
+      <span :for={tag <- @sample.tags} class="tag"><%= tag %></span>
+    </div>
+  </:item>
   <:item title="Download File">
     <.link href={generate_url_for_file(@sample.sha256)}>
       <.button>Download File</.button>
@@ -62,8 +66,11 @@
   </:item>
   <:item title="Triage">
     <.link
-      :if={@triage not in [[], :still_processing, :triage_has_no_data]}
-      href={"https://tria.ge/#{@triage.sample}"}
+      :if={
+        @triage not in [:does_not_exist, :triage_has_no_data] and
+          List.first(@triage["data"]) |> Map.get("id") !== nil
+      }
+      href={"https://tria.ge/#{List.first(@triage["data"]) |> Map.get("id")}"}
       target="_blank"
       class="mb-5"
     >

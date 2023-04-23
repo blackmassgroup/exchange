@@ -67,8 +67,6 @@ defmodule VxUnderground.Samples do
 
   @doc """
   Gets a single sample.
-
-
   ## Examples
 
       iex> get_sample!(123)

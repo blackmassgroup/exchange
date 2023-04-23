@@ -75,8 +75,6 @@ defmodule VxUndergroundWeb.RoleLive.FormComponent do
           original_resource_permissions -- [permission]
         )
       end
-      # |> Jason.encode!
-      |> IO.inspect(label: :new_permissions)
 
     {:ok, role} =
       socket.assigns.role

@@ -2,7 +2,10 @@
   <span class="dark:text-slate-200">Malware Samples</span>
   <br />
   <br />
-  <.link :if={@current_user.role && @current_user.role.name in ["Admin", "Uploader"]} navigate={~p"/samples/new"}>
+  <.link
+    :if={@current_user.role && @current_user.role.name in ["Admin", "Uploader"]}
+    navigate={~p"/samples/new"}
+  >
     <.button class="dark:bg-zinc-700 dark:hover:bg-zinc-800">New Sample</.button>
   </.link>
   <:actions>
@@ -12,11 +15,7 @@
       phx-hook="SplitFlap"
       id="SplitFlap"
     >
-      <div
-        :for={digit <- @count |> Integer.to_string() |> String.graphemes()}
-        class="split-flap"
-        data-letter={digit}
-      />
+      <div :for={digit <- @count |> String.graphemes()} class="split-flap" data-letter={digit} />
     </div>
     <div
       :if={@count !== :"counting..."}
@@ -31,6 +30,8 @@
       <div class="split-flap" data-letter="l" data-animation-delay="2600ms" />
       <div class="split-flap" data-letter="e" data-animation-delay="3000ms" />
       <div class="split-flap" data-letter="s" data-animation-delay="3400ms" />
+      <div class="split-flap" data-letter=" " data-animation-delay="3400ms" />
+      <div class="split-flap" data-letter=" " data-animation-delay="3400ms" />
       <div class="split-flap" data-letter="🏴‍☠️" data-animation-delay="3400ms" />
     </div>
 
@@ -56,17 +57,28 @@
 </.header>
 
 <div :if={not connected?(@socket)} class="p-6 m-6 animate-pulse">
-  <div class="h-4 bg-gray-200 mb-6 rounded dark:bg-zinc-500"></div>
-  <div class="h-4 bg-gray-300 mb-6 rounded dark:bg-zinc-600"></div>
-  <div class="h-4 bg-gray-200 mb-6 rounded dark:bg-zinc-500"></div>
-  <div class="h-4 bg-gray-300 mb-6 rounded dark:bg-zinc-600"></div>
-  <div class="h-4 bg-gray-200 mb-6 rounded dark:bg-zinc-500"></div>
-  <div class="h-4 bg-gray-200 mb-6 rounded dark:bg-zinc-500"></div>
-  <div class="h-4 bg-gray-300 mb-6 rounded dark:bg-zinc-600"></div>
-  <div class="h-4 bg-gray-200 mb-6 rounded dark:bg-zinc-500"></div>
-  <div class="h-4 bg-gray-300 mb-6 rounded dark:bg-zinc-600"></div>
-  <div class="h-4 bg-gray-200 mb-6 rounded dark:bg-zinc-500"></div>
-  <div class="h-4 bg-gray-200 mb-6 rounded dark:bg-zinc-500"></div>
+  <div class="h-4 bg-gray-600 mb-6 rounded dark:bg-zinc-500"></div>
+  <div class="h-4 bg-gray-700 mb-6 rounded dark:bg-zinc-600"></div>
+  <div class="h-4 bg-gray-600 mb-6 rounded dark:bg-zinc-500"></div>
+  <div class="h-4 bg-gray-700 mb-6 rounded dark:bg-zinc-600"></div>
+  <div class="h-4 bg-gray-600 mb-6 rounded dark:bg-zinc-500"></div>
+  <div class="h-4 bg-gray-600 mb-6 rounded dark:bg-zinc-500"></div>
+  <div class="h-4 bg-gray-700 mb-6 rounded dark:bg-zinc-600"></div>
+  <div class="h-4 bg-gray-600 mb-6 rounded dark:bg-zinc-500"></div>
+  <div class="h-4 bg-gray-700 mb-6 rounded dark:bg-zinc-600"></div>
+  <div class="h-4 bg-gray-600 mb-6 rounded dark:bg-zinc-500"></div>
+  <div class="h-4 bg-gray-600 mb-6 rounded dark:bg-zinc-500"></div>
+  <div class="h-4 bg-gray-600 mb-6 rounded dark:bg-zinc-500"></div>
+  <div class="h-4 bg-gray-700 mb-6 rounded dark:bg-zinc-600"></div>
+  <div class="h-4 bg-gray-600 mb-6 rounded dark:bg-zinc-500"></div>
+  <div class="h-4 bg-gray-700 mb-6 rounded dark:bg-zinc-600"></div>
+  <div class="h-4 bg-gray-600 mb-6 rounded dark:bg-zinc-500"></div>
+  <div class="h-4 bg-gray-600 mb-6 rounded dark:bg-zinc-500"></div>
+  <div class="h-4 bg-gray-700 mb-6 rounded dark:bg-zinc-600"></div>
+  <div class="h-4 bg-gray-600 mb-6 rounded dark:bg-zinc-500"></div>
+  <div class="h-4 bg-gray-700 mb-6 rounded dark:bg-zinc-600"></div>
+  <div class="h-4 bg-gray-600 mb-6 rounded dark:bg-zinc-500"></div>
+  <div class="h-4 bg-gray-600 mb-6 rounded dark:bg-zinc-500"></div>
 </div>
 
 <.table
@@ -88,6 +100,11 @@
         Processing...
       <% end %>
     </p>
+  </:col>
+  <:col :let={sample} label="Tags">
+    <div class="flex max-w-xs flex-wrap">
+      <span :for={tag <- sample.tags} class="tag"><%= tag %></span>
+    </div>
   </:col>
   <:col :let={sample} label="Size">
     <%= get_shown_number(sample.size, @size) |> Number.Delimit.number_to_delimited(precision: 0) %> <%= @size %>
