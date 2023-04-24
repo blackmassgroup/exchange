@@ -84,6 +84,8 @@ pre {
   width: 100%;
   justify-content: center;
   align-content: center;
+  max-width: 500px;
+  text-transform: uppercase;
 }
 
 .split-flap {
