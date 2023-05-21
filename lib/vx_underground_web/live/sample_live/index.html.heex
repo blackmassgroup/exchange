@@ -105,7 +105,7 @@
     </p>
   </:col>
   <:col :let={sample} label="Tags">
-    <div class="flex max-w-xs flex-wrap">
+    <div class="flex max-w-xs flex-wrap" :if={sample.tags}>
       <span :for={tag <- sample.tags} class="tag"><%= tag %></span>
     </div>
   </:col>
