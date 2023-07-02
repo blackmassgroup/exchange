@@ -173,18 +173,18 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
     end)
     |> VxUnderground.Repo.Local.transaction()
     |> case do
-      {:ok, samples} ->
-        Enum.map(socket.assigns.uploads.s3_object_key.entries, fn upload ->
-          sample = Map.get(samples, upload.client_name)
+      {:ok, _samples} ->
+        # Enum.map(socket.assigns.uploads.s3_object_key.entries, fn upload ->
+        #   sample = Map.get(samples, upload.client_name)
 
-          %{sample: sample}
-          |> VxUnderground.ObanJobs.TriageUpload.new()
-          |> Oban.insert()
-        end)
+        #   %{sample: sample}
+        #   |> VxUnderground.ObanJobs.TriageUpload.new()
+        #   |> Oban.insert()
+        # end)
 
         socket =
           socket
-          |> put_flash(:info, "Sample(s) created successfully, Triage processing has started.")
+          |> put_flash(:info, "Sample(s) created successfully")
           |> push_patch(to: ~p(/samples))
 
         {:noreply, socket}

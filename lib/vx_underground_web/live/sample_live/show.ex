@@ -31,34 +31,12 @@ defmodule VxUndergroundWeb.SampleLive.Show do
                 :does_not_exist
             end
 
-          triage =
-            case TriageSearch.search(sample.sha256) do
-              {:ok, %{"data" => []}} ->
-                %{sample: sample}
-                |> VxUnderground.ObanJobs.TriageUpload.new()
-                |> Oban.insert()
-
-                :triage_has_no_data
-
-              {:ok, %{"data" => _} = response} ->
-                response
-
-              {:error, _} = response ->
-                Logger.error(triage_search_error: response)
-
-                %{sample: sample}
-                |> VxUnderground.ObanJobs.TriageUpload.new()
-                |> Oban.insert()
-
-                :still_processing
-            end
-
           {:ok,
            socket
            |> assign(:page_title, page_title(socket.assigns.live_action))
            |> assign(:sample, sample)
            |> assign(:virus_total, virus_total)
-           |> assign(:triage, triage)}
+           |> assign(:triage, :triage_not_processed)}
       end
     else
       {:ok, socket}
@@ -72,6 +50,35 @@ defmodule VxUndergroundWeb.SampleLive.Show do
       |> put_flash(:info, "Sample #{sample.sha256}(sha256) finished processing.")
 
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("start-triage-processing", _params, socket) do
+    sample = socket.assigns.sample
+
+    triage =
+      case TriageSearch.search(sample.sha256) do
+        {:ok, %{"data" => []}} ->
+          %{sample: sample}
+          |> VxUnderground.ObanJobs.TriageUpload.new()
+          |> Oban.insert()
+
+          :triage_has_no_data
+
+        {:ok, %{"data" => _} = response} ->
+          response
+
+        {:error, _} = response ->
+          Logger.error(triage_search_error: response)
+
+          %{sample: sample}
+          |> VxUnderground.ObanJobs.TriageUpload.new()
+          |> Oban.insert()
+
+          :still_processing
+      end
+
+    {:noreply, assign(socket, :triage, triage)}
   end
 
   defp page_title(:show), do: "Show Sample"

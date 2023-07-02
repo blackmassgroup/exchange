@@ -35,7 +35,7 @@
   <:item title="First seen"><%= @sample.first_seen %></:item>
   <:item title="Names"><%= @sample.names %></:item>
   <:item title="Tags">
-    <div class="flex max-w-xs flex-wrap">
+    <div :if={@sample.tags != nil} class="flex max-w-xs flex-wrap">
       <span :for={tag <- @sample.tags} class="tag"><%= tag %></span>
     </div>
   </:item>
@@ -67,7 +67,7 @@
   <:item title="Triage">
     <.link
       :if={
-        @triage not in [:does_not_exist, :triage_has_no_data] and
+        @triage not in [:does_not_exist, :triage_has_no_data, :triage_not_processed] and
           List.first(@triage["data"]) |> Map.get("id") !== nil
       }
       href={"https://tria.ge/#{List.first(@triage["data"]) |> Map.get("id")}"}
@@ -85,6 +85,11 @@
     <p :if={@triage == :triage_has_no_data}>
       Triage has not data on the file, we have asked them to process it again please try again in a little bit.
     </p>
+    <.link :if={@triage == :triage_not_processed} phx-click="start-triage-processing" class="mb-5">
+      <.button>
+        Start Triage Processing
+      </.button>
+    </.link>
   </:item>
 </.list>
 
