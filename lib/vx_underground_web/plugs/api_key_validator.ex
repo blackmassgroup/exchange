@@ -7,7 +7,6 @@ defmodule VxUndergroundWeb.Plugs.ApiKeyValidator do
     api_key =
       get_req_header(conn, "authorization")
       |> List.first()
-      |> String.replace("Bearer ", "")
 
     case validate_api_key(api_key) do
       :error ->
@@ -21,9 +20,6 @@ defmodule VxUndergroundWeb.Plugs.ApiKeyValidator do
   end
 
   defp validate_api_key(api_key) do
-    # Your validation logic here. Return :ok if valid, :error if not.
-    # For example, you could look up the API key in the database.
-
     case VxUnderground.Accounts.get_user_by_api_key(api_key) do
       nil -> :error
       user -> user
