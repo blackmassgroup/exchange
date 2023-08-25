@@ -7,7 +7,7 @@ defmodule VxUnderground.Repo.Local.Migrations.AddAiKeysToExistingUsers do
     VxUnderground.Accounts.list_users()
     |> Enum.each(fn
       %{api_key: nil} = user ->
-        User.api_key_changeset(user, %{user: generate_api_key()}) |> Repo.update!()
+        User.api_key_changeset(user, %{api_key: generate_api_key()}) |> Repo.update!()
 
       _ ->
         :ok
