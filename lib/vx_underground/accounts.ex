@@ -82,7 +82,9 @@ defmodule VxUnderground.Accounts do
       {:ok, user} ->
         {:ok, user} = add_role_to_user(user, "User")
 
-        User.api_key_changeset(user, %{api_key: generate_api_key()}) |> Repo.insert!()
+        user = User.api_key_changeset(user, %{api_key: generate_api_key()}) |> Repo.update!()
+
+        {:ok, user}
 
       # VxUnderground.Services.Malcore.register(user.email)
       error ->
