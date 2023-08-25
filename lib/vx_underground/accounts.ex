@@ -80,14 +80,28 @@ defmodule VxUnderground.Accounts do
     |> Repo.insert()
     |> case do
       {:ok, user} ->
-        case add_role_to_user(user, "User") do
-          {:ok, user} -> {:ok, user}
-          _ -> {:ok, user}
-        end
+        {:ok, user} = add_role_to_user(user, "User")
 
+        User.api_key_changeset(user, %{api_key: generate_api_key()}) |> Repo.insert!()
+
+      # VxUnderground.Services.Malcore.register(user.email)
       error ->
         error
     end
+  end
+
+  @key_length 32
+
+  def generate_api_key() do
+    :crypto.strong_rand_bytes(@key_length)
+    |> Base.encode64()
+    # Remove any characters that might not be URL safe
+    |> String.replace("/", "0")
+    |> String.slice(0, @key_length)
+  end
+
+  def get_user_by_api_key(api_key) do
+    Repo.get_by(User, api_key: api_key)
   end
 
   @doc """

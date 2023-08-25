@@ -13,6 +13,8 @@ defmodule VxUnderground.Accounts.User do
     field :custom_permissions, :map, default: %{}
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
+    field :api_key, :string, redact: true
+    field :malcore_api_key, :string, redact: true
 
     timestamps()
   end
@@ -167,5 +169,13 @@ defmodule VxUnderground.Accounts.User do
     else
       add_error(changeset, :current_password, "is not valid")
     end
+  end
+
+  @doc """
+  A user changeset for updating the user's API key.
+  """
+  def api_key_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:api_key, :malcore_api_key])
   end
 end
