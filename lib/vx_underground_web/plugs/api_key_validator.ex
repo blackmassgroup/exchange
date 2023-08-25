@@ -10,13 +10,13 @@ defmodule VxUndergroundWeb.Plugs.ApiKeyValidator do
       |> String.replace("Bearer ", "")
 
     case validate_api_key(api_key) do
-      :ok ->
-        conn
-
       :error ->
         conn
         |> send_resp(401, "Unauthorized")
         |> halt()
+
+      user ->
+        assign(conn, :current_user, user)
     end
   end
 
@@ -26,7 +26,7 @@ defmodule VxUndergroundWeb.Plugs.ApiKeyValidator do
 
     case VxUnderground.Accounts.get_user_by_api_key(api_key) do
       nil -> :error
-      _user -> :ok
+      user -> user
     end
   end
 end
