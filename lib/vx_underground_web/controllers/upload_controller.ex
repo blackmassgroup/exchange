@@ -16,7 +16,7 @@ defmodule VxUndergroundWeb.UploadController do
     #    malcore_api_key |> build_malcore_headers() |> MalcoreRuntime.upload(sample.id)
     with params <- build_sample_params(file),
          {:ok, sample} <- Samples.create_sample(params),
-         {:ok, sample} <- upload_file(sample.s3_object_key, file) do
+         {:ok, _sample} <- upload_file(sample.s3_object_key, file) do
       conn
       |> put_status(:created)
       |> render(:show, sample: sample)

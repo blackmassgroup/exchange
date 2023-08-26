@@ -7,6 +7,8 @@ defmodule VxUndergroundWeb.Plugs.ApiKeyValidator do
     api_key =
       get_req_header(conn, "authorization")
       |> List.first()
+      |> String.split("Bearer ")
+      |> List.last()
 
     case validate_api_key(api_key) do
       :error ->

@@ -1,4 +1,5 @@
 defmodule VxUndergroundWeb.Router do
+  alias VxUndergroundWeb.UploadController
   use VxUndergroundWeb, :router
 
   import VxUndergroundWeb.UserAuth
@@ -43,6 +44,18 @@ defmodule VxUndergroundWeb.Router do
       live_dashboard "/dashboard", metrics: VxUndergroundWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
+  end
+
+  scope "/", VxUndergroundWeb do
+    pipe_through [:api]
+
+    post "/api/login", UserApiSessionController, :create
+  end
+
+  scope "/" do
+    pipe_through [:api]
+
+    post "/api/upload", UploadController, :create
   end
 
   ## Authentication routes

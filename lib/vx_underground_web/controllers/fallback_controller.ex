@@ -21,4 +21,11 @@ defmodule VxUndergroundWeb.FallbackController do
     |> put_view(html: VxUndergroundWeb.ErrorHTML, json: VxUndergroundWeb.ErrorJSON)
     |> render(:"404")
   end
+
+  def call(conn, {:error, "Invalid email or password"}) do
+    conn
+    |> put_status(:unauthorized)
+    |> put_view(html: VxUndergroundWeb.ErrorHTML, json: VxUndergroundWeb.ErrorJSON)
+    |> render(:"401")
+  end
 end
