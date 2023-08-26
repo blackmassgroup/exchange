@@ -1,6 +1,6 @@
 <main class="py-6 px-6">
   <style>
-    p {
+    dt p {
           overflow-wrap: anywhere;
           max-width: 70%;
       }
@@ -11,9 +11,9 @@
       
   </style>
   <.header :if={connected?(@socket)}>
-    <h1 class="text-zinc-200 truncate">Sample <%= @sample.sha256 %></h1>
+    Sample <span class="truncate"><%= @sample.sha256 %></span>
     <:subtitle>
-      <span class="text-zinc-300">This is a malware sample found in the wild.</span>
+      This is a malware sample found in the wild
     </:subtitle>
 
     <:actions>
