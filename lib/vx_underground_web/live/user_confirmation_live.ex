@@ -5,20 +5,30 @@ defmodule VxUndergroundWeb.UserConfirmationLive do
 
   def render(%{live_action: :edit} = assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm">
-      <.header class="text-center">Confirm Account</.header>
+    <div class="flex items-center justify-center h-screen">
+      <div class="mx-auto max-w-sm">
+        <.header class="text-center">
+          <span class="text-white">Confirm Account</span>
+        </.header>
 
-      <.simple_form :let={f} for={%{}} as={:user} id="confirmation_form" phx-submit="confirm_account">
-        <.input field={{f, :token}} type="hidden" value={@token} />
-        <:actions>
-          <.button phx-disable-with="Confirming..." class="w-full">Confirm my account</.button>
-        </:actions>
-      </.simple_form>
+        <.simple_form
+          :let={f}
+          for={%{}}
+          as={:user}
+          id="confirmation_form"
+          phx-submit="confirm_account"
+        >
+          <.input field={{f, :token}} type="hidden" value={@token} />
+          <:actions>
+            <.button phx-disable-with="Confirming..." class="w-full">Confirm my account</.button>
+          </:actions>
+        </.simple_form>
 
-      <p class="text-center mt-4">
-        <.link href={~p"/users/register"}>Register</.link>
-        | <.link href={~p"/users/log_in"}>Log in</.link>
-      </p>
+        <p class="text-center mt-4 text-emerald-500 text-sm">
+          <.link href={~p"/users/register"}>Register</.link>
+          | <.link href={~p"/users/log_in"}>Log in</.link>
+        </p>
+      </div>
     </div>
     """
   end

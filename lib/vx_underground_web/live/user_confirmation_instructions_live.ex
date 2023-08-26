@@ -5,25 +5,31 @@ defmodule VxUndergroundWeb.UserConfirmationInstructionsLive do
 
   def render(assigns) do
     ~H"""
-    <.header>Resend confirmation instructions</.header>
+    <div class="flex items-center justify-center h-screen">
+      <.header>
+        <span class="text-white">
+          Resend confirmation instructions
+        </span>
+      </.header>
 
-    <.simple_form
-      :let={f}
-      for={%{}}
-      as={:user}
-      id="resend_confirmation_form"
-      phx-submit="send_instructions"
-    >
-      <.input field={{f, :email}} type="email" label="Email" required />
-      <:actions>
-        <.button phx-disable-with="Sending...">Resend confirmation instructions</.button>
-      </:actions>
-    </.simple_form>
+      <.simple_form
+        :let={f}
+        for={%{}}
+        as={:user}
+        id="resend_confirmation_form"
+        phx-submit="send_instructions"
+      >
+        <.input field={{f, :email}} type="email" label="Email" required />
+        <:actions>
+          <.button phx-disable-with="Sending...">Resend confirmation instructions</.button>
+        </:actions>
+      </.simple_form>
 
-    <p>
-      <.link href={~p"/users/register"}>Register</.link>
-      | <.link href={~p"/users/log_in"}>Log in</.link>
-    </p>
+      <p class="text-sm text-emerald-500">
+        <.link href={~p"/users/register"}>Register</.link>
+        | <.link href={~p"/users/log_in"}>Log in</.link>
+      </p>
+    </div>
     """
   end
 

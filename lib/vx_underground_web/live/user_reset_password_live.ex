@@ -5,36 +5,40 @@ defmodule VxUndergroundWeb.UserResetPasswordLive do
 
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm">
-      <.header class="text-center">Reset Password</.header>
+    <div class="flex items-center justify-center h-screen">
+      <div class="mx-auto max-w-sm">
+        <.header class="text-center">
+          <span class="text-white">Reset virus.exchange Password </span>
+        </.header>
 
-      <.simple_form
-        :let={f}
-        for={@changeset}
-        id="reset_password_form"
-        phx-submit="reset_password"
-        phx-change="validate"
-      >
-        <.error :if={@changeset.action == :insert}>
-          Oops, something went wrong! Please check the errors below.
-        </.error>
+        <.simple_form
+          :let={f}
+          for={@changeset}
+          id="reset_password_form"
+          phx-submit="reset_password"
+          phx-change="validate"
+        >
+          <.error :if={@changeset.action == :insert}>
+            Oops, something went wrong! Please check the errors below.
+          </.error>
 
-        <.input field={{f, :password}} type="password" label="New password" required />
-        <.input
-          field={{f, :password_confirmation}}
-          type="password"
-          label="Confirm new password"
-          required
-        />
-        <:actions>
-          <.button phx-disable-with="Resetting..." class="w-full">Reset Password</.button>
-        </:actions>
-      </.simple_form>
+          <.input field={{f, :password}} type="password" label="New password" required />
+          <.input
+            field={{f, :password_confirmation}}
+            type="password"
+            label="Confirm new password"
+            required
+          />
+          <:actions>
+            <.button phx-disable-with="Resetting..." class="w-full">Reset Password</.button>
+          </:actions>
+        </.simple_form>
 
-      <p class="text-center mt-4">
-        <.link href={~p"/users/register"}>Register</.link>
-        | <.link href={~p"/users/log_in"}>Log in</.link>
-      </p>
+        <p class="text-center mt-4 text-sm text-emerald-500">
+          <.link href={~p"/users/register"}>Register</.link>
+          | <.link href={~p"/users/log_in"}>Log in</.link>
+        </p>
+      </div>
     </div>
     """
   end
