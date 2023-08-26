@@ -440,7 +440,7 @@ defmodule VxUndergroundWeb.CoreComponents do
         value={@value}
         class={[
           input_border(@errors),
-          "mt-2 block w-full rounded-lg border-zinc-300 py-[7px] px-[11px] dark:bg-zinc-700 dark:border-zinc-800 dark:text-slate-300",
+          "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6",
           "text-zinc-900 focus:outline-none focus:ring-4 sm:text-sm sm:leading-6",
           "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400 phx-no-feedback:focus:ring-zinc-800/5"
         ]}
@@ -465,7 +465,7 @@ defmodule VxUndergroundWeb.CoreComponents do
 
   def label(assigns) do
     ~H"""
-    <label for={@for} class="block text-sm font-semibold leading-6 text-zinc-800 dark:text-slate-300">
+    <label for={@for} class="block text-xs font-semibold leading-6 text-zinc-800 text-slate-300">
       <%= render_slot(@inner_block) %>
     </label>
     """
