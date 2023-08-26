@@ -1,34 +1,35 @@
 <div class="fixed inset-y-0 right-0 left-[40rem] hidden lg:block xl:left-[50rem] home-img-bg" />
 <div class="px-4 py-10 sm:py-28 sm:px-6 lg:px-8 xl:py-32 xl:px-28">
-  <div class="mx-auto max-w-xl lg:mx-0">
-    <h1 class="mt-10 flex items-center text-sm font-semibold leading-6 text-brand">
-      Password: infected
-      <small class="ml-3 rounded-full bg-brand/5 px-2 text-[0.8125rem] font-medium leading-6">
-        v1.1
-      </small>
+  <div class="mx-auto max-w-2xl lg:mx-0">
+    <h1 class="mt-4 text-[2rem] font-semibold leading-10 tracking-tighter text-emerald-600">
+      Virus.exchange
     </h1>
-    <p class="mt-4 text-[2rem] font-semibold leading-10 tracking-tighter text-zinc-900">
-      VX Underground
-    </p>
-    <p class="mt-4 text-base leading-7 text-zinc-600">
+    <h2 class="flex items-center text-sm font-semibold text-lg leading-6 text-emerald-500">
+      Powered by Vx Underground
+      <small class="ml-3 rounded-full bg-emerald-900 px-2 text-base text-[0.8125rem] font-medium leading-6">
+        v <%= Application.spec(:vx_underground)[:vsn] %>
+      </small>
+    </h2>
+    <p class="mt-4 text-base leading-7 text-zinc-400">
       The largest collection of malware source code, samples, and papers on the internet.
     </p>
     <div class="flex">
       <div class="w-full sm:w-auto">
-        <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-3">
-          <.link
-            href={~p"/users/register"}
-            class="group relative rounded-2xl px-6 py-4 text-sm font-semibold leading-6 text-zinc-900 sm:py-6 flex items-center"
-          >
-            Register <Heroicons.paper_airplane outline class="ml-1 h-4 w-4 stroke-current" />
+        <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
+          <.link href={~p"/users/register"}>
+            <.button>
+              <div class="flex items-center">
+                Register <Heroicons.user_plus outline class="ml-1 h-4 w-4 stroke-current" />
+              </div>
+            </.button>
           </.link>
 
-          <.link
-            href={~p"/users/log_in"}
-            class="group relative rounded-2xl px-6 py-4 text-sm font-semibold leading-6 text-zinc-900 sm:py-6 flex items-center"
-          >
-            Log in
-            <Heroicons.arrow_right_on_rectangle outline class="ml-1 h-4 w-4 stroke-current" />
+          <.link href={~p"/users/log_in"}>
+            <.button>
+              <div class="flex items-center">
+                Log in <Heroicons.lock_open outline class="ml-1 h-4 w-4 stroke-current" />
+              </div>
+            </.button>
           </.link>
         </div>
       </div>
