@@ -10,8 +10,8 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
     ~H"""
     <div>
       <.header>
-        <span class="dark:text-slate-200"><%= @title %></span>
-        <:subtitle><span class="dark:text-slate-300"> Something new? Interesting...</span></:subtitle>
+        <span class="text-slate-200"><%= @title %></span>
+        <:subtitle><span class="text-slate-300"> Something new? Interesting...</span></:subtitle>
       </.header>
 
       <.simple_form
@@ -33,7 +33,7 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
         >
           <label
             for="dropzone-file"
-            class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-slate-50 dark:bg-zinc-800 dark:border-zinc-600 dark:text-slate-200"
+            class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-slate-50 bg-zinc-800 border-zinc-600 text-slate-200"
           >
             <div class="flex flex-col items-center justify-center pt-5 pb-6">
               <svg
@@ -52,11 +52,11 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
                 >
                 </path>
               </svg>
-              <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+              <p class="mb-2 text-sm text-gray-500 text-gray-400">
                 <span class="font-semibold">Click "browse" below to upload</span>
                 or drag and drop your files here.
               </p>
-              <p class="text-xs text-gray-500 dark:text-gray-400">
+              <p class="text-xs text-gray-500 text-gray-400">
                 All file types accepted, 10 file limit, 50MB limit per file.
               </p>
             </div>
@@ -71,7 +71,7 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
         <%= for entry <- @uploads.s3_object_key.entries do %>
           <article class="upload-entry">
             <figure>
-              <figcaption class="dark:text-gray-500"><%= entry.client_name %></figcaption>
+              <figcaption class="text-gray-500"><%= entry.client_name %></figcaption>
             </figure>
 
             <%!-- entry.progress will update automatically for in-flight entries --%>

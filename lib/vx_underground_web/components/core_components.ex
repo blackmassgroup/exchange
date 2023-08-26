@@ -55,7 +55,7 @@ defmodule VxUndergroundWeb.CoreComponents do
     >
       <div
         id={"#{@id}-bg"}
-        class="fixed inset-0 bg-zinc-50/90 transition-opacity dark:bg-zinc-600/90"
+        class="fixed inset-0 bg-zinc-50/90 transition-opacity bg-zinc-600/90"
         aria-hidden="true"
       />
       <div
@@ -74,30 +74,30 @@ defmodule VxUndergroundWeb.CoreComponents do
               phx-window-keydown={hide_modal(@on_cancel, @id)}
               phx-key="escape"
               phx-click-away={hide_modal(@on_cancel, @id)}
-              class="hidden relative rounded-2xl bg-white p-14 shadow-lg shadow-zinc-700/10 ring-1 ring-zinc-700/10 transition  dark:bg-zinc-900"
+              class="hidden relative rounded-2xl bg-white p-14 shadow-lg shadow-zinc-700/10 ring-1 ring-zinc-700/10 transition bg-zinc-900"
             >
               <div class="absolute top-6 right-5">
                 <button
                   phx-click={hide_modal(@on_cancel, @id)}
                   type="button"
-                  class="-m-3 flex-none p-3 opacity-20 hover:opacity-40 dark:bg-zinc-700"
+                  class="-m-3 flex-none p-3 opacity-20 hover:opacity-40 bg-zinc-700"
                   aria-label={gettext("close")}
                 >
-                  <Heroicons.x_mark solid class="h-5 w-5 stroke-current dark:text-slate-200" />
+                  <Heroicons.x_mark solid class="h-5 w-5 stroke-current text-slate-200" />
                 </button>
               </div>
               <div id={"#{@id}-content"}>
                 <header :if={@title != []}>
                   <h1
                     id={"#{@id}-title"}
-                    class="text-lg font-semibold leading-8 text-zinc-800 dark:text-slate-200"
+                    class="text-lg font-semibold leading-8 text-zinc-800 text-slate-200"
                   >
                     <%= render_slot(@title) %>
                   </h1>
                   <p
                     :if={@subtitle != []}
                     id={"#{@id}-description"}
-                    class="mt-2 text-sm leading-6 text-zinc-600 dark:text-slate-300"
+                    class="mt-2 text-sm leading-6 text-zinc-600 text-slate-300"
                   >
                     <%= render_slot(@subtitle) %>
                   </p>
@@ -236,7 +236,7 @@ defmodule VxUndergroundWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3 dark:bg-zinc-700 dark:border-zinc-800 dark:hover:bg-zinc-900/90",
+        "rounded-md bg-emerald-900 border-2 border-emerald-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600",
         "text-sm font-semibold leading-6 text-white active:text-white/80",
         @class
       ]}
@@ -323,7 +323,7 @@ defmodule VxUndergroundWeb.CoreComponents do
       <select
         id={@id}
         name={@name}
-        class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-zinc-500 focus:border-zinc-500 sm:text-sm dark:bg-zinc-700 dark:border-zinc-800 dark:text-slate-200"
+        class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-zinc-500 focus:border-zinc-500 sm:text-sm bg-zinc-700 border-zinc-800 text-slate-200"
         multiple={@multiple}
         {@rest}
       >
@@ -634,7 +634,7 @@ defmodule VxUndergroundWeb.CoreComponents do
   def list(assigns) do
     ~H"""
     <div class="mt-14">
-      <dl class="-my-4 divide-y divide-zinc-100 dark:divide-zinc-700">
+      <dl class="-my-4 divide-y divide-zinc-100 divide-zinc-700">
         <div :for={item <- @item} class="flex gap-4 py-4 sm:gap-8">
           <dt class="w-1/4 flex-none text-[0.8125rem] leading-6 text-zinc-500 dark:text-zinc-300">
             <%= item.title %>

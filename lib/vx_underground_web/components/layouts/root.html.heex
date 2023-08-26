@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" style="scrollbar-gutter: stable;">
+<html lang="en" style="scrollbar-gutter: stable;" class="h-full bg-zinc-900">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -11,10 +11,10 @@
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
   </head>
-  <body class="bg-white antialiased dark:bg-zinc-900">
+  <body class="h-full antialiased bg-zinc-900">
     <%= @inner_content %>
   </body>
-  <script>
+  <%!-- <script>
     const checkbox = document.querySelector("#checkbox");
     const html = document.querySelector("html");
     const toggleDarkMode = function () {
@@ -35,5 +35,5 @@
           x.style.display = "none";
         }
       }
-  </script>
+  </script> --%>
 </html>
