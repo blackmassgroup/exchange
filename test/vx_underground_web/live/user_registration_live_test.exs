@@ -9,7 +9,7 @@ defmodule VxUndergroundWeb.UserRegistrationLiveTest do
       {:ok, _lv, html} = live(conn, ~p"/users/register")
 
       assert html =~ "Register"
-      assert html =~ "Log in"
+      assert html =~ "Sign in"
     end
 
     test "redirects if already logged in", %{conn: conn} do
@@ -51,8 +51,8 @@ defmodule VxUndergroundWeb.UserRegistrationLiveTest do
       conn = get(conn, "/samples")
       response = html_response(conn, 200)
       assert response =~ email
-      assert response =~ "Settings\n        </a>"
-      assert response =~ "Log out\n        </a>"
+      assert response =~ "Settings\n"
+      assert response =~ "Log out\n"
     end
 
     test "renders errors for duplicated email", %{conn: conn} do
@@ -77,7 +77,7 @@ defmodule VxUndergroundWeb.UserRegistrationLiveTest do
 
       {:ok, _login_live, login_html} =
         lv
-        |> element(~s|main a:fl-contains("Sign in")|)
+        |> element(~s|p a:fl-contains("Sign in")|)
         |> render_click()
         |> follow_redirect(conn, ~p"/users/log_in")
 

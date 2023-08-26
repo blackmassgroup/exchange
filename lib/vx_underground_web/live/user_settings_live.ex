@@ -250,7 +250,7 @@ defmodule VxUndergroundWeb.UserSettingsLive do
         )
 
         info = "A link to confirm your email change has been sent to the new address."
-        {:noreply, put_flash(socket, :info, info)}
+        {:noreply, put_flash(socket, :info, info) |> assign(:trigger_submit, true)}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :email_changeset, Map.put(changeset, :action, :insert))}
@@ -283,5 +283,9 @@ defmodule VxUndergroundWeb.UserSettingsLive do
       {:error, changeset} ->
         {:noreply, assign(socket, :password_changeset, changeset)}
     end
+  end
+
+  def handle_params(_, _, socket) do
+    {:noreply, socket}
   end
 end

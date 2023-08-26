@@ -46,6 +46,10 @@ defmodule VxUndergroundWeb.UserRegistrationLive do
     """
   end
 
+  def handle_info(_, socket) do
+    {:noreply, socket}
+  end
+
   def mount(_params, _session, socket) do
     changeset = Accounts.change_user_registration(%User{})
     socket = assign(socket, changeset: changeset, trigger_submit: false)

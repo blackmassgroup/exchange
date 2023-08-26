@@ -3,6 +3,6 @@ defmodule VxUndergroundWeb.PageControllerTest do
 
   test "GET /", %{conn: conn} do
     conn = get(conn, ~p"/")
-    assert html_response(conn, 200) =~ "VX Underground"
+    assert html_response(conn, 200) =~ "Virus.exchange"
   end
 end

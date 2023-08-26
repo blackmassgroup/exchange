@@ -21,8 +21,8 @@ defmodule VxUndergroundWeb.UserSessionControllerTest do
       conn = get(conn, ~p"/samples")
       response = html_response(conn, 200)
       assert response =~ user.email
-      assert response =~ "Settings\n        </a>"
-      assert response =~ "Log out\n        </a>"
+      assert response =~ "Settings\n"
+      assert response =~ "Log out\n"
     end
 
     test "logs the user in with remember me", %{conn: conn, user: user} do
