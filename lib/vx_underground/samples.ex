@@ -20,9 +20,19 @@ defmodule VxUnderground.Samples do
   def list_samples(opts \\ %{}) do
     from(s in Sample)
     |> filter_by_hash(opts)
-    |> offset(0)
-    |> limit(10)
     |> Repo.all()
+  end
+
+  def super_quick_list_samples() do
+    query = from s in Sample, limit: 10
+
+    Repo.all(query)
+  end
+
+  def quick_list_samples() do
+    query = from s in Sample, order_by: [desc: s.inserted_at], limit: 20
+
+    Repo.all(query)
   end
 
   defp filter_by_hash(query, %{hash: hash}) when byte_size(hash) not in [32, 40, 64, 128] do
