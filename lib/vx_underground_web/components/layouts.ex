@@ -30,4 +30,36 @@ defmodule VxUndergroundWeb.Layouts do
       out: {"transition-opacity ease-linear duration-300", "opacity-100", "opacity-0"}
     )
   end
+
+  def loading_component(assigns) do
+    ~H"""
+    <div
+      :if={not Phoenix.LiveView.connected?(@socket) and @samples == []}
+      class="p-6 m-6 animate-pulse"
+    >
+      <div class="h-4 mb-6 rounded bg-emerald-800"></div>
+      <div class="h-4 mb-6 rounded bg-emerald-900"></div>
+      <div class="h-4 mb-6 rounded bg-emerald-800"></div>
+      <div class="h-4 mb-6 rounded bg-emerald-900"></div>
+      <div class="h-4 mb-6 rounded bg-emerald-800"></div>
+      <div class="h-4 mb-6 rounded bg-emerald-800"></div>
+      <div class="h-4 mb-6 rounded bg-emerald-900"></div>
+      <div class="h-4 mb-6 rounded bg-emerald-800"></div>
+      <div class="h-4 mb-6 rounded bg-emerald-900"></div>
+      <div class="h-4 mb-6 rounded bg-emerald-800"></div>
+      <div class="h-4 mb-6 rounded bg-emerald-800"></div>
+      <div class="h-4 mb-6 rounded bg-emerald-800"></div>
+      <div class="h-4 mb-6 rounded bg-emerald-900"></div>
+      <div class="h-4 mb-6 rounded bg-emerald-800"></div>
+      <div class="h-4 mb-6 rounded bg-emerald-900"></div>
+      <div class="h-4 mb-6 rounded bg-emerald-800"></div>
+      <div class="h-4 mb-6 rounded bg-emerald-800"></div>
+      <div class="h-4 mb-6 rounded bg-emerald-900"></div>
+      <div class="h-4 mb-6 rounded bg-emerald-800"></div>
+      <div class="h-4 mb-6 rounded bg-emerald-900"></div>
+      <div class="h-4 mb-6 rounded bg-emerald-800"></div>
+      <div class="h-4 mb-6 rounded bg-emerald-800"></div>
+    </div>
+    """
+  end
 end
