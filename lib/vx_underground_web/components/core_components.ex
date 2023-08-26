@@ -158,8 +158,8 @@ defmodule VxUndergroundWeb.CoreComponents do
       role="alert"
       class={[
         "flash fixed hidden top-2 right-2 w-80 sm:w-fit z-50 rounded-lg p-3 shadow-md shadow-zinc-900/5 ring-1",
-        @kind == :info && "bg-emerald-50 text-emerald-800 ring-emerald-500 fill-cyan-900",
-        @kind == :error && "bg-rose-50 p-3 text-rose-900 shadow-md ring-rose-500 fill-rose-900"
+        @kind == :info && "bg-emerald-50 text-emerald-900 ring-emerald-600 fill-cyan-900",
+        @kind == :error && "bg-rose-50 p-3 text-rose-700 shadow-md ring-rose-500 fill-rose-900"
       ]}
       {@rest}
     >
@@ -478,7 +478,7 @@ defmodule VxUndergroundWeb.CoreComponents do
 
   def error(assigns) do
     ~H"""
-    <p class="phx-no-feedback:hidden mt-3 flex gap-3 text-sm leading-6 text-rose-600">
+    <p class="phx-no-feedback:hidden mt-3 flex gap-3 text-sm leading-6 text-rose-400">
       <Heroicons.exclamation_circle mini class="mt-0.5 h-5 w-5 flex-none fill-rose-500" />
       <%= render_slot(@inner_block) %>
     </p>
