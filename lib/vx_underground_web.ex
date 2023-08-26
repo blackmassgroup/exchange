@@ -54,6 +54,8 @@ defmodule VxUndergroundWeb do
       use Phoenix.LiveView,
         layout: {VxUndergroundWeb.Layouts, :app}
 
+      use VxUndergroundWeb.AsyncAssigns
+
       unquote(html_helpers())
     end
   end
