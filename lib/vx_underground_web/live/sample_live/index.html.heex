@@ -7,19 +7,19 @@
     </h1>
   </header>
 
-  <%!-- <p
-    :if={@samples == [] and connected?(@socket) and @search != ""}
+  <p
+    :if={@main_samples == [] and connected?(@socket) and @search != ""}
     class="text-base font-semibold leading-7 text-gray-500 py-7 px-6"
   >
     No results
   </p>
   <p
-    :if={@samples == [] and connected?(@socket) and @search == ""}
+    :if={@main_samples == [] and connected?(@socket) and @search == ""}
     class="text-xl leading-7 text-gray-700 py-7 px-6 max-wd-sm"
   >
     Please use the seach bar to find samples by md5, sha1, sha256 or sha512,
     <br />click the upload button to upload a new sample or click on a sample in the recent activity feed to view it.
-  </p> --%>
+  </p>
 
   <.main_sample_list samples={@main_samples} current_user={@current_user} />
 

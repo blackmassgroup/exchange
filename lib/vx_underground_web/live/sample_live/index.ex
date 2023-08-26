@@ -3,7 +3,7 @@ defmodule VxUndergroundWeb.SampleLive.Index do
 
   use Timex
   alias VxUnderground.Services.S3
-  alias VxUndergroundWeb.SampleChannel
+  # alias VxUndergroundWeb.SampleChannel
   alias VxUnderground.Samples
   alias VxUnderground.Samples.Sample
 
@@ -11,9 +11,9 @@ defmodule VxUndergroundWeb.SampleLive.Index do
   def mount(_params, _session, socket) do
     if connected?(socket) do
       Task.start(fn ->
-        send(self(), :samples)
+        # send(self(), :samples)
         send(self(), :count)
-        SampleChannel.join("sample:lobby", %{}, socket)
+        # SampleChannel.join("sample:lobby", %{}, socket)
       end)
     end
 
