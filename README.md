@@ -27,9 +27,7 @@
 
 ### Screenshots
 
-![Index Listing](/readme_imgs/screenshot1.png)
-![Show Listing](/readme_imgs/screenshot2.png)
-![Upload](/readme_imgs/screenshot3.png)
+![Dashboard](/readme_imgs/screenshot1.png)
 
 ## Getting Started
 
