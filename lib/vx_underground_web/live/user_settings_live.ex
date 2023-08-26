@@ -54,12 +54,12 @@ defmodule VxUndergroundWeb.UserSettingsLive do
                   id="api_key"
                   disabled
                   value={if @type == "text", do: @current_user.api_key, else: "**************"}
-                  class="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                  class="block w-full rounded-t-md rounded-b-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                 />
               </div>
               <button
                 type="button"
-                class="relative -ml-px inline-flex items-center gap-x-1.5 rounded-r-md px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                class="relative -ml-px inline-flex items-center gap-x-1.5 rounded-r-md px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-white/10 hover:bg-zinc-800"
                 phx-click="toggle-type"
               >
                 <svg
@@ -83,7 +83,7 @@ defmodule VxUndergroundWeb.UserSettingsLive do
 
                 <svg
                   :if={@type == "text"}
-                  class="mb-0.5 mr-0.5 h-3 w-4 text-gray-400"
+                  class="h-3 w-4 text-gray-400"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                   aria-hidden="true"
