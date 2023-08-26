@@ -63,7 +63,8 @@ defmodule VxUnderground.MixProject do
       {:nimble_csv, "~> 1.1"},
       {:libcluster, "~> 3.3"},
       {:fly_postgres, "~> 0.3.0"},
-      {:oban, "~> 2.14"}
+      {:oban, "~> 2.14"},
+      {:timex, "~> 3.7"}
     ]
   end
 
