@@ -39,8 +39,10 @@ defmodule VxUndergroundWeb.UploadController do
   end
 
   def upload_file(object_key, file) do
+    opts = [{:content_type, "application/octet-stream"}]
+
     S3.get_bucket()
-    |> ExAws.S3.put_object(object_key, file)
+    |> ExAws.S3.put_object(object_key, file, opts)
     |> ExAws.request()
   end
 
