@@ -47,6 +47,7 @@ defmodule VxUnderground.Samples.Sample do
     |> unique_constraint(:sha1, name: :samples_sha1_index)
     |> unique_constraint(:sha256)
     |> unique_constraint(:sha512)
+    |> unique_constraint(:samples_pkey)
     |> validate_required(@required)
   end
 end

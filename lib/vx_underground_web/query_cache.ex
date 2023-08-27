@@ -35,6 +35,12 @@ defmodule VxUndergroundWeb.QueryCache do
     GenServer.cast(__MODULE__, :update)
   end
 
+  def handle_cast(:update, state) do
+    refresh_value()
+
+    {:noreply, state}
+  end
+
   def handle_info(:update, state) do
     refresh_value()
 
