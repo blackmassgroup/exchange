@@ -8,12 +8,13 @@
   - https://hexdocs.pm/phoenix_live_view/uploads-external.html
 - Generates presigned urls for secure download
 - Calculates file hashes with [`:crypto.hash/2`](https://www.erlang.org/doc/man/crypto.html#hash-2)
-- Uploads to [Triage](https://tria.ge/) on upload to Vx Underground via [Oban Job Scheduler](https://hexdocs.pm/oban/Oban.html) and notifies the user of completion with `Phoenix.Channels`.
+- ~~Uploads to [Triage](https://tria.ge/) on upload to Vx Underground via [Oban Job Scheduler](https://hexdocs.pm/oban/Oban.html) and notifies the user of completion with `Phoenix.Channels`.~~
 - Checks for VT Report on load of the `Sample` show page.
 - Uses [`libcluster`](https://fly.io/docs/elixir/the-basics/clustering/#adding-libcluster) and [`fly_postgres`](https://hexdocs.pm/fly_postgres/readme.html) for scalability
 - Has [CI/CD](https://fly.io/docs/elixir/advanced-guides/github-actions-elixir-ci-cd/) setup and is deployed on Fly.io.
 - Searchable tables and Light / Dark mode
 - Custom Discord Logger backend
+- Upload and login API routes
 
 ### Built With
 
@@ -76,12 +77,50 @@
 
 > You can run unit tests with the command `mix test`
 
+### API Routes
+
+Documentation can be found at [here](https://vxu-api-docs.fly.dev) and requires an API key generated when a user signs up.
+
+Example script using the upload API to upload all files from a sub directory.
+
+```python
+import requests, os, sys
+from concurrent.futures import ThreadPoolExecutor
+
+MAX_WORKERS = 10
+API_LOGIN = "https://virus.exchange/api/login"
+API_UPLOAD = "https://virus.exchange/api/upload"
+
+TOKEN=""
+EMAIL="ur email"
+
+if TOKEN == "":
+        PASSWORD=input("Enter your password: ")
+        r = requests.post(API_LOGIN, data={"email":EMAIL, "password":PASSWORD})
+        TOKEN = r.json()["data"]["token"]
+ 
+def process_file(subdir, file):
+    filename = os.path.join(subdir, file)
+    with open(filename, "rb+") as f:
+        file_content = f.read()
+        r = requests.post(API_UPLOAD, headers={'Authorization': f"Bearer {TOKEN}", "Content-Type": "application/x-www-form-urlencoded"}, data=file_content)
+        print(f"{os.path.basename(filename)}: STATUS({r.status_code}) {r.text}")
+
+def main(directory):
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        for subdir, dirs, files in os.walk(directory):
+            for file in files:
+                executor.submit(process_file, subdir, file)
+
+if __name__ == '__main__':
+    main(sys.argv[1])
+```
+
 ### TODO
 
 - Setup Minio for Dev upload / download
 - Better file types
 - YARA Tags 
-- API routes
 
 ## Database architecture 🗂
 
