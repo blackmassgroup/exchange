@@ -1,6 +1,7 @@
 defmodule VxUndergroundWeb.SampleLive.FormComponent do
   use VxUndergroundWeb, :live_component
 
+  alias VxUndergroundWeb.QueryCache
   alias VxUnderground.Samples
   alias VxUnderground.Samples.Sample
   alias VxUnderground.Services.S3
@@ -174,6 +175,10 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
     |> VxUnderground.Repo.Local.transaction()
     |> case do
       {:ok, _samples} ->
+        if Application.get_env(:vx_underground, :env) != :test do
+          QueryCache.update()
+        end
+
         # Enum.map(socket.assigns.uploads.s3_object_key.entries, fn upload ->
         #   sample = Map.get(samples, upload.client_name)
 
@@ -181,6 +186,8 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
         #   |> VxUnderground.ObanJobs.TriageUpload.new()
         #   |> Oban.insert()
         # end)
+
+        # if Application.get_env(:vx_underground)
 
         socket =
           socket

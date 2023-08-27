@@ -1,4 +1,5 @@
 defmodule VxUndergroundWeb.SampleLive.Index do
+  alias VxUndergroundWeb.QueryCache
   use VxUndergroundWeb, :live_view
 
   use Timex
@@ -6,22 +7,16 @@ defmodule VxUndergroundWeb.SampleLive.Index do
   # alias VxUndergroundWeb.SampleChannel
   alias VxUnderground.Samples
   alias VxUnderground.Samples.Sample
-
+  alias VxUndergroundWeb.QueryCache
   @impl true
   def mount(_params, _session, socket) do
-    if connected?(socket) do
-      Task.start(fn ->
-        # send(self(), :samples)
-        send(self(), :count)
-        # SampleChannel.join("sample:lobby", %{}, socket)
-      end)
-    end
+    %{samples: samples, count: count} = QueryCache.fetch_value()
 
     socket =
       assign(socket, size: :KB)
       |> assign(:search, "")
-      |> assign(:main_samples, [])
-      |> assign(:count, :"Counting Samples...")
+      |> assign(:main_samples, samples)
+      |> assign(:count, count)
       |> stream(:samples_stream, Samples.quick_list_samples())
 
     {:ok, socket}

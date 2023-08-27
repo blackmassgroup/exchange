@@ -12,6 +12,8 @@ config :vx_underground, Oban,
   plugins: [Oban.Plugins.Pruner],
   queues: [default: 10]
 
+config :vx_underground, env: Mix.env()
+
 config :vx_underground,
   ecto_repos: [VxUnderground.Repo.Local]
 

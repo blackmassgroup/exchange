@@ -7,6 +7,7 @@ defmodule VxUnderground.Samples do
   alias VxUnderground.Repo.Local, as: Repo
 
   alias VxUnderground.Samples.Sample
+  alias VxUndergroundWeb.QueryCache
 
   @doc """
   Returns the list of samples.
@@ -24,13 +25,13 @@ defmodule VxUnderground.Samples do
   end
 
   def super_quick_list_samples() do
-    query = from s in Sample, limit: 10
+    query = from(s in Sample, limit: 10)
 
     Repo.all(query)
   end
 
   def quick_list_samples() do
-    query = from s in Sample, order_by: [desc: s.inserted_at], limit: 20
+    query = from(s in Sample, order_by: [desc: s.inserted_at], limit: 20)
 
     Repo.all(query)
   end
@@ -104,6 +105,17 @@ defmodule VxUnderground.Samples do
     %Sample{}
     |> Sample.changeset(attrs)
     |> Repo.insert()
+    |> case do
+      {:ok, _} = result ->
+        if Application.get_env(:vx_underground, :env) != :test do
+          QueryCache.update()
+        end
+
+        result
+
+      result ->
+        result
+    end
   end
 
   @doc """

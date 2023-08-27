@@ -27,7 +27,8 @@ defmodule VxUnderground.Application do
       # Start a worker by calling: VxUnderground.Worker.start_link(arg)
       # {VxUnderground.Worker, arg}
       {Cluster.Supervisor, [topologies, [name: VxUnderground.ClusterSupervisor]]},
-      {Oban, Application.fetch_env!(:vx_underground, Oban)}
+      {Oban, Application.fetch_env!(:vx_underground, Oban)},
+      VxUndergroundWeb.QueryCache
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
