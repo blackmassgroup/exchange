@@ -17,7 +17,8 @@ defmodule VxUndergroundWeb.SampleLive.Index do
       |> assign(:search, "")
       |> assign(:main_samples, samples)
       |> assign(:count, count)
-      |> stream(:samples_stream, Samples.quick_list_samples())
+
+    # |> stream(:samples_stream, Samples.quick_list_samples())
 
     {:ok, socket}
   end
@@ -280,18 +281,11 @@ defmodule VxUndergroundWeb.SampleLive.Index do
 
   def activity_feed(assigns) do
     ~H"""
-    <ul
-      :if={@streams}
-      role="list"
-      class="divide-y divide-white/5"
-      id="as-list"
-      phx-update="stream"
-      id="as-stream-container"
-    >
+    <ul role="list" class="divide-y divide-white/5" id="as-stream-container">
       <li
-        :for={{id, sample} <- @streams.samples_stream}
+        :for={sample <- @samples}
         class="px-4 py-4 sm:px-6 lg:px-8 hover:bg-emerald-900 text-gray-600 hover:text-gray-300"
-        id={id}
+        id={"#{sample.id}"}
       >
         <.link navigate={~p"/samples/#{sample.id}"}>
           <div class="flex items-center gap-x-3">

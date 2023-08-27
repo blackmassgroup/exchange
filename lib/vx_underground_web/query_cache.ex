@@ -27,6 +27,8 @@ defmodule VxUndergroundWeb.QueryCache do
 
     :ets.insert(:query_cache, {:samples, samples})
     :ets.insert(:query_cache, {:count, count})
+
+    :ok
   end
 
   def update do
@@ -40,8 +42,15 @@ defmodule VxUndergroundWeb.QueryCache do
   end
 
   def fetch_value do
-    [{:samples, samples}] = :ets.lookup(:query_cache, :samples)
-    [{:count, count}] = :ets.lookup(:query_cache, :count)
-    %{samples: samples, count: count}
+    with(
+      [{:samples, samples}] <- :ets.lookup(:query_cache, :samples),
+      [{:count, count}] <- :ets.lookup(:query_cache, :count)
+    ) do
+      %{samples: samples, count: count}
+    else
+      _ ->
+        update()
+        fetch_value()
+    end
   end
 end
