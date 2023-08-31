@@ -2,12 +2,14 @@ defmodule VxUndergroundWeb.QueryCache do
   use GenServer
   alias VxUnderground.Samples
 
+  @ets_table_name :query_cache
+
   def start_link(_) do
     GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
   end
 
   def init(_) do
-    :ets.new(:query_cache, [:named_table])
+    :ets.new(@ets_table_name, [:named_table])
     refresh_value()
     {:ok, %{}}
   end
@@ -24,6 +26,11 @@ defmodule VxUndergroundWeb.QueryCache do
 
   def refresh_value() do
     %{samples: samples, count: count} = query_database()
+
+    case :ets.whereis(@ets_table_name) do
+      :undefined -> :ets.new(@ets_table_name, [:named_table])
+      _ -> :ok
+    end
 
     :ets.insert(:query_cache, {:samples, samples})
     :ets.insert(:query_cache, {:count, count})
