@@ -38,3 +38,4 @@ vx_underground-*.tar
 npm-debug.log
 /assets/node_modules/
 
+fly.toml

@@ -104,6 +104,7 @@ defmodule VxUnderground.Accounts do
 
   def get_user_by_api_key(api_key) do
     Repo.get_by(User, api_key: api_key)
+    |> Repo.preload(:role)
   end
 
   @doc """

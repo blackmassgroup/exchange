@@ -62,7 +62,7 @@ if config_env() == :prod do
       port: port
     ],
     secret_key_base: secret_key_base,
-    check_origin: ["https://" <> System.get_env("PHX_HOST"), "https://vxu.fly.dev"]
+    check_origin: ["https://" <> System.get_env("PHX_HOST"), System.get_env("DEV_ENV")]
 
   # ## SSL Support
   #

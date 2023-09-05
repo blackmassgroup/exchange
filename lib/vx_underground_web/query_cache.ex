@@ -27,10 +27,7 @@ defmodule VxUndergroundWeb.QueryCache do
   def refresh_value() do
     %{samples: samples, count: count} = query_database()
 
-    case :ets.whereis(@ets_table_name) do
-      :undefined -> :ets.new(@ets_table_name, [:named_table])
-      _ -> :ok
-    end
+    create_table_if_dne()
 
     :ets.insert(:query_cache, {:samples, samples})
     :ets.insert(:query_cache, {:count, count})
@@ -55,15 +52,24 @@ defmodule VxUndergroundWeb.QueryCache do
   end
 
   def fetch_value do
+    create_table_if_dne()
+
     with(
-      [{:samples, samples}] <- :ets.lookup(:query_cache, :samples),
-      [{:count, count}] <- :ets.lookup(:query_cache, :count)
+      [{:samples, samples}] <- :ets.lookup(@ets_table_name, :samples),
+      [{:count, count}] <- :ets.lookup(@ets_table_name, :count)
     ) do
       %{samples: samples, count: count}
     else
       _ ->
         update()
         fetch_value()
+    end
+  end
+
+  defp create_table_if_dne() do
+    case :ets.whereis(@ets_table_name) do
+      :undefined -> :ets.new(@ets_table_name, [:named_table])
+      _ -> :ok
     end
   end
 end

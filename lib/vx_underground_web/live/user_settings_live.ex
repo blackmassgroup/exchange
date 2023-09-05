@@ -30,7 +30,10 @@ defmodule VxUndergroundWeb.UserSettingsLive do
         </div>
       </div>
 
-      <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
+      <div
+        :if={@current_user.role.name in ["admin", "uploader"]}
+        class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8"
+      >
         <div>
           <h2 class="text-base font-semibold leading-7 text-white">Api Key</h2>
           <p class="mt-1 text-sm leading-6 text-gray-400">
@@ -199,7 +202,7 @@ defmodule VxUndergroundWeb.UserSettingsLive do
   end
 
   def mount(_params, _session, socket) do
-    user = socket.assigns.current_user
+    user = socket.assigns.current_user |> VxUnderground.Repo.preload(:role)
 
     socket =
       socket
@@ -210,6 +213,7 @@ defmodule VxUndergroundWeb.UserSettingsLive do
       |> assign(:password_changeset, Accounts.change_user_password(user))
       |> assign(:trigger_submit, false)
       |> assign(:type, "password")
+      |> assign(:current_user, user)
 
     {:ok, socket}
   end

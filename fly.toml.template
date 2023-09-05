@@ -1,0 +1,46 @@
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+app = "PLACEHOLDER_APP_NAME"
+primary_region = "lax"
+kill_signal = "SIGTERM"
+kill_timeout = "5s"
+swap_size_mb = 512
+
+[experimental]
+  auto_rollback = true
+
+[build]
+
+[deploy]
+  release_command = "/app/bin/migrate"
+
+[env]
+  PHX_HOST = "virus.exchange"
+  PORT = "8080"
+  PRIMARY_REGION = "lax"
+  RELEASE_COOKIE = "iHw000MHvKwjeH3tl6LSOOcbe8asKzaxYBav0BJ8QoFIP3AqJUoceA=="
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8080
+  processes = ["app"]
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 1000
+    soft_limit = 1000
+
+  [[services.tcp_checks]]
+    interval = "15s"
+    timeout = "2s"
+    grace_period = "1s"
+
+

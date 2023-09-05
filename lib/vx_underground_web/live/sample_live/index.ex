@@ -1,24 +1,21 @@
 defmodule VxUndergroundWeb.SampleLive.Index do
-  alias VxUndergroundWeb.QueryCache
   use VxUndergroundWeb, :live_view
-
   use Timex
+
   alias VxUnderground.Services.S3
-  # alias VxUndergroundWeb.SampleChannel
   alias VxUnderground.Samples
   alias VxUnderground.Samples.Sample
   alias VxUndergroundWeb.QueryCache
+
   @impl true
   def mount(_params, _session, socket) do
     %{samples: samples, count: count} = QueryCache.fetch_value()
 
     socket =
-      assign(socket, size: :KB)
+      socket
       |> assign(:search, "")
       |> assign(:main_samples, samples)
       |> assign(:count, count)
-
-    # |> stream(:samples_stream, Samples.quick_list_samples())
 
     {:ok, socket}
   end
@@ -71,29 +68,6 @@ defmodule VxUndergroundWeb.SampleLive.Index do
     {:noreply, socket}
   end
 
-  @impl true
-  def handle_info({:triage_report_complete, %{sample: sample}}, socket) do
-    socket =
-      assign(socket, :samples, [sample | socket.assigns.samples])
-      |> put_flash(:info, "Sample #{sample.sha256}(sha256) finished processing.")
-
-    {:noreply, socket}
-  end
-
-  def handle_info(:count, socket) do
-    {:noreply,
-     assign(
-       socket,
-       :count,
-       Samples.get_sample_count!()
-       |> Number.Delimit.number_to_delimited(delimiter: ",", precision: 0)
-     )}
-  end
-
-  def handle_info(:samples, socket) do
-    {:noreply, socket |> assign(:main_samples, Samples.super_quick_list_samples())}
-  end
-
   def format_time(past_datetime) do
     current_datetime = NaiveDateTime.utc_now()
 
@@ -128,9 +102,9 @@ defmodule VxUndergroundWeb.SampleLive.Index do
 
   def get_shown_number(size, :KB), do: size
 
-  def get_shown_number(size, :MB), do: div(size, 1024)
+  def get_shown_number(size, :MB), do: size / (1024 * 1024)
 
-  def get_shown_number(size, :GB), do: div(size, 1024) |> div(1024)
+  def get_shown_number(size, :GB), do: size / (1024 * 1024 * 1024)
 
   def search_header(assigns) do
     ~H"""

@@ -28,7 +28,7 @@
 
 ### Screenshots
 
-![Dashboard](/readme_imgs/screenshot1.png)
+![Dashboard](/readme_imgs/readme.png)
 
 ## Getting Started
 

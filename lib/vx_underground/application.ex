@@ -28,7 +28,8 @@ defmodule VxUnderground.Application do
       # {VxUnderground.Worker, arg}
       {Cluster.Supervisor, [topologies, [name: VxUnderground.ClusterSupervisor]]},
       {Oban, Application.fetch_env!(:vx_underground, Oban)},
-      VxUndergroundWeb.QueryCache
+      VxUndergroundWeb.QueryCache,
+      VxUnderground.Services.CloudflareEts
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -4,7 +4,7 @@ defmodule VxUnderground.MixProject do
   def project do
     [
       app: :vx_underground,
-      version: "2.0.0",
+      version: "2.1.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -64,7 +64,8 @@ defmodule VxUnderground.MixProject do
       {:libcluster, "~> 3.3"},
       {:fly_postgres, "~> 0.3.0"},
       {:oban, "~> 2.14"},
-      {:timex, "~> 3.7"}
+      {:timex, "~> 3.7"},
+      {:inet_cidr, "~> 1.0.0"}
     ]
   end
 
