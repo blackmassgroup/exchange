@@ -74,19 +74,36 @@ defmodule VxUnderground.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
+  def register_user(%{"malcore" => "true"} = attrs) do
+    %User{}
+    |> User.registration_changeset(attrs)
+    |> Repo.insert()
+    |> case do
+      {:ok, user} ->
+        with {:ok, user} <- add_role_to_user(user, "User"),
+             attrs <- %{api_key: generate_api_key()},
+             user = %{} <- User.api_key_changeset(user, attrs) |> Repo.update!(),
+             {:ok, _user} <- VxUnderground.Services.Malcore.register(user.email) do
+          {:ok, user}
+        end
+
+      error ->
+        error
+    end
+  end
+
   def register_user(attrs) do
     %User{}
     |> User.registration_changeset(attrs)
     |> Repo.insert()
     |> case do
       {:ok, user} ->
-        {:ok, user} = add_role_to_user(user, "User")
+        with {:ok, user} <- add_role_to_user(user, "User"),
+             attrs <- %{api_key: generate_api_key()},
+             user = %{} <- User.api_key_changeset(user, attrs) |> Repo.update!() do
+          {:ok, user}
+        end
 
-        user = User.api_key_changeset(user, %{api_key: generate_api_key()}) |> Repo.update!()
-
-        {:ok, user}
-
-      # VxUnderground.Services.Malcore.register(user.email)
       error ->
         error
     end

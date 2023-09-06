@@ -1,4 +1,4 @@
-defmodule MyVxUnderground.Services.MalcoreRuntime do
+defmodule VxUnderground.Services.MalcoreRuntime do
   @moduledoc """
   Malcore Virus Scanning
 
@@ -9,7 +9,7 @@ defmodule MyVxUnderground.Services.MalcoreRuntime do
   alias VxUnderground.Samples
   use Tesla
 
-  @public_url "https://api.malcore.io/api/"
+  @public_url "https://api.malcore.io/"
 
   plug Tesla.Middleware.BaseUrl, @public_url
   plug Tesla.Middleware.JSON
@@ -20,7 +20,7 @@ defmodule MyVxUnderground.Services.MalcoreRuntime do
     with sample when sample != nil <- Samples.get_sample(sample_id),
          {:ok, %{body: binary, status_code: 200}} <- S3.get_file_binary(sample.s3_object_key),
          {:ok, %Tesla.Env{body: body, status: 200}} <-
-           client |> post("/upload", %{}, query: [{sample.s3_object_key, binary}]) do
+           client |> post("/api/upload", %{}, query: [{sample.s3_object_key, binary}]) do
       {:ok, body}
     else
       {:error, %Tesla.Env{}} ->

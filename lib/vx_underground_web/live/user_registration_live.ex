@@ -36,6 +36,7 @@ defmodule VxUndergroundWeb.UserRegistrationLive do
 
           <.input field={{f, :email}} type="email" label="Email" required />
           <.input field={{f, :password}} type="password" label="Password" required />
+          <.input field={{f, :malcore}} type="checkbox" label="Create Malcore Account?" />
 
           <:actions>
             <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>
