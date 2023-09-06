@@ -8,13 +8,14 @@ defmodule VxUnderground.Services.CloudflareEts do
 
   @ets_table_name :cloudflare_ips
 
-  def start_link(_) do
-    GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
+  def start_link(default) when is_binary(default) do
+    GenServer.start_link(__MODULE__, default)
   end
 
   def init(_) do
     :ets.new(@ets_table_name, [:named_table])
     populate_ets()
+
     {:ok, %{}}
   end
 
@@ -26,7 +27,7 @@ defmodule VxUnderground.Services.CloudflareEts do
     :ets.insert(@ets_table_name, {:ipv6, ipv6})
   end
 
-  def get_ips do
+  def get_ips() do
     GenServer.call(__MODULE__, :get_ips)
   end
 
