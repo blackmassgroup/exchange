@@ -39,3 +39,5 @@ npm-debug.log
 /assets/node_modules/
 
 fly.toml
+
+priv/repo/structure.sql
