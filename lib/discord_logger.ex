@@ -39,20 +39,27 @@ defmodule VxUnderground.DiscordLogger do
   end
 
   def log_to_discord(channel_id, level, msg, ts, md) do
-    formatted_msg = format_message(level, msg, ts, md)
-    url = "/channels/#{channel_id}/messages"
-    body = %{"content" => formatted_msg}
+    # Websocket Connections timeout after 60seconds of inactivity
+    inactivity_error = "(DBConnection.ConnectionError) tcp recv (idle): closed"
 
-    headers = [
-      {"authorization",
-       "Bot #{Application.get_env(:logger, :discord) |> Keyword.get(:bot_token)}"}
-    ]
+    if String.contains?(msg, inactivity_error) do
+      :ok
+    else
+      formatted_msg = format_message(level, msg, ts, md)
+      url = "/channels/#{channel_id}/messages"
+      body = %{"content" => formatted_msg}
 
-    post(url, body, headers: headers)
-    |> case do
-      {:ok, %{status: status}} when status in 200..299 -> :ok
-      {:error, reason} -> IO.inspect(reason, label: "Error sending log to Discord")
-      any -> IO.inspect(any, label: "Error sending log to Discord")
+      headers = [
+        {"authorization",
+         "Bot #{Application.get_env(:logger, :discord) |> Keyword.get(:bot_token)}"}
+      ]
+
+      post(url, body, headers: headers)
+      |> case do
+        {:ok, %{status: status}} when status in 200..299 -> :ok
+        {:error, reason} -> IO.inspect(reason, label: "Error sending log to Discord")
+        any -> IO.inspect(any, label: "Error sending log to Discord")
+      end
     end
   end
 
