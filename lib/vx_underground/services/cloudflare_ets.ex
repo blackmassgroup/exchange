@@ -8,12 +8,12 @@ defmodule VxUnderground.Services.CloudflareEts do
 
   @ets_table_name :cloudflare_ips
 
-  def start_link(_) do
-    GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
+  def start_link(opts \\ []) do
+    GenServer.start_link(__MODULE__, opts, name: __MODULE__)
   end
 
   def init(_) do
-    :ets.new(@ets_table_name, [:named_table])
+    create_table_if_dne()
     populate_ets()
     {:ok, %{}}
   end
@@ -26,7 +26,8 @@ defmodule VxUnderground.Services.CloudflareEts do
     :ets.insert(@ets_table_name, {:ipv6, ipv6})
   end
 
-  def get_ips do
+  def get_ips() do
+    create_table_if_dne()
     GenServer.call(__MODULE__, :get_ips)
   end
 
@@ -36,6 +37,13 @@ defmodule VxUnderground.Services.CloudflareEts do
       [{:ipv6, ipv6}] <- :ets.lookup(@ets_table_name, :ipv6)
     ) do
       {:reply, %{ipv4: ipv4, ipv6: ipv6}, state}
+    end
+  end
+
+  defp create_table_if_dne() do
+    case :ets.whereis(@ets_table_name) do
+      :undefined -> :ets.new(@ets_table_name, [:named_table])
+      _ -> :ok
     end
   end
 end
