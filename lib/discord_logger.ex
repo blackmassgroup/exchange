@@ -1,4 +1,5 @@
 defmodule VxUnderground.DiscordLogger do
+  require Logger
   use Tesla
 
   plug Tesla.Middleware.BaseUrl, "https://discord.com/api/v10"
@@ -57,8 +58,8 @@ defmodule VxUnderground.DiscordLogger do
       post(url, body, headers: headers)
       |> case do
         {:ok, %{status: status}} when status in 200..299 -> :ok
-        {:error, reason} -> IO.inspect(reason, label: "Error sending log to Discord")
-        any -> IO.inspect(any, label: "Error sending log to Discord")
+        {:error, reason} -> Logger.error("Error sending log to Discord: #{reason}")
+        _any -> Logger.error("Error sending log to Discord")
       end
     end
   end

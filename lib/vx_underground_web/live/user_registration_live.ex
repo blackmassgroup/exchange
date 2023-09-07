@@ -61,12 +61,6 @@ defmodule VxUndergroundWeb.UserRegistrationLive do
     """
   end
 
-  def handle_event("toggle-checkbox", _params, socket) do
-    socket = assign(socket, checked: !socket.assigns.checked)
-
-    {:noreply, socket}
-  end
-
   def handle_info(_, socket) do
     {:noreply, socket}
   end
@@ -104,5 +98,11 @@ defmodule VxUndergroundWeb.UserRegistrationLive do
   def handle_event("validate", %{"user" => user_params}, socket) do
     changeset = Accounts.change_user_registration(%User{}, user_params)
     {:noreply, assign(socket, changeset: Map.put(changeset, :action, :validate))}
+  end
+
+  def handle_event("toggle-checkbox", _params, socket) do
+    socket = assign(socket, checked: !socket.assigns.checked)
+
+    {:noreply, socket}
   end
 end
