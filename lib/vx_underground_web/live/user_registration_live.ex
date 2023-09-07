@@ -91,6 +91,13 @@ defmodule VxUndergroundWeb.UserRegistrationLive do
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
+
+      {:error, :failed_to_register_malcore} ->
+        changeset =
+          socket.assigns.changeset
+          |> Ecto.Changeset.add_error(:malcore, "failed to register with Malcore")
+
+        {:noreply, assign(socket, :changeset, changeset)}
     end
   end
 

@@ -67,6 +67,8 @@ defmodule VxUnderground.Services.Malcore do
 
         {:ok, reset_password(user_email)}
 
+        {:ok, %Tesla.Env{body: %{"messages" => _}}} ->
+          {:error, :failed_to_register_malcore}
       _ ->
         {:error, :failed_to_register}
     end
