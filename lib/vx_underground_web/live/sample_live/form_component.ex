@@ -5,6 +5,7 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
   alias VxUnderground.Samples
   alias VxUnderground.Samples.Sample
   alias VxUnderground.Services.S3
+  alias VxUnderground.Services.MalcoreRuntime
 
   @impl true
   def render(assigns) do
@@ -174,20 +175,17 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
     end)
     |> VxUnderground.Repo.Local.transaction()
     |> case do
-      {:ok, _samples} ->
+      {:ok, samples} ->
         if Application.get_env(:vx_underground, :env) != :test do
           QueryCache.update()
+
+          malcore_api_key =
+            socket.assigns.current_user.malcore_api_key || System.get_env("MALCORE_API_KEY")
+
+          Enum.map(samples, fn {_name, %{id: id}} ->
+            MalcoreRuntime.upload(malcore_api_key, id)
+          end)
         end
-
-        # Enum.map(socket.assigns.uploads.s3_object_key.entries, fn upload ->
-        #   sample = Map.get(samples, upload.client_name)
-
-        #   %{sample: sample}
-        #   |> VxUnderground.ObanJobs.TriageUpload.new()
-        #   |> Oban.insert()
-        # end)
-
-        # if Application.get_env(:vx_underground)
 
         socket =
           socket

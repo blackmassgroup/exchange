@@ -7,16 +7,16 @@ defmodule VxUndergroundWeb.UploadController do
 
   alias VxUnderground.Services.S3
   alias VxUnderground.Samples
-  #   alias VxUnderground.Services.MalcoreRuntime
+  alias VxUnderground.Services.MalcoreRuntime
 
   def create(conn, %{"file" => file} = _params) when is_binary(file) do
-    # malcore_api_key = conn.assigns.current_user.malcore_api_key
+    malcore_api_key =
+      conn.assigns.current_user.malcore_api_key || System.get_env("MALCORE_API_KEY")
 
-    #  {:ok, _user} <-
-    #    malcore_api_key |> build_malcore_headers() |> MalcoreRuntime.upload(sample.id)
     with params <- build_sample_params(file),
          {:ok, sample} <- Samples.create_sample(params),
-         {:ok, _sample} <- upload_file(sample.s3_object_key, file) do
+         {:ok, _sample} <- upload_file(sample.s3_object_key, file),
+         {:ok, _user} <- MalcoreRuntime.upload(malcore_api_key, sample.id) do
       conn
       |> put_status(:created)
       |> render(:show, sample: sample)
@@ -28,14 +28,6 @@ defmodule VxUndergroundWeb.UploadController do
     |> put_status(:bad_request)
     |> put_view(html: VxUndergroundWeb.ErrorHTML, json: VxUndergroundWeb.ErrorJSON)
     |> render(:"400")
-  end
-
-  def build_malcore_headers(api_key) do
-    [
-      {"Content-Type", "application/json"},
-      {"apiKey", api_key},
-      {"X-Member", "vxug"}
-    ]
   end
 
   def upload_file(object_key, file) do
