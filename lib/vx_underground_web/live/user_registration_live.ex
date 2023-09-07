@@ -36,7 +36,21 @@ defmodule VxUndergroundWeb.UserRegistrationLive do
 
           <.input field={{f, :email}} type="email" label="Email" required />
           <.input field={{f, :password}} type="password" label="Password" required />
-          <.input field={{f, :malcore}} type="checkbox" label="Create Malcore Account?" />
+          <.input
+            :if={@checked == true}
+            field={{f, :malcore}}
+            type="checkbox"
+            phx-click="toggle-checkbox"
+            label="Create Malcore Account?"
+            checked
+          />
+          <.input
+            :if={@checked == false}
+            field={{f, :malcore}}
+            type="checkbox"
+            phx-click="toggle-checkbox"
+            label="Create Malcore Account?"
+          />
 
           <:actions>
             <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>
@@ -47,13 +61,19 @@ defmodule VxUndergroundWeb.UserRegistrationLive do
     """
   end
 
+  def handle_event("toggle-checkbox", _params, socket) do
+    socket = assign(socket, checked: !socket.assigns.checked)
+
+    {:noreply, socket}
+  end
+
   def handle_info(_, socket) do
     {:noreply, socket}
   end
 
   def mount(_params, _session, socket) do
     changeset = Accounts.change_user_registration(%User{})
-    socket = assign(socket, changeset: changeset, trigger_submit: false)
+    socket = assign(socket, changeset: changeset, trigger_submit: false, checked: true)
     {:ok, socket, temporary_assigns: [changeset: nil]}
   end
 
