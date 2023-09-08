@@ -21,7 +21,17 @@ defmodule VxUndergroundWeb.RoleLive.FormComponent do
         phx-submit="save"
       >
         <.input field={{f, :name}} type="text" label="Name" />
-        <.input field={{f, :permissions}} type="permissions" label="Permissions" phx-target={@myself} />
+        <.input
+          field={{f, :permissions}}
+          value={%{}}
+          type="permissions"
+          label="Permissions"
+          phx-target={@myself}
+        />
+
+        <:actions>
+          <.button phx-disable-with="Saving...">Save Role</.button>
+        </:actions>
       </.simple_form>
     </div>
     """

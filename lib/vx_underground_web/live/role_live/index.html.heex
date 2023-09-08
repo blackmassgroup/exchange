@@ -1,35 +1,39 @@
-<.header>
-  Listing Roles
-  <:actions>
-    <.link patch={~p"/roles/new"}>
-      <.button>New Role</.button>
-    </.link>
-  </:actions>
-</.header>
+<VxUndergroundWeb.SampleLive.Index.search_header mobile_menu_only={true} />
 
-<.table id="roles" rows={@roles} row_click={&JS.navigate(~p"/roles/#{&1}")}>
-  <:col :let={role} label="Name"><%= role.name %></:col>
-  <:col :let={role} label="Permissions"><%= Jason.encode!(role.permissions) %></:col>
-  <:action :let={role}>
-    <div class="sr-only">
-      <.link navigate={~p"/roles/#{role}"}>Show</.link>
-    </div>
-    <.link patch={~p"/roles/#{role}/edit"}>Edit</.link>
-  </:action>
-</.table>
+<div class="p-5">
+  <.header>
+    Listing Roles
+    <:actions>
+      <.link patch={~p"/roles/new"}>
+        <.button>New Role</.button>
+      </.link>
+    </:actions>
+  </.header>
 
-<.modal
-  :if={@live_action in [:new, :edit]}
-  id="role-modal"
-  show
-  on_cancel={JS.navigate(~p"/roles")}
->
-  <.live_component
-    module={VxUndergroundWeb.RoleLive.FormComponent}
-    id={@role.id || :new}
-    title={@page_title}
-    action={@live_action}
-    role={@role}
-    navigate={~p"/roles"}
-  />
-</.modal>
+  <.table id="roles" rows={@roles} row_click={&JS.navigate(~p"/roles/#{&1}")}>
+    <:col :let={role} label="Name"><%= role.name %></:col>
+    <:col :let={role} label="Permissions"><%= Jason.encode!(role.permissions) %></:col>
+    <:action :let={role}>
+      <div class="sr-only">
+        <.link navigate={~p"/roles/#{role}"}>Show</.link>
+      </div>
+      <.link patch={~p"/roles/#{role}/edit"}>Edit</.link>
+    </:action>
+  </.table>
+
+  <.modal
+    :if={@live_action in [:new, :edit]}
+    id="role-modal"
+    show
+    on_cancel={JS.navigate(~p"/roles")}
+  >
+    <.live_component
+      module={VxUndergroundWeb.RoleLive.FormComponent}
+      id={@role.id || :new}
+      title={@page_title}
+      action={@live_action}
+      role={@role}
+      navigate={~p"/roles"}
+    />
+  </.modal>
+</div>

@@ -382,8 +382,9 @@ defmodule VxUndergroundWeb.CoreComponents do
     assigns = Map.put(assigns, :all_permissions, all_permissions)
 
     ~H"""
-    <div :for={{section_name, permissions} <- @all_permissions}>
-      <h1 class="dark:text-gray-500"><%= String.capitalize(section_name) %></h1>
+    <h2 class="text-white text-base">Permissions</h2>
+    <div :for={{section_name, permissions} <- @all_permissions} class="pl-6">
+      <h2 class="text-white text-sm"><%= String.capitalize(section_name) %></h2>
       <label
         :for={permission <- permissions}
         phx-feedback-for={@name}
@@ -538,7 +539,7 @@ defmodule VxUndergroundWeb.CoreComponents do
       <table class="mt-11 w-[40rem] sm:w-full">
         <thead class="text-left text-[0.8125rem] leading-6 text-zinc-500">
           <tr>
-            <th :for={col <- @col} :if={col[:label] != "Hash"} class="p-0 pr-6 font-normal">
+            <th :for={col <- @col} :if={col[:label] != "Hash"} class="p-0 pr-6 pb-2 font-normal">
               <div :if={col[:label] == "Size"}>
                 <.form for={%{}} phx-change="size-change" class="w-28">
                   <.input
@@ -578,22 +579,18 @@ defmodule VxUndergroundWeb.CoreComponents do
             </th>
           </tr>
         </thead>
-        <tbody class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700 dark:border-zinc-700 dark:text-zinc-300 dark:divide-zinc-700">
-          <tr
-            :for={row <- @rows}
-            id={"#{@id}-#{Phoenix.Param.to_param(row)}"}
-            class="group hover:bg-zinc-50"
-          >
+        <tbody class="relative divide-y divide-zinc-700 border-t border-zinc-700 text-sm leading-6 text-zinc-700 dark:border-zinc-700 dark:text-zinc-300 dark:divide-zinc-700">
+          <tr :for={row <- @rows} id={"#{@id}-#{Phoenix.Param.to_param(row)}"} class="group">
             <td
               :for={{col, i} <- Enum.with_index(@col)}
               phx-click={@row_click && @row_click.(row)}
               class={["relative p-0", @row_click && "hover:cursor-pointer"]}
             >
               <div class="block py-4 pr-6">
-                <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl  group-hover:bg-zinc-5 dark:group-hover:bg-zinc-800" />
+                <span class="absolute -inset-y-px right-0 -left-4  sm:rounded-l-xl group-hover:bg-emerald-900 group-hover:text-white" />
                 <span class={[
-                  "relative",
-                  i == 0 && "font-semibold text-zinc-900  dark:text-slate-200"
+                  "relative text-white",
+                  i == 0 && "font-semibold"
                 ]}>
                   <%= render_slot(col, row) %>
                 </span>
@@ -601,10 +598,10 @@ defmodule VxUndergroundWeb.CoreComponents do
             </td>
             <td :if={@action != []} class="relative p-0 w-14">
               <div class="relative whitespace-nowrap py-4 text-right text-sm font-medium">
-                <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 sm:rounded-r-xl group-hover:bg-zinc-5 dark:group-hover:bg-zinc-800 " />
+                <span class="absolute -inset-y-px -right-4 left-0 sm:rounded-r-xl group-hover:text-white group-hover:bg-emerald-900 " />
                 <span
                   :for={action <- @action}
-                  class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700 dark:text-slate-200"
+                  class="relative ml-4 font-semibold text-white leading-6 group-hover:text-white"
                 >
                   <%= render_slot(action, row) %>
                 </span>
