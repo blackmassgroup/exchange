@@ -67,7 +67,8 @@ defmodule VxUnderground.MixProject do
       {:timex, "~> 3.7"},
       {:inet_cidr, "~> 1.0.0"},
       {:paraxial, "~> 2.5.0"},
-      {:remote_ip, "~> 1.1"}
+      {:remote_ip, "~> 1.1"},
+      {:tesla_curl, "~> 1.2.1", only: :dev}
     ]
   end
 

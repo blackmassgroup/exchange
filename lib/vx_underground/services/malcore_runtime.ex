@@ -2,6 +2,7 @@ defmodule VxUnderground.Services.MalcoreRuntime do
   @moduledoc """
   Malcore Virus Scanning
 
+  VxUnderground.Services.MalcoreRuntime("4e21fce851d6a6e26cf8013d43b5024d823b0f3b", 3)
   File upload
   - https://malcore.readme.io/reference/upload
   """
@@ -12,19 +13,23 @@ defmodule VxUnderground.Services.MalcoreRuntime do
 
   @public_url "https://api.malcore.io/"
 
-  plug Tesla.Middleware.BaseUrl, @public_url
-  plug Tesla.Middleware.JSON
-
   def upload(malcore_api_key, sample_id) do
     client = build_client(malcore_api_key)
 
     with sample when sample != nil <- Samples.get_sample(sample_id),
-         {:ok, %{body: binary, status_code: 200}} <- S3.get_file_binary(sample.s3_object_key),
-         Logger.info("S3 binary: #{binary}"),
-         body <- %{filename1: binary},
-         {:ok, %Tesla.Env{body: body, status: 200}} <- post(client, "/api/upload", body) do
-      Logger.info("Malcore success body: #{inspect(body)}")
-      {:ok, body}
+         {:ok, %{body: binary, status_code: 200}} <- S3.get_file_binary(sample.sha256) do
+      binary = Base.encode64(binary)
+
+      body = %{filename1: binary, contentType: "", base64: true}
+
+      case Tesla.post(client, "/api/upload", body) do
+        {:ok, %Tesla.Env{status: 200, body: body}} ->
+          {:ok, body}
+
+        {:error, reason} ->
+          Logger.error("Malcore upload failed: #{inspect(reason)}")
+          {:error, :failed_to_upload}
+      end
     else
       {:error, %Tesla.Env{}} ->
         {:error, :failed_to_upload}
@@ -33,23 +38,21 @@ defmodule VxUnderground.Services.MalcoreRuntime do
         {:error, :does_not_exist}
 
       {:ok, %{body: error}} ->
-        Logger.info("Malcore error body: #{inspect(error)}")
-
+        Logger.error("Malcore error body: #{inspect(error)}")
         {:error, :failed_to_get_binary}
     end
   end
 
-  defp build_client(malcore_api_key) do
+  defp build_client(api_key) do
     Tesla.client([
-      {Tesla.Middleware.Headers, build_malcore_headers(malcore_api_key)},
       {Tesla.Middleware.BaseUrl, @public_url},
-      Tesla.Middleware.FormUrlencoded
+      {Tesla.Middleware.Headers, build_malcore_headers(api_key)},
+      Tesla.Middleware.JSON
     ])
   end
 
-  def build_malcore_headers(api_key) do
+  defp build_malcore_headers(api_key) do
     [
-      {"Content-Type", "application/x-www-form-urlencoded"},
       {"apiKey", api_key},
       {"X-Member", "vxug"},
       {"X-No-Poll", "true"}

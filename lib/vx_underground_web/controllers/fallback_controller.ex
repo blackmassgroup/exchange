@@ -22,17 +22,17 @@ defmodule VxUndergroundWeb.FallbackController do
     |> render(:"404")
   end
 
-  def call(conn, {:error, :failed_to_get_binary}) do
-    conn
-    |> put_status(500)
-    |> put_view(html: VxUndergroundWeb.ErrorHTML, json: VxUndergroundWeb.ErrorJSON)
-    |> render(:"500")
-  end
-
   def call(conn, {:error, "Invalid email or password"}) do
     conn
     |> put_status(:unauthorized)
     |> put_view(html: VxUndergroundWeb.ErrorHTML, json: VxUndergroundWeb.ErrorJSON)
     |> render(:"401")
+  end
+
+  def call(conn, {:error, _}) do
+    conn
+    |> put_status(500)
+    |> put_view(html: VxUndergroundWeb.ErrorHTML, json: VxUndergroundWeb.ErrorJSON)
+    |> render(:"500")
   end
 end
