@@ -20,10 +20,10 @@ defmodule VxUnderground.Services.MalcoreRuntime do
 
     with sample when sample != nil <- Samples.get_sample(sample_id),
          {:ok, %{body: binary, status_code: 200}} <- S3.get_file_binary(sample.s3_object_key),
-         Logger.info("#{binary}"),
-         {:ok, %Tesla.Env{body: body, status: 200}} <-
-           client |> post("/api/upload", %{filename1: binary}) do
-      Logger.info("Malcore body #{inspect(body)}")
+         Logger.info("S3 binary: #{binary}"),
+         body <- %{filename1: binary},
+         {:ok, %Tesla.Env{body: body, status: 200}} <- post(client, "/api/upload", body) do
+      Logger.info("Malcore success body: #{inspect(body)}")
       {:ok, body}
     else
       {:error, %Tesla.Env{}} ->
@@ -33,7 +33,7 @@ defmodule VxUnderground.Services.MalcoreRuntime do
         {:error, :does_not_exist}
 
       {:ok, %{body: error}} ->
-        Logger.info("Malcore body #{inspect(error)}")
+        Logger.info("Malcore error body: #{inspect(error)}")
 
         {:error, :failed_to_get_binary}
     end

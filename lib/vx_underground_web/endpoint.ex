@@ -52,7 +52,7 @@ defmodule VxUndergroundWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-  plug RemoteIp
+  plug RemoteIp, headers: ~w[cf-connecting-ip]
   plug Paraxial.AllowedPlug
   plug Paraxial.RecordPlug
   plug VxUndergroundWeb.Router

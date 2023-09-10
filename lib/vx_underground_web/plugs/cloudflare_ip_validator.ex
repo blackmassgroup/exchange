@@ -1,4 +1,5 @@
 defmodule VxUndergroundWeb.Plugs.CloudflareIpValidator do
+  require Logger
   alias VxUnderground.Services.CloudflareEts
 
   def init(opts) do
