@@ -22,6 +22,7 @@ defmodule VxUnderground.Services.MalcoreRuntime do
          {:ok, %{body: binary, status_code: 200}} <- S3.get_file_binary(sample.s3_object_key),
          {:ok, %Tesla.Env{body: body, status: 200}} <-
            client |> post("/api/upload", %{}, query: [{sample.s3_object_key, binary}]) do
+      Logger.info("Malcore body #{inspect(body)}")
       {:ok, body}
     else
       {:error, %Tesla.Env{}} ->
