@@ -5,7 +5,6 @@ defmodule VxUndergroundWeb.Router do
   import VxUndergroundWeb.UserAuth
 
   pipeline :browser do
-
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
@@ -17,7 +16,6 @@ defmodule VxUndergroundWeb.Router do
   end
 
   pipeline :api do
-
     plug :accepts, ["json"]
   end
 
