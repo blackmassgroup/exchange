@@ -21,7 +21,7 @@ defmodule VxUnderground.Services.MalcoreRuntime do
     with sample when sample != nil <- Samples.get_sample(sample_id),
          {:ok, %{body: binary, status_code: 200}} <- S3.get_file_binary(sample.s3_object_key),
          {:ok, %Tesla.Env{body: body, status: 200}} <-
-           client |> post("/api/upload", %{}, query: [{sample.s3_object_key, binary}]) do
+           client |> post("/api/upload", %{filename1: binary}) do
       Logger.info("Malcore body #{inspect(body)}")
       {:ok, body}
     else
@@ -31,7 +31,7 @@ defmodule VxUnderground.Services.MalcoreRuntime do
       nil ->
         {:error, :does_not_exist}
 
-      error ->
+      {:ok, %{body: error}} ->
         Logger.error(error)
 
         {:error, :failed_to_get_binary}
@@ -42,13 +42,13 @@ defmodule VxUnderground.Services.MalcoreRuntime do
     Tesla.client([
       {Tesla.Middleware.Headers, build_malcore_headers(malcore_api_key)},
       {Tesla.Middleware.BaseUrl, @public_url},
-      Tesla.Middleware.JSON
+      Tesla.Middleware.FormUrlencoded
     ])
   end
 
   def build_malcore_headers(api_key) do
     [
-      {"Content-Type", "application/json"},
+      {"Content-Type", "application/x-www-form-urlencoded"},
       {"apiKey", api_key},
       {"X-Member", "vxug"},
       {"X-No-Poll", "true"}
