@@ -48,5 +48,8 @@ defmodule VxUndergroundWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
+  plug Paraxial.AllowedPlug
+  plug Paraxial.RecordPlug
   plug VxUndergroundWeb.Router
+  plug Paraxial.RecordPlug
 end

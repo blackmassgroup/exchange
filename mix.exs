@@ -65,7 +65,9 @@ defmodule VxUnderground.MixProject do
       {:fly_postgres, "~> 0.3.0"},
       {:oban, "~> 2.14"},
       {:timex, "~> 3.7"},
-      {:inet_cidr, "~> 1.0.0"}
+      {:inet_cidr, "~> 1.0.0"},
+      {:paraxial, "~> 2.5.0"},
+      {:remote_ip, "~> 1.1"}
     ]
   end
 

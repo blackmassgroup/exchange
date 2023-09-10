@@ -36,3 +36,8 @@ config :logger, level: :warning
 config :phoenix, :plug_init_mode, :runtime
 
 config :vx_underground, Oban, testing: :inline
+
+config :paraxial,
+  paraxial_api_key: System.get_env("PARAXIAL_TEST_API_KEY"),
+  paraxial_url: "https://app.paraxial.io",
+  fetch_cloud_ips: false
