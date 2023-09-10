@@ -5,6 +5,7 @@ defmodule VxUnderground.Services.MalcoreRuntime do
   File upload
   - https://malcore.readme.io/reference/upload
   """
+  require Logger
   alias VxUnderground.Services.S3
   alias VxUnderground.Samples
   use Tesla
@@ -29,7 +30,9 @@ defmodule VxUnderground.Services.MalcoreRuntime do
       nil ->
         {:error, :does_not_exist}
 
-      _ ->
+      error ->
+        Logger.error(error)
+
         {:error, :failed_to_get_binary}
     end
   end
@@ -46,7 +49,8 @@ defmodule VxUnderground.Services.MalcoreRuntime do
     [
       {"Content-Type", "application/json"},
       {"apiKey", api_key},
-      {"X-Member", "vxug"}
+      {"X-Member", "vxug"},
+      {"X-No-Poll", "true"}
     ]
   end
 end
