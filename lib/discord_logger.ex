@@ -43,7 +43,7 @@ defmodule VxUnderground.DiscordLogger do
     # Websocket Connections timeout after 60seconds of inactivity
     inactivity_error = "(DBConnection.ConnectionError) tcp recv (idle): closed"
 
-    if String.contains?(msg, inactivity_error) do
+    if IO.iodata_to_binary(msg) |> String.slice(0..1900) |> String.contains?(inactivity_error) do
       :ok
     else
       formatted_msg = format_message(level, msg, ts, md)
