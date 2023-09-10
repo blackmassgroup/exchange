@@ -5,11 +5,7 @@ defmodule VxUndergroundWeb.Router do
   import VxUndergroundWeb.UserAuth
 
   pipeline :browser do
-    if Application.compile_env(:vx_underground, :env) not in [:test, :dev] do
-      plug VxUndergroundWeb.Plugs.CloudflareIpValidator
-    end
 
-    plug RemoteIp
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
@@ -21,11 +17,6 @@ defmodule VxUndergroundWeb.Router do
   end
 
   pipeline :api do
-    plug RemoteIp
-
-    if Application.compile_env(:vx_underground, :env) not in [:test, :dev] do
-      plug VxUndergroundWeb.Plugs.CloudflareIpValidator
-    end
 
     plug :accepts, ["json"]
   end
