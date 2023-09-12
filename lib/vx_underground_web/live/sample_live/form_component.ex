@@ -175,16 +175,16 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
     end)
     |> VxUnderground.Repo.Local.transaction()
     |> case do
-      {:ok, samples} ->
+      {:ok, _samples} ->
         if Application.get_env(:vx_underground, :env) != :test do
           QueryCache.update()
 
-          malcore_api_key =
-            socket.assigns.current_user.malcore_api_key || System.get_env("MALCORE_API_KEY")
+          # malcore_api_key =
+          #   socket.assigns.current_user.malcore_api_key || System.get_env("MALCORE_API_KEY")
 
-          Enum.map(samples, fn {_name, %{id: id}} ->
-            MalcoreRuntime.upload(malcore_api_key, id)
-          end)
+          # Enum.map(samples, fn {_name, %{id: id}} ->
+          #   MalcoreRuntime.upload(malcore_api_key, id)
+          # end)
         end
 
         socket =
