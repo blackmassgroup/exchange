@@ -45,9 +45,9 @@ defmodule VxUndergroundWeb.Endpoint do
     json_decoder: Phoenix.json_library(),
     body_reader: {VxUndergroundWeb.ApiBodyReader, :read_body, []}
 
-  if Application.compile_env(:vx_underground, :env) not in [:test, :dev] do
-    plug VxUndergroundWeb.Plugs.CloudflareIpValidator
-  end
+  # if Application.compile_env(:vx_underground, :env) not in [:test, :dev] do
+  #   plug VxUndergroundWeb.Plugs.CloudflareIpValidator
+  # end
 
   plug Plug.MethodOverride
   plug Plug.Head
