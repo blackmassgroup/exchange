@@ -37,7 +37,7 @@ defmodule VxUndergroundWeb.UserSettingsLive do
         <div>
           <h2 class="text-base font-semibold leading-7 text-white">Api Key</h2>
           <p class="mt-1 text-sm leading-6 text-gray-400">
-            See docs <a href="https://vxu-api-docs.fly.dev">here</a>.
+            See docs <a href="https://docs.virus.exchange">here</a>.
           </p>
         </div>
 

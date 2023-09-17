@@ -79,7 +79,7 @@
 
 ### API Routes
 
-Documentation can be found at [here](https://vxu-api-docs.fly.dev) and requires an API key generated when a user signs up.
+Documentation can be found at [here](https://docs.virus.exchange) and requires an API key generated when a user signs up.
 
 Example script using the upload API to upload all files from a sub directory.
 
