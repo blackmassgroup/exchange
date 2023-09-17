@@ -68,7 +68,8 @@ defmodule VxUnderground.MixProject do
       {:inet_cidr, "~> 1.0.0"},
       {:paraxial, "~> 2.5.0"},
       {:remote_ip, "~> 1.1"},
-      {:tesla_curl, "~> 1.2.1", only: :dev}
+      {:tesla_curl, "~> 1.2.1", only: :dev},
+      {:sentry, "~> 8.0"}
     ]
   end
 

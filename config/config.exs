@@ -85,6 +85,12 @@ config :logger, :discord,
   bot_token: System.get_env("DISCORD_BOT_TOKEN"),
   channel_id: System.get_env("DISCORD_CHANNEL_ID")
 
+config :sentry,
+  dsn:
+    "https://30f19d0c59e288153c88fb762e46cc3e@o4505897025470464.ingest.sentry.io/4505897042575360",
+  included_environments: [:prod],
+  environment_name: Mix.env()
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

@@ -1,4 +1,5 @@
 defmodule VxUndergroundWeb.Endpoint do
+  use Sentry.PlugCapture
   use Phoenix.Endpoint, otp_app: :vx_underground
 
   # The session will be stored in the cookie and signed,
@@ -44,6 +45,8 @@ defmodule VxUndergroundWeb.Endpoint do
     pass: ["*/*"],
     json_decoder: Phoenix.json_library(),
     body_reader: {VxUndergroundWeb.ApiBodyReader, :read_body, []}
+
+  plug Sentry.PlugContext
 
   # if Application.compile_env(:vx_underground, :env) not in [:test, :dev] do
   #   plug VxUndergroundWeb.Plugs.CloudflareIpValidator
