@@ -61,11 +61,12 @@ defmodule VxUnderground.Services.Malcore do
        }} ->
         attrs = %{malcore_api_key: malcore_api_key}
 
-        Accounts.get_user_by_email(user_email)
-        |> User.api_key_changeset(attrs)
-        |> Repo.update!()
+        user =
+          Accounts.get_user_by_email(user_email)
+          |> User.api_key_changeset(attrs)
+          |> Repo.update!()
 
-        {:ok, reset_password(user_email)}
+        {:ok, user}
 
       {:ok, %Tesla.Env{body: %{"messages" => _}}} ->
         {:error, :failed_to_register_malcore}
