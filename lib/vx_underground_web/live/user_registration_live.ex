@@ -90,6 +90,11 @@ defmodule VxUndergroundWeb.UserRegistrationLive do
         socket = put_flash(socket, :error, "failed to register with Malcore")
 
         {:noreply, socket}
+
+      {:error, :failed_to_register} ->
+        socket = put_flash(socket, :error, "Please try again later.")
+
+        {:noreply, socket}
     end
   end
 
