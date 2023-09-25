@@ -18,7 +18,7 @@ defmodule VxUndergroundWeb.SampleLive.Show do
 
       case sample do
         nil ->
-          {:noreply,
+          {:ok,
            put_flash(socket, :error, "Sample does not exist") |> push_navigate(to: ~p(/samples))}
 
         _ ->
