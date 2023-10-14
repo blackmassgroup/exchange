@@ -5,7 +5,6 @@ defmodule VxUndergroundWeb.SampleLive.FormComponent do
   alias VxUnderground.Samples
   alias VxUnderground.Samples.Sample
   alias VxUnderground.Services.S3
-  alias VxUnderground.Services.MalcoreRuntime
 
   @impl true
   def render(assigns) do

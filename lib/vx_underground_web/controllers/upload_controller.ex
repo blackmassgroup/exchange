@@ -7,7 +7,6 @@ defmodule VxUndergroundWeb.UploadController do
 
   alias VxUnderground.Services.S3
   alias VxUnderground.Samples
-  alias VxUnderground.Services.MalcoreRuntime
 
   def create(conn, %{"file" => file} = _params) when is_binary(file) do
     # malcore_api_key =
