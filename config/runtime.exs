@@ -142,9 +142,5 @@ if config_env() == :prod do
   config :paraxial,
     paraxial_api_key: System.get_env("PARAXIAL_PROD_API_KEY"),
     paraxial_url: "https://app.paraxial.io",
-    fetch_cloud_ips: true,
-    except: [
-    %{path: System.get("PARAXIAL_EXCEPTION"), method: "GET"},
-    %{path: System.get("PARAXIAL_EXCEPTION"), method: "POST"},
-  ]
+    fetch_cloud_ips: true
 end

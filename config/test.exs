@@ -42,6 +42,6 @@ config :paraxial,
   paraxial_url: "https://app.paraxial.io",
   fetch_cloud_ips: false,
     except: [
-    %{path: System.get("PARAXIAL_EXCEPTION"), method: "GET"},
-    %{path: System.get("PARAXIAL_EXCEPTION"), method: "POST"},
+    %{path: (System.get_env("PARAXIAL_EXCEPTION") || ""), method: "GET"},
+    %{path: (System.get_env("PARAXIAL_EXCEPTION") || ""), method: "POST"},
   ]
