@@ -8,6 +8,7 @@ defmodule VxUndergroundWeb.ApiBodyReader do
       |> case do
         {:ok, body, conn} -> {:ok, body, conn}
         {:more, data} -> {:ok, data, conn}
+        {:more, data, conn} -> {:ok, data, conn}
       end
 
     params = %{"file" => body}
