@@ -71,11 +71,11 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 config :ex_aws,
-  region: "us-east-1",
+  region: System.get_env("AWS_REGION"),
   s3: [
     scheme: "https://",
-    host: "s3.us-east-1.wasabisys.com",
-    region: "us-east-1"
+    host: System.get_env("S3_HOST"),
+    region: System.get_env("AWS_REGION")
   ]
 
 config :vx_underground, s3_bucket_name: System.get_env("S3_BUCKET_NAME")

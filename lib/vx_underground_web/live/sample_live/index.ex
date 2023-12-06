@@ -38,7 +38,7 @@ defmodule VxUndergroundWeb.SampleLive.Index do
     |> assign(:sample, nil)
   end
 
-    defp apply_action(socket, :show,  %{"id" => id}) do
+  defp apply_action(socket, :show, %{"id" => id}) do
     socket
     |> assign(:page_title, "Show Sample")
     |> assign(:sample, Samples.get_sample!(id))

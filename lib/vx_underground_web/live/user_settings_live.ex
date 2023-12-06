@@ -30,10 +30,7 @@ defmodule VxUndergroundWeb.UserSettingsLive do
         </div>
       </div>
 
-      <div
-        :if={@current_user.role.name in ["admin", "uploader"]}
-        class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8"
-      >
+      <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
         <div>
           <h2 class="text-base font-semibold leading-7 text-white">Api Key</h2>
           <p class="mt-1 text-sm leading-6 text-gray-400">

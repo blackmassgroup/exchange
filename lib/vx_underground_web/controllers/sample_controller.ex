@@ -1,4 +1,4 @@
-defmodule VxUndergroundWeb.UploadController do
+defmodule VxUndergroundWeb.SampleController do
   use VxUndergroundWeb, :controller
 
   action_fallback VxUndergroundWeb.FallbackController
@@ -7,6 +7,21 @@ defmodule VxUndergroundWeb.UploadController do
 
   alias VxUnderground.Services.S3
   alias VxUnderground.Samples
+
+  def show(conn, %{"sha256" => sha256}) do
+    case VxUnderground.Samples.get_sample_by_sha256(sha256) do
+      nil ->
+        conn
+        |> put_status(:not_found)
+        |> put_view(html: VxUndergroundWeb.ErrorHTML, json: VxUndergroundWeb.ErrorJSON)
+        |> render(:"404")
+
+      sample ->
+        conn
+        |> put_status(:ok)
+        |> render(:show, sample: sample)
+    end
+  end
 
   def create(conn, %{"file" => file} = _params) when is_binary(file) do
     # malcore_api_key =

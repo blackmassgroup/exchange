@@ -164,4 +164,12 @@ defmodule VxUnderground.Samples do
   def change_sample(%Sample{} = sample, attrs \\ %{}) do
     Sample.changeset(sample, attrs)
   end
+
+  @doc """
+  Gets a single sample by sha256.
+  """
+  def get_sample_by_sha256(sha256) do
+    from(s in Sample, where: s.sha256 == ^sha256)
+    |> Repo.one()
+  end
 end

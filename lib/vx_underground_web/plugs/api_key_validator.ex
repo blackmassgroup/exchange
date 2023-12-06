@@ -10,7 +10,7 @@ defmodule VxUndergroundWeb.Plugs.ApiKeyValidator do
       |> String.split("Bearer ")
       |> List.last()
 
-    case validate_api_key(api_key) do
+    case validate_api_key(api_key, conn.request_path) do
       :unauthorized ->
         conn
         |> send_resp(401, "Unauthorized")
@@ -21,11 +21,20 @@ defmodule VxUndergroundWeb.Plugs.ApiKeyValidator do
     end
   end
 
-  defp validate_api_key(api_key) do
+  defp validate_api_key(api_key, request_path) do
     case VxUnderground.Accounts.get_user_by_api_key(api_key) do
-      nil -> :unauthorized
-      %{role: %{name: name}} = user when name in ["Admin", "Uploader"] -> user
-      _ -> :unauthorized
+      nil ->
+        :unauthorized
+
+      %{role: %{name: name}} = user when name in ["Admin", "Uploader"] ->
+        user
+
+      %{role: %{name: "User"}} = user
+      when request_path not in ["/api/samples/new", "/api/upload"] ->
+        user
+
+      _ ->
+        :unauthorized
     end
   end
 end

@@ -1,5 +1,4 @@
 defmodule VxUndergroundWeb.Router do
-  alias VxUndergroundWeb.UploadController
   use VxUndergroundWeb, :router
 
   import VxUndergroundWeb.UserAuth
@@ -53,10 +52,12 @@ defmodule VxUndergroundWeb.Router do
     post "/api/login", UserApiSessionController, :create
   end
 
-  scope "/" do
+  scope "/", VxUndergroundWeb do
     pipe_through [:api]
 
-    post "/api/upload", UploadController, :create
+    post "/api/upload", SampleController, :create
+    post "/api/samples/new", SampleController, :create
+    get "/api/samples/:sha256", SampleController, :show
   end
 
   ## Authentication routes
