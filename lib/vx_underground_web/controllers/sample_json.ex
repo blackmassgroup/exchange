@@ -5,6 +5,8 @@ defmodule VxUndergroundWeb.SampleJSON do
   @doc """
   Renders a single user.
   """
+
+  def show_id(%{sample: sample}), do: %{id: sample.id}
   def show(%{sample: sample}), do: data(sample)
 
   defp data(%Sample{} = sample) do

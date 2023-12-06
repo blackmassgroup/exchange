@@ -1,5 +1,13 @@
 import Config
 
+config :ex_aws,
+  region: System.get_env("AWS_REGION"),
+  s3: [
+    scheme: "https://",
+    host: System.get_env("S3_HOST"),
+    region: System.get_env("AWS_REGION")
+  ]
+
 # config/runtime.exs is executed for all environments, including
 # during releases. It is executed after compilation and before the
 # system starts, so it is typically used to load production configuration

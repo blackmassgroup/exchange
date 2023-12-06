@@ -34,7 +34,7 @@ defmodule VxUndergroundWeb.SampleController do
          {:ok, _sample} <- upload_file(sample.s3_object_key, file) do
       conn
       |> put_status(:created)
-      |> render(:show, sample: sample)
+      |> render(:show_id, sample: sample)
     end
   end
 
