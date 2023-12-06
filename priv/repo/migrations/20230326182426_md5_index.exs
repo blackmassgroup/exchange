@@ -1,4 +1,4 @@
-defmodule VxUnderground.Repo.Local.Migrations.Md5Index do
+defmodule VExchange.Repo.Local.Migrations.Md5Index do
   use Ecto.Migration
 
   def change do

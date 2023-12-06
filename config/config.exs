@@ -7,28 +7,28 @@
 # General application configuration
 import Config
 
-config :vx_underground, Oban,
-  repo: VxUnderground.Repo.Local,
+config :v_exchange, Oban,
+  repo: VExchange.Repo.Local,
   plugins: [Oban.Plugins.Pruner],
   queues: [default: 10]
 
-config :vx_underground, env: Mix.env()
+config :v_exchange, env: Mix.env()
 
-config :vx_underground,
-  ecto_repos: [VxUnderground.Repo.Local]
+config :v_exchange,
+  ecto_repos: [VExchange.Repo.Local]
 
-config :vx_underground, VxUnderground.Repo.Local,
+config :v_exchange, VExchange.Repo.Local,
   priv: "priv/repo",
   timeout: :infinity
 
 # Configures the endpoint
-config :vx_underground, VxUndergroundWeb.Endpoint,
+config :v_exchange, VExchangeWeb.Endpoint,
   url: [host: "localhost"],
   render_errors: [
-    formats: [html: VxUndergroundWeb.ErrorHTML, json: VxUndergroundWeb.ErrorJSON],
+    formats: [html: VExchangeWeb.ErrorHTML, json: VExchangeWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: VxUnderground.PubSub,
+  pubsub_server: VExchange.PubSub,
   live_view: [signing_salt: "hnZZR7D2"]
 
 # Configures the mailer
@@ -38,7 +38,7 @@ config :vx_underground, VxUndergroundWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :vx_underground, VxUnderground.Mailer, adapter: Swoosh.Adapters.Local
+config :v_exchange, VExchange.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configure esbuild (the version is required)
 config :esbuild,
@@ -70,7 +70,7 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :vx_underground, s3_bucket_name: System.get_env("S3_BUCKET_NAME")
+config :v_exchange, s3_bucket_name: System.get_env("S3_BUCKET_NAME")
 
 config :logger, :discord,
   level: :info,

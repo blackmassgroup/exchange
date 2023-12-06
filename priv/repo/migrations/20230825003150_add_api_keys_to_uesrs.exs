@@ -1,4 +1,4 @@
-defmodule VxUnderground.Repo.Local.Migrations.AddApiKeysToUesrs do
+defmodule VExchange.Repo.Local.Migrations.AddApiKeysToUesrs do
   use Ecto.Migration
 
   def change do

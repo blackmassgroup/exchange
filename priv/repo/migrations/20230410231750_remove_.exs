@@ -1,4 +1,4 @@
-defmodule VxUnderground.Repo.Local.Migrations.Remove do
+defmodule VExchange.Repo.Local.Migrations.Remove do
   use Ecto.Migration
 
   def change do

@@ -1,2 +1,2 @@
 set PHX_SERVER=true
-call "%~dp0\vx_underground" start
+call "%~dp0\v_exchange" start

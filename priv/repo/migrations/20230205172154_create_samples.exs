@@ -1,4 +1,4 @@
-defmodule VxUnderground.Repo.Migrations.CreateSamples do
+defmodule VExchange.Repo.Migrations.CreateSamples do
   use Ecto.Migration
 
   def change do

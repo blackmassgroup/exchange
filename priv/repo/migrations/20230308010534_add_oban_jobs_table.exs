@@ -1,4 +1,4 @@
-defmodule VxUnderground.Repo.Local.Migrations.AddObanJobsTable do
+defmodule VExchange.Repo.Local.Migrations.AddObanJobsTable do
   use Ecto.Migration
 
   def up do

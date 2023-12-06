@@ -1,4 +1,4 @@
-defmodule VxUnderground.DataCase do
+defmodule VExchange.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -10,7 +10,7 @@ defmodule VxUnderground.DataCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use VxUnderground.DataCase, async: true`, although
+  by setting `use VExchange.DataCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -18,17 +18,17 @@ defmodule VxUnderground.DataCase do
 
   using do
     quote do
-      alias VxUnderground.Repo.Local, as: Repo
+      alias VExchange.Repo.Local, as: Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import VxUnderground.DataCase
+      import VExchange.DataCase
     end
   end
 
   setup tags do
-    VxUnderground.DataCase.setup_sandbox(tags)
+    VExchange.DataCase.setup_sandbox(tags)
     :ok
   end
 
@@ -37,7 +37,7 @@ defmodule VxUnderground.DataCase do
   """
   def setup_sandbox(tags) do
     pid =
-      Ecto.Adapters.SQL.Sandbox.start_owner!(VxUnderground.Repo.Local, shared: not tags[:async])
+      Ecto.Adapters.SQL.Sandbox.start_owner!(VExchange.Repo.Local, shared: not tags[:async])
 
     on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
   end

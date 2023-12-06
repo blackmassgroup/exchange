@@ -1,2 +1,2 @@
 ExUnit.start()
-Ecto.Adapters.SQL.Sandbox.mode(VxUnderground.Repo.Local, :manual)
+Ecto.Adapters.SQL.Sandbox.mode(VExchange.Repo.Local, :manual)

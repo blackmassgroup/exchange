@@ -1,4 +1,4 @@
-defmodule VxUndergroundWeb.ChannelCase do
+defmodule VExchangeWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -11,7 +11,7 @@ defmodule VxUndergroundWeb.ChannelCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use VxUndergroundWeb.ChannelCase, async: true`, although
+  by setting `use VExchangeWeb.ChannelCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -21,15 +21,15 @@ defmodule VxUndergroundWeb.ChannelCase do
     quote do
       # Import conveniences for testing with channels
       import Phoenix.ChannelTest
-      import VxUndergroundWeb.ChannelCase
+      import VExchangeWeb.ChannelCase
 
       # The default endpoint for testing
-      @endpoint VxUndergroundWeb.Endpoint
+      @endpoint VExchangeWeb.Endpoint
     end
   end
 
   setup tags do
-    VxUnderground.DataCase.setup_sandbox(tags)
+    VExchange.DataCase.setup_sandbox(tags)
     :ok
   end
 end

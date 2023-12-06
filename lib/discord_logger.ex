@@ -1,4 +1,4 @@
-defmodule VxUnderground.DiscordLogger do
+defmodule VExchange.DiscordLogger do
   require Logger
   use Tesla
 

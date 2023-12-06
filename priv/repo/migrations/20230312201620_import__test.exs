@@ -1,4 +1,4 @@
-defmodule VxUnderground.Repo.Local.Migrations.Import_Test do
+defmodule VExchange.Repo.Local.Migrations.Import_Test do
   use Ecto.Migration
 
   def change do

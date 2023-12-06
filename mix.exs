@@ -1,10 +1,10 @@
-defmodule VxUnderground.MixProject do
+defmodule VExchange.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :vx_underground,
-      version: "2.1.0",
+      app: :v_exchange,
+      version: "2.2.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -18,7 +18,7 @@ defmodule VxUnderground.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {VxUnderground.Application, []},
+      mod: {VExchange.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end

@@ -1,10 +1,10 @@
-defmodule VxUnderground.AccountsTest do
-  use VxUnderground.DataCase
+defmodule VExchange.AccountsTest do
+  use VExchange.DataCase
 
-  alias VxUnderground.Accounts
+  alias VExchange.Accounts
 
-  import VxUnderground.AccountsFixtures
-  alias VxUnderground.Accounts.{User, UserToken}
+  import VExchange.AccountsFixtures
+  alias VExchange.Accounts.{User, UserToken}
 
   describe "get_user_by_email/1" do
     test "does not return the user if the email does not exist" do
@@ -519,9 +519,9 @@ defmodule VxUnderground.AccountsTest do
   end
 
   describe "roles" do
-    alias VxUnderground.Accounts.Role
+    alias VExchange.Accounts.Role
 
-    import VxUnderground.AccountsFixtures
+    import VExchange.AccountsFixtures
 
     @invalid_attrs %{name: nil, permissions: nil}
 

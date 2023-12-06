@@ -1,4 +1,4 @@
-defmodule VxUnderground.Repo.Local.Migrations.AddUserTier do
+defmodule VExchange.Repo.Local.Migrations.AddUserTier do
   use Ecto.Migration
 
   def change do

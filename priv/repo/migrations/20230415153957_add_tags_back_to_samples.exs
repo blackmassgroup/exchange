@@ -1,4 +1,4 @@
-defmodule VxUnderground.Repo.Local.Migrations.AddTagsBackToSamples do
+defmodule VExchange.Repo.Local.Migrations.AddTagsBackToSamples do
   use Ecto.Migration
 
   def change do

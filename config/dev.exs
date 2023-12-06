@@ -1,7 +1,7 @@
 import Config
 
 # Configure your database
-config :vx_underground, VxUnderground.Repo.Local,
+config :v_exchange, VExchange.Repo.Local,
   username: "postgres",
   password: "r8Ej76Cxa5r2emd",
   hostname: "localhost",
@@ -17,7 +17,7 @@ config :vx_underground, VxUnderground.Repo.Local,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with esbuild to bundle .js and .css sources.
-config :vx_underground, VxUndergroundWeb.Endpoint,
+config :v_exchange, VExchangeWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {127, 0, 0, 1}, port: 4000],
@@ -60,17 +60,17 @@ config :vx_underground, VxUndergroundWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :vx_underground, VxUndergroundWeb.Endpoint,
+config :v_exchange, VExchangeWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/vx_underground_web/(controllers|live|components)/.*(ex|heex)$"
+      ~r"lib/v_exchange_web/(controllers|live|components)/.*(ex|heex)$"
     ]
   ]
 
 # Enable dev routes for dashboard and mailbox
-config :vx_underground, dev_routes: true
+config :v_exchange, dev_routes: true
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n", backends: []

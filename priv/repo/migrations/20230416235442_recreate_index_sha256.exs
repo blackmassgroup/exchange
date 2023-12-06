@@ -1,4 +1,4 @@
-defmodule VxUnderground.Repo.Local.Migrations.RecreateIndexSha256 do
+defmodule VExchange.Repo.Local.Migrations.RecreateIndexSha256 do
   use Ecto.Migration
 
   def change do

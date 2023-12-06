@@ -1,4 +1,4 @@
-defmodule VxUnderground.Repo.Local.Migrations.Gen do
+defmodule VExchange.Repo.Local.Migrations.Gen do
   @moduledoc """
   Migration to reimport all objects from CSV.
   """
@@ -47,7 +47,7 @@ defmodule VxUnderground.Repo.Local.Migrations.Gen do
     #       id: id
     #     }
 
-    #     VxUnderground.Samples.create_sample(attrs)
+    #     VExchange.Samples.create_sample(attrs)
     # end)
     # |> Enum.to_list()
   end

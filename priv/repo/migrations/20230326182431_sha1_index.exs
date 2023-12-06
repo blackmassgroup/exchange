@@ -1,4 +1,4 @@
-defmodule VxUnderground.Repo.Local.Migrations.Sha1Index do
+defmodule VExchange.Repo.Local.Migrations.Sha1Index do
   use Ecto.Migration
 
   def change do

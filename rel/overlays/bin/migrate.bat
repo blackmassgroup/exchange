@@ -1,1 +1,1 @@
-call "%~dp0\vx_underground" eval VxUnderground.Release.migrate
+call "%~dp0\v_exchange" eval VExchange.Release.migrate

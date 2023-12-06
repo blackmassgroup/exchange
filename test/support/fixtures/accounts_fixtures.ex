@@ -1,7 +1,7 @@
-defmodule VxUnderground.AccountsFixtures do
+defmodule VExchange.AccountsFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `VxUnderground.Accounts` context.
+  entities via the `VExchange.Accounts` context.
   """
 
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
@@ -19,7 +19,7 @@ defmodule VxUnderground.AccountsFixtures do
     {:ok, user} =
       attrs
       |> valid_user_attributes()
-      |> VxUnderground.Accounts.register_user()
+      |> VExchange.Accounts.register_user()
 
     user
   end
@@ -44,7 +44,7 @@ defmodule VxUnderground.AccountsFixtures do
           "tags" => ["create", "read", "update", "delete"]
         }
       })
-      |> VxUnderground.Accounts.create_role()
+      |> VExchange.Accounts.create_role()
 
     role
   end
@@ -60,7 +60,7 @@ defmodule VxUnderground.AccountsFixtures do
           "tags" => ["create", "read", "update", "delete"]
         }
       })
-      |> VxUnderground.Accounts.create_role()
+      |> VExchange.Accounts.create_role()
 
     role
   end

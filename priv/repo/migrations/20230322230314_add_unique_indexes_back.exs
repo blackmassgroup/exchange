@@ -1,4 +1,4 @@
-defmodule VxUnderground.Repo.Local.Migrations.AddUniqueIndexesBack do
+defmodule VExchange.Repo.Local.Migrations.AddUniqueIndexesBack do
   use Ecto.Migration
 
   def change do

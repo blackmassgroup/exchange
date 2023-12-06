@@ -1,12 +1,12 @@
-defmodule VxUnderground.SamplesTest do
-  use VxUnderground.DataCase
+defmodule VExchange.SamplesTest do
+  use VExchange.DataCase
 
-  alias VxUnderground.Samples
+  alias VExchange.Samples
 
   describe "samples" do
-    alias VxUnderground.Samples.Sample
+    alias VExchange.Samples.Sample
 
-    import VxUnderground.SamplesFixtures
+    import VExchange.SamplesFixtures
 
     @invalid_attrs %{
       first_seen: nil,

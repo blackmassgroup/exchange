@@ -1,7 +1,7 @@
-defmodule VxUnderground.SamplesFixtures do
+defmodule VExchange.SamplesFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `VxUnderground.Samples` context.
+  entities via the `VExchange.Samples` context.
   """
 
   @doc """
@@ -24,7 +24,7 @@ defmodule VxUnderground.SamplesFixtures do
         sha512:
           "38ae7e95990689ff4f209f765452a164ef22ce5fd805ebc185278b8aa03196b3f7e76df17da6d755d3e4cd58caae8c485e4cd01c913b91d14de68b6e701dbe86"
       })
-      |> VxUnderground.Samples.create_sample()
+      |> VExchange.Samples.create_sample()
 
     sample
   end

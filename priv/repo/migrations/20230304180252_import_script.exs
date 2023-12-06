@@ -1,5 +1,5 @@
-defmodule VxUnderground.Repo.Migrations.ImportScript do
-  # alias VxUnderground.Samples
+defmodule VExchange.Repo.Migrations.ImportScript do
+  # alias VExchange.Samples
   use Ecto.Migration
 
   NimbleCSV.define(MyParser, separator: ",", escape: "\"")
@@ -43,7 +43,7 @@ defmodule VxUnderground.Repo.Migrations.ImportScript do
     #       file_type: file_type
     #     }
 
-    #     VxUnderground.Samples.create_sample(attrs)
+    #     VExchange.Samples.create_sample(attrs)
 
     #   any ->
     #     {:count, Enum.count(any), any}
