@@ -8,8 +8,8 @@ defmodule VExchangeWeb.AccountLive.User.Index do
   def mount(_params, _session, socket) do
     socket =
       socket
-      |> assign(:users, list_users())
       |> assign(:roles, Accounts.list_roles() |> Enum.map(&[value: &1.id, key: &1.name]))
+      |> assign_async(:users, fn -> {:ok, %{users: list_users()}} end)
 
     {:ok, socket}
   end
