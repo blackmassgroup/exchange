@@ -12,23 +12,18 @@
 - Checks for VT Report on load of the `Sample` show page.
 - Uses [`libcluster`](https://fly.io/docs/elixir/the-basics/clustering/#adding-libcluster) and [`fly_postgres`](https://hexdocs.pm/fly_postgres/readme.html) for scalability
 - Has [CI/CD](https://fly.io/docs/elixir/advanced-guides/github-actions-elixir-ci-cd/) setup and is deployed on Fly.io.
-- Searchable tables and Light / Dark mode
 - Custom Discord Logger backend
-- Upload and login API routes
+- Upload, login and get sample API routes
 
 ### Built With
 
 - **Postgres** - ~ 15.2
-- **erlang** - ~ 25.2
-- [**Elixir**](https://hexdocs.pm/elixir/Kernel.html) - ~ 1.14.3-otp-25
+- **erlang** - ~ 26.1.2
+- [**Elixir**](https://hexdocs.pm/elixir/Kernel.html) - ~ 1.15.7-otp-26
 - [**Phoenix**](https://hexdocs.pm/phoenix/Phoenix.html) - ~ 1.7.2
-- [**Phoenix LiveView**](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html) - ~ 0.18.17
+- [**Phoenix LiveView**](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html) - ~ 0.20.1
 - **NodeJS** - ~ 19.3.0
-- [**TailwindCSS**](https://tailwindcss.com/docs/installation) - ~ 3.0.23
-
-### Screenshots
-
-![Dashboard](/readme_imgs/readme.png)
+- [**TailwindCSS**](https://tailwindcss.com/docs/installation) 
 
 ## Getting Started
 
