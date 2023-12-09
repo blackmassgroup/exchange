@@ -1,4 +1,8 @@
-defmodule VExchange.ObanJobs.TriageUpload do
+defmodule VExchange.Services.TriageUpload do
+  @moduledoc """
+  An oban job to submit uploads to Triage.
+  """
+
   alias VExchangeWeb.SampleChannel
   alias VExchange.Services.S3
 

@@ -60,7 +60,7 @@ defmodule VExchangeWeb.SampleLive.Show do
       case TriageSearch.search(sample.sha256) do
         {:ok, %{"data" => []}} ->
           %{sample: sample}
-          |> VExchange.ObanJobs.TriageUpload.new()
+          |> VExchange.Services.TriageUpload.new()
           |> Oban.insert()
 
           :triage_has_no_data
@@ -72,7 +72,7 @@ defmodule VExchangeWeb.SampleLive.Show do
           Logger.error(triage_search_error: response)
 
           %{sample: sample}
-          |> VExchange.ObanJobs.TriageUpload.new()
+          |> VExchange.Services.TriageUpload.new()
           |> Oban.insert()
 
           :still_processing
