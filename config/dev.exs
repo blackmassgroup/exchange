@@ -3,9 +3,9 @@ import Config
 # Configure your database
 config :v_exchange, VExchange.Repo.Local,
   username: "postgres",
-  password: "r8Ej76Cxa5r2emd",
+  password: "postgres",
   hostname: "localhost",
-  database: "vxu",
+  database: "vx_underground_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10,
