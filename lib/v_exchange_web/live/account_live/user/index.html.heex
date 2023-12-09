@@ -5,8 +5,13 @@
     Listing Users
   </.header>
 
-  <p class="text-white p-5" :if={@users.loading}>Loading users ...</p>
-  <.table :if={@users.ok? && @users.result} id="users" rows={@users.result} row_click={&JS.navigate(~p"/manage/users/#{&1}")}>
+  <p :if={@users.loading} class="text-white p-5">Loading users ...</p>
+  <.table
+    :if={@users.ok? && @users.result}
+    id="users"
+    rows={@users.result}
+    row_click={&JS.navigate(~p"/manage/users/#{&1}")}
+  >
     <:col :let={user} label="Email"><%= user.email %></:col>
     <:col :let={user} label="Role"><%= user.role.name %></:col>
     <:col :let={user} label="Username"><%= user.username || "No Username" %></:col>

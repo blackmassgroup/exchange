@@ -61,11 +61,7 @@ defmodule VExchangeWeb.SampleLive.FormComponent do
                 All file types accepted, 10 file limit, 50MB limit per file.
               </p>
             </div>
-            <.live_file_input
-              upload={@uploads.s3_object_key}
-              label="S3 object key"
-              auto_upload="true"
-            />
+            <.live_file_input upload={@uploads.s3_object_key} />
           </label>
         </div>
 
