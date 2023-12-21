@@ -57,7 +57,7 @@ defmodule VExchange.MixProject do
       {:poison, "~> 3.0"},
       {:hackney, "~> 1.9"},
       # optional dependency
-      {:sweet_xml, "~> 0.6.6"},
+      {:sweet_xml, "~> 0.7"},
       {:tesla, "~> 1.4"},
       {:number, "~> 1.0.1"},
       {:nimble_csv, "~> 1.1"},
