@@ -28,8 +28,8 @@ jobs:
     - name: Set up Elixir
       uses: erlef/setup-elixir@v1
       with:
-        elixir-version: '1.14.3' # Define the elixir version [required]
-        otp-version: '25.2' # Define the OTP version [required]
+        elixir-version: '1.15.6' # Define the elixir version [required]
+        otp-version: '26.2.1' # Define the OTP version [required]
     - name: Restore dependencies cache
       uses: actions/cache@v2
       with:
