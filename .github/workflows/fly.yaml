@@ -24,14 +24,14 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Elixir
-      uses: erlef/setup-elixir@v1
+      uses: erlef/setup-beam@v1
       with:
         elixir-version: '1.15.6' # Define the elixir version [required]
         otp-version: '26.2.1' # Define the OTP version [required]
     - name: Restore dependencies cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: deps
         key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
@@ -40,7 +40,16 @@ jobs:
       run: mix deps.get
     - name: Run tests
       run: MIX_ENV=test mix test.ci
-
+    - name: Get Github Repo Name
+      run: echo "REPO_NAME=$(echo ${{ github.repository }} | cut -d'/' -f2)" >> $GITHUB_ENV
+    - name: Send info to Paraxial.io
+      run: |
+        mix paraxial.scan --github_app \
+          --install_id ${{ secrets.PARAXIAL_INSTALL_ID }} \
+          --repo_owner ${{ github.repository_owner }} \
+          --repo_name ${{ env.REPO_NAME }} \
+          --pr_number ${{ github.event.number }} \
+          --add-exit-code
   deploy:
       name: Deploy app
       needs: test
