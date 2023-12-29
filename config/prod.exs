@@ -20,11 +20,13 @@ config :logger, level: :info
 
 config :logger, backends: [:console, {VExchange.DiscordLogger, :discord}]
 
-config :paraxial,
-  except: [
-    %{path: System.get_env("PARAXIAL_EXCEPTION") || "", method: "GET"},
-    %{path: System.get_env("PARAXIAL_EXCEPTION") || "", method: "POST"}
-  ]
+if System.get_env("PARAXIAL_EXCEPTION") != nil do
+  config :paraxial,
+    except: [
+      %{path: System.get_env("PARAXIAL_EXCEPTION") || "", method: "GET"},
+      %{path: System.get_env("PARAXIAL_EXCEPTION") || "", method: "POST"}
+    ]
+end
 
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.

@@ -40,8 +40,4 @@ config :v_exchange, Oban, testing: :inline
 config :paraxial,
   paraxial_api_key: System.get_env("PARAXIAL_TEST_API_KEY"),
   paraxial_url: "https://app.paraxial.io",
-  fetch_cloud_ips: false,
-  except: [
-    %{path: System.get_env("PARAXIAL_EXCEPTION") || "", method: "GET"},
-    %{path: System.get_env("PARAXIAL_EXCEPTION") || "", method: "POST"}
-  ]
+  fetch_cloud_ips: false

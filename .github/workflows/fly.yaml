@@ -47,7 +47,7 @@ jobs:
     - name: Send info to Paraxial.io
       run: |
         mix paraxial.scan --github_app \
-          --install_id ${{ secrets.PARAXIAL_INSTALL_ID }} \
+          --install_id 45585617 \
           --repo_owner ${{ github.repository_owner }} \
           --repo_name ${{ env.REPO_NAME }} \
           --pr_number ${{ github.event.number }} \
