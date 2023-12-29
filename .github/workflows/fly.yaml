@@ -23,6 +23,8 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+    env:
+      PARAXIAL_API_KEY: ${{ secrets.PARAXIAL_API_KEY }}
     steps:
     - uses: actions/checkout@v3
     - name: Set up Elixir

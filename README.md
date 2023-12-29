@@ -17,12 +17,12 @@
 
 ### Built With
 
-- **Postgres** - ~ 15.2
-- **erlang** - ~ 26.1.2
-- [**Elixir**](https://hexdocs.pm/elixir/Kernel.html) - ~ 1.15.7-otp-26
-- [**Phoenix**](https://hexdocs.pm/phoenix/Phoenix.html) - ~ 1.7.2
-- [**Phoenix LiveView**](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html) - ~ 0.20.1
-- **NodeJS** - ~ 19.3.0
+- **Postgres**
+- **erlang** 
+- [**Elixir**](https://hexdocs.pm/elixir/Kernel.html) 
+- [**Phoenix**](https://hexdocs.pm/phoenix/Phoenix.html)
+- [**Phoenix LiveView**](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html)
+- **NodeJS**
 - [**TailwindCSS**](https://tailwindcss.com/docs/installation) 
 
 ## Getting Started
