@@ -1,10 +1,12 @@
-name: Paraxial.io Application Secure
+name: Paraxial
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  workflow_run:
+    workflows: [Tests]
+    branches: [main]
+    types: 
+      - completed
+  workflow_call:
 
 permissions:
   contents: read
@@ -12,7 +14,7 @@ permissions:
 jobs:
   build:
 
-    name: Build and test
+    name: Paraxial.io Application Secure
     runs-on: ubuntu-latest
 
     env:

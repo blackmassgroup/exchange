@@ -1,15 +1,16 @@
 
-name: Test
+name: Tests
 
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_call:
 
 jobs:
   test:
-    name: Build and test
+    name: Test
     runs-on: ubuntu-latest
     services:
       db:
