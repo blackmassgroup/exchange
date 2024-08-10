@@ -1,0 +1,135 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+.scroll-to-top-btn {
+  position: relative;
+  margin: 0 auto;
+  display: block;
+  z-index: 100;
+  opacity: 1;
+  padding: 15px;
+}
+
+#search-text {
+  position: relative;
+  bottom: 0;
+  width: 300px;
+  left: calc(50% - 150px);
+}
+
+.flash {
+  min-width: 300px;
+}
+
+.home-img-bg {
+  background: url(/images/vxu.jpg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #191919;
+}
+
+pre {
+  max-height: 400px;
+  overflow: scroll;
+  width: 100%;
+}
+/* This file is for your main application CSS */
+
+.highlight-animation {
+  animation: pulse 5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes highlight {
+  0%,
+  100% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: rgb(254 249 195);
+  }
+}
+
+@keyframes slidein {
+  from {
+    height: 0%;
+  }
+
+  to {
+    height: 100%;
+  }
+}
+
+/* https://codepen.io/jesusbotella/pen/opmRrO */
+.splitflap-display {
+  
+  color: #fff;
+  height: 100%;
+  font-family: "Cousine", monospace;
+  display: flex;
+  margin: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  align-content: center;
+  max-width: 500px;
+  text-transform: uppercase;
+}
+
+.split-flap {
+  width: 30px;
+  height: 32px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  position: relative;
+  margin: 0 20px 20px 0;
+  font-size: 24px;
+  line-height: 30px;
+  text-align: center;
+  box-sizing: border-box;
+  box-shadow: inset 2px 2px 0px 0px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  position: relative;
+}
+
+.split-flap:after {
+  content: " ";
+  width: 100%;
+  height: 2px;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  transform: translate3d(0, -50%, 0);
+}
+
+.split-flap:before {
+  content: attr(data-letter);
+  width: 100%;
+  height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  position: absolute;
+  /*  transition: height 100ms linear;*/
+  animation-duration: 120ms;
+  animation-delay: attr(data-animation-delay);
+  animation-name: slidein;
+  animation-iteration-count: 6;
+  overflow: hidden;
+}
+
+.tag {
+  margin: 0px 5px;
+}

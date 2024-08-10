@@ -1,0 +1,51 @@
+<div class="fixed inset-y-0 right-0 left-[40rem] hidden lg:block xl:left-[50rem] home-img-bg" />
+<div class="px-4 py-10 sm:py-28 sm:px-6 lg:px-8 xl:py-32 xl:px-28">
+  <div class="mx-auto max-w-2xl lg:mx-0">
+    <h1 class="mt-4 text-[2rem] font-semibold leading-10 tracking-tighter text-emerald-600">
+      Virus.exchange
+    </h1>
+    <h2 class="flex items-center text-sm font-semibold text-lg leading-6 text-emerald-500">
+      Powered by Vx Underground
+      <small class="ml-3 rounded-full bg-emerald-900 px-2 text-base text-[0.8125rem] font-medium leading-6">
+        v <%= Application.spec(:v_exchange)[:vsn] %>
+      </small>
+    </h2>
+    <p class="mt-4 text-base leading-7 text-zinc-400">
+      The largest collection of malware source code, samples, and papers on the internet.
+    </p>
+    <div class="flex">
+      <.flash kind={:info} title="Success!" flash={@flash} class="flash" />
+      <.flash kind={:error} title="Error!" flash={@flash} class="flash" />
+      <.flash
+        id="disconnected"
+        kind={:error}
+        title="We can't find the internet"
+        close={false}
+        autoshow={false}
+        phx-disconnected={show("#disconnected")}
+        phx-connected={hide("#disconnected")}
+      >
+        Attempting to reconnect <Heroicons.arrow_path class="ml-1 w-3 h-3 inline animate-spin" />
+      </.flash>
+      <div class="w-full sm:w-auto">
+        <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
+          <.link href={~p"/users/register"}>
+            <.button>
+              <div class="flex items-center">
+                Register <Heroicons.user_plus outline class="ml-1 h-4 w-4 stroke-current" />
+              </div>
+            </.button>
+          </.link>
+
+          <.link href={~p"/users/log_in"}>
+            <.button>
+              <div class="flex items-center">
+                Log in <Heroicons.lock_open outline class="ml-1 h-4 w-4 stroke-current" />
+              </div>
+            </.button>
+          </.link>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

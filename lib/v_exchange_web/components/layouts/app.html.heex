@@ -1,0 +1,19 @@
+<.flash kind={:info} title="Success!" flash={@flash} class="flash" />
+<.flash kind={:error} title="Error!" flash={@flash} class="flash" />
+<.flash
+  id="disconnected"
+  kind={:error}
+  title="We can't find the internet"
+  close={false}
+  autoshow={false}
+  phx-disconnected={show("#disconnected")}
+  phx-connected={hide("#disconnected")}
+>
+  Attempting to reconnect <Heroicons.arrow_path class="ml-1 w-3 h-3 inline animate-spin" />
+</.flash>
+<div>
+  <.nav_menu current_user={@current_user} live_action={@live_action} />
+  <div class={if @current_user, do: "xl:pl-72", else: ""}>
+    <%= @inner_content %>
+  </div>
+</div>

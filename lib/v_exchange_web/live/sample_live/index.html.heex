@@ -1,0 +1,61 @@
+<.search_header search={@search} current_user={@current_user} />
+
+<main class="lg:pr-96">
+  <header class="flex items-center justify-between border-b border-white/5 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+    <h1 class="text-base font-semibold leading-7 text-white">
+      <%= @count %> <span :if={@count != :"Counting Samples..."}> Samples to date</span>
+    </h1>
+  </header>
+
+  <p
+    :if={@main_samples == [] and connected?(@socket) and @search != ""}
+    class="text-base font-semibold leading-7 text-gray-500 py-7 px-6"
+  >
+    No results
+  </p>
+  <p
+    :if={@main_samples == [] and connected?(@socket) and @search == ""}
+    class="text-xl leading-7 text-gray-700 py-7 px-6 max-wd-sm"
+  >
+    Please use the seach bar to find samples by md5, sha1, sha256 or sha512,
+    <br />click the upload button to upload a new sample or click on a sample in the recent activity feed to view it.
+  </p>
+
+  <.main_sample_list samples={@main_samples} current_user={@current_user} />
+
+  <.modal
+    :if={@live_action in [:new, :edit]}
+    id="sample-modal"
+    show
+    on_cancel={JS.patch(~p"/samples")}
+  >
+    <.live_component
+      module={VExchangeWeb.SampleLive.FormComponent}
+      id={@sample.id || :new}
+      title={@page_title}
+      action={@live_action}
+      sample={@sample}
+      navigate={~p"/samples"}
+      current_user={@current_user}
+    />
+  </.modal>
+</main>
+<aside
+  class="bg-black/10 lg:fixed lg:bottom-0 lg:right-0 lg:top-16 lg:w-96 lg:overflow-y-auto lg:border-l lg:border-white/5"
+  phx-update="stream"
+  id="activity-stream"
+>
+  <header
+    class="flex items-center justify-between border-b border-white/5 px-4 py-4 sm:px-6 sm:py-6 lg:px-8"
+    id="as-header"
+  >
+    <h2 class="text-base font-semibold leading-7 text-white">Activity feed</h2>
+    <.link
+      :if={@current_user.role && @current_user.role.name in ["Admin", "Uploader"]}
+      patch={~p"/samples/new"}
+    >
+      <.button class="text-sm font-semibold leading-6">Upload New</.button>
+    </.link>
+  </header>
+  <.activity_feed samples={@main_samples} current_user={@current_user} />
+</aside>
