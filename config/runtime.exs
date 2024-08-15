@@ -140,11 +140,6 @@ if config_env() == :prod do
       ]
     ]
 
-  # config :logger, :discord,
-  #   level: :error,
-  #   bot_token: System.get_env("DISCORD_BOT_TOKEN"),
-  #   channel_id: System.get_env("DISCORD_CHANNEL_ID")
-
   config :paraxial,
     paraxial_api_key: System.get_env("PARAXIAL_PROD_API_KEY"),
     paraxial_url: "https://app.paraxial.io",

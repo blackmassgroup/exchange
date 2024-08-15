@@ -4,7 +4,7 @@ defmodule VExchange.MixProject do
   def project do
     [
       app: :v_exchange,
-      version: "2.3.0",
+      version: "2.5.0",
       elixir: "~> 1.15",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -69,7 +69,6 @@ defmodule VExchange.MixProject do
       {:paraxial, "~> 2.6.0"},
       {:remote_ip, "~> 1.1"},
       {:tesla_curl, "~> 1.2.1", only: :dev},
-      {:sentry, "~> 8.0"},
       {:sobelow, "~> 0.13.0"}
     ]
   end

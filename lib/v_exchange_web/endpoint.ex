@@ -1,5 +1,4 @@
 defmodule VExchangeWeb.Endpoint do
-  use Sentry.PlugCapture
   use Phoenix.Endpoint, otp_app: :v_exchange
 
   # The session will be stored in the cookie and signed,
@@ -46,7 +45,6 @@ defmodule VExchangeWeb.Endpoint do
     json_decoder: Phoenix.json_library(),
     body_reader: {VExchange.ApiBodyReader, :read_body, []}
 
-  plug Sentry.PlugContext
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options

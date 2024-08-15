@@ -78,27 +78,6 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :v_exchange, s3_bucket_name: System.get_env("S3_BUCKET_NAME")
-
-config :logger, :discord,
-  level: :info,
-  bot_token: System.get_env("DISCORD_BOT_TOKEN"),
-  channel_id: System.get_env("DISCORD_CHANNEL_ID")
-
-config :sentry,
-  dsn:
-    "https://30f19d0c59e288153c88fb762e46cc3e@o4505897025470464.ingest.sentry.io/4505897042575360",
-  included_environments: [:prod],
-  environment_name: Mix.env(),
-  integrations: [
-    oban: [
-      # Capture errors:
-      capture_errors: true,
-      # Monitor cron jobs:
-      cron: [enabled: true]
-    ]
-  ]
-
 config :tesla, :adapter, Tesla.Adapter.Hackney
 
 # Import environment specific config. This must remain at the bottom
