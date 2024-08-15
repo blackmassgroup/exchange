@@ -128,9 +128,12 @@ defmodule VExchangeWeb.SampleLive.FormComponent do
     config_opts = S3.wasabi_config()
 
     {:ok, presigned_url} =
-      ExAws.Config.new(:s3, config_opts) |> ExAws.S3.presigned_url(:put, bucket, key)
+      ExAws.Config.new(:s3, config_opts)
+      |> ExAws.S3.presigned_url(:put, bucket, key,
+        query_params: [{"Content-Type", entry.client_type}]
+      )
 
-    meta = %{uploader: "S3", bucket: bucket, key: key, url: presigned_url}
+    meta = %{uploader: "S3", key: key, url: presigned_url}
 
     {:ok, meta, socket}
   end

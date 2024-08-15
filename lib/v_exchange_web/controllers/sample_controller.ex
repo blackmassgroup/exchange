@@ -23,12 +23,13 @@ defmodule VExchangeWeb.SampleController do
     end
   end
 
+  # malcore_api_key =
+  #   conn.assigns.current_user.malcore_api_key || System.get_env("MALCORE_API_KEY")
+
+  # {:ok, _user} <- MalcoreRuntime.upload(malcore_api_key, sample.id)
+
   def create(conn, %{"file" => file} = _params) when is_binary(file) do
-    # malcore_api_key =
-    #   conn.assigns.current_user.malcore_api_key || System.get_env("MALCORE_API_KEY")
-
-    # {:ok, _user} <- MalcoreRuntime.upload(malcore_api_key, sample.id)
-
+    # wrap in a transaction
     with params <- build_sample_params(file),
          {:ok, sample} <- Samples.create_sample(params),
          {:ok, _sample} <- S3.put_object(sample.s3_object_key, file, :wasabi) do

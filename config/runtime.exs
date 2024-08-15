@@ -1,10 +1,6 @@
 import Config
 
 config :v_exchange,
-  vxu_region: System.get_env("VXU_AWS_REGION"),
-  vxu_host: System.get_env("VXU_AWS_ENDPOINT"),
-  vxu_access_key_id: System.get_env("VXU_AWS_ACCESS_KEY_ID"),
-  vxu_secret_access_key: System.get_env("VXU_AWS_SECRET_ACCESS_KEY"),
   vxu_bucket_name: System.get_env("VXU_S3_BUCKET_NAME"),
   s3_host: System.get_env("S3_HOST"),
   s3_region: System.get_env("AWS_REGION"),
