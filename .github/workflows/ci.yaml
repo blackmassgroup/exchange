@@ -20,7 +20,7 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
-        image: postgres:14
+        image: postgres:16
         ports: ['5432:5432']
         options: >-
           --health-cmd pg_isready
@@ -58,8 +58,4 @@ jobs:
       steps:
         - uses: actions/checkout@v4
         - uses: superfly/flyctl-actions/setup-flyctl@master
-        # - name: Set Environment Variable from GitHub Secret
-        #   run: echo "APP_NAME=${{ secrets.APP_NAME }}" >> $GITHUB_ENV
-        # - name: Replace Environment Variables in fly.toml
-        #   run: bash replace-env-vars.sh
         - run: flyctl deploy --remote-only --wait-timeout 500 -a ${{ secrets.APP_NAME }}
