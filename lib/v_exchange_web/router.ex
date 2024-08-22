@@ -14,6 +14,22 @@ defmodule VExchangeWeb.Router do
 
     plug :put_secure_browser_headers, %{
       "content-security-policy" =>
+        "default-src 'self'; connect-src 'self' https://s3.us-east-1.wasabisys.com;"
+    }
+
+    plug Paraxial.BlockCloudIP
+  end
+
+  pipeline :browser_insecure do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_live_flash
+    plug :put_root_layout, {VExchangeWeb.Layouts, :root}
+    plug :protect_from_forgery
+    plug :fetch_current_user
+
+    plug :put_secure_browser_headers, %{
+      "content-security-policy" =>
         "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://s3.amazonaws.com;"
     }
 
@@ -110,9 +126,13 @@ defmodule VExchangeWeb.Router do
   end
 
   scope "/", VExchangeWeb do
-    pipe_through [:browser, :require_authenticated_user, :require_admin]
+    pipe_through [:browser_insecure, :require_authenticated_user, :require_admin]
 
     error_tracker_dashboard("/errors", on_mount: [{VExchangeWeb.UserAuth, :ensure_admin}])
+  end
+
+  scope "/", VExchangeWeb do
+    pipe_through [:browser, :require_authenticated_user, :require_admin]
 
     live_session :require_admin_user,
       on_mount: [{VExchangeWeb.UserAuth, :ensure_authenticated}] do
