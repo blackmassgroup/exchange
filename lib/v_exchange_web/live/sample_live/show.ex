@@ -14,29 +14,36 @@ defmodule VExchangeWeb.SampleLive.Show do
     if connected?(socket) do
       SampleChannel.join("sample:lobby", %{}, socket)
 
-      sample = Samples.get_sample(sample_id)
+      with(
+        {sample_id, ""} <- Integer.parse(sample_id),
+        sample <- Samples.get_sample(sample_id)
+      ) do
+        case sample do
+          nil ->
+            {:ok,
+             put_flash(socket, :error, "Sample does not exist") |> push_navigate(to: ~p(/samples))}
 
-      case sample do
-        nil ->
+          _ ->
+            virus_total =
+              case VirusTotal.get_sample(sample.sha256) do
+                {:ok, virus_total} ->
+                  virus_total
+
+                {:error, _} ->
+                  :does_not_exist
+              end
+
+            {:ok,
+             socket
+             |> assign(:page_title, page_title(socket.assigns.live_action))
+             |> assign(:sample, sample)
+             |> assign(:virus_total, virus_total)
+             |> assign(:triage, :triage_not_processed)}
+        end
+      else
+        _ ->
           {:ok,
            put_flash(socket, :error, "Sample does not exist") |> push_navigate(to: ~p(/samples))}
-
-        _ ->
-          virus_total =
-            case VirusTotal.get_sample(sample.sha256) do
-              {:ok, virus_total} ->
-                virus_total
-
-              {:error, _} ->
-                :does_not_exist
-            end
-
-          {:ok,
-           socket
-           |> assign(:page_title, page_title(socket.assigns.live_action))
-           |> assign(:sample, sample)
-           |> assign(:virus_total, virus_total)
-           |> assign(:triage, :triage_not_processed)}
       end
     else
       {:ok, socket}
