@@ -51,10 +51,10 @@ defmodule VExchange.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"},
       {:ex_aws, "~> 2.0"},
       {:ex_aws_s3, "~> 2.0"},
       {:poison, "~> 3.0"},
+      {:bandit, "~> 1.2"},
       {:hackney, "~> 1.9"},
       # optional dependency
       {:sweet_xml, "~> 0.7"},

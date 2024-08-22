@@ -35,6 +35,7 @@ config :v_exchange, VExchange.Repo.Local,
 
 # Configures the endpoint
 config :v_exchange, VExchangeWeb.Endpoint,
+  adapter: Bandit.PhoenixAdapter,
   url: [host: "localhost"],
   render_errors: [
     formats: [html: VExchangeWeb.ErrorHTML, json: VExchangeWeb.ErrorJSON],
