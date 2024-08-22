@@ -1,13 +1,20 @@
 defmodule VExchange.ObanJobs.JobScheduler do
   @moduledoc """
+  Used to do daily backups for easy archive.
+
   Usage:
   ```
-  start_date = ~D[2023-05-13]
-  VExchange.ObanJobs.JobScheduler.insert_daily_uploader_jobs()
+
+  VExchange.ObanJobs.JobScheduler.insert_daily_uploader_jobs(~D[2024-08-01], ~D[2024-08-01])
+  VExchange.ObanJobs.JobScheduler.insert_daily_uploader_jobs(~D[2024-08-01])
   ```
   """
   alias VExchange.ObanJobs.DailyUploader
   require Logger
+
+  def insert_daily_uploader_jobs(start_date, end_date) do
+    insert_jobs(start_date, end_date)
+  end
 
   def insert_daily_uploader_jobs(start_date) do
     end_date = Date.utc_today()
