@@ -1,5 +1,6 @@
 defmodule VExchangeWeb.Router do
   use VExchangeWeb, :router
+  use ErrorTracker.Web, :router
 
   import VExchangeWeb.UserAuth
 
@@ -13,7 +14,7 @@ defmodule VExchangeWeb.Router do
 
     plug :put_secure_browser_headers, %{
       "content-security-policy" =>
-        "default-src 'self'; connect-src 'self' https://s3.us-east-1.wasabisys.com;"
+        "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://s3.amazonaws.com;"
     }
 
     plug Paraxial.BlockCloudIP
@@ -110,6 +111,8 @@ defmodule VExchangeWeb.Router do
 
   scope "/", VExchangeWeb do
     pipe_through [:browser, :require_authenticated_user, :require_admin]
+
+    error_tracker_dashboard("/errors", on_mount: [{VExchangeWeb.UserAuth, :ensure_admin}])
 
     live_session :require_admin_user,
       on_mount: [{VExchangeWeb.UserAuth, :ensure_authenticated}] do

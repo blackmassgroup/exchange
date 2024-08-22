@@ -162,6 +162,31 @@ defmodule VExchangeWeb.UserAuth do
     end
   end
 
+  def on_mount(:ensure_admin, _params, session, socket) do
+    socket = mount_current_user(session, socket)
+
+    cond do
+      socket.assigns.current_user.role.name == "Admin" ->
+        {:cont, socket}
+
+      socket.assigns.current_user != nil ->
+        socket =
+          socket
+          |> Phoenix.LiveView.put_flash(:error, "You do not have access this page.")
+          |> Phoenix.LiveView.redirect(to: ~p"/samples")
+
+        {:halt, socket}
+
+      true ->
+        socket =
+          socket
+          |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
+          |> Phoenix.LiveView.redirect(to: ~p"/users/log_in")
+
+        {:halt, socket}
+    end
+  end
+
   def on_mount(:redirect_if_user_is_authenticated, _params, session, socket) do
     socket = mount_current_user(session, socket)
 

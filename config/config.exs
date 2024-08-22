@@ -25,6 +25,10 @@ config :v_exchange, env: Mix.env()
 config :v_exchange,
   ecto_repos: [VExchange.Repo.Local]
 
+config :error_tracker,
+  repo: VExchange.Repo.Local,
+  otp_app: :v_exchange
+
 config :v_exchange, VExchange.Repo.Local,
   priv: "priv/repo",
   timeout: :infinity

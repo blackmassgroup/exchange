@@ -69,7 +69,8 @@ defmodule VExchange.MixProject do
       {:paraxial, "~> 2.6.0"},
       {:remote_ip, "~> 1.1"},
       {:tesla_curl, "~> 1.2.1", only: :dev},
-      {:sobelow, "~> 0.13.0"}
+      {:sobelow, "~> 0.13.0"},
+      {:error_tracker, "~> 0.2"}
     ]
   end
 

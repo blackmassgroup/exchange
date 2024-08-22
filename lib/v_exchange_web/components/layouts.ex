@@ -234,6 +234,14 @@ defmodule VExchangeWeb.Layouts do
                         </svg>
                         Roles
                       </.link>
+
+                      <.link
+                        href={~p"/errors"}
+                        class="text-gray-400 hover:text-white hover:bg-zinc-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                      >
+                        🐛
+                        Error Tracker
+                      </.link>
                     <% end %>
                     <li>
                       <.link
@@ -376,6 +384,13 @@ defmodule VExchangeWeb.Layouts do
                       />
                     </svg>
                     Roles
+                  </.link>
+                  <.link
+                    href={~p"/errors"}
+                    class="text-gray-400 hover:text-white hover:bg-zinc-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                  >
+                    🐛
+                    Error Tracker
                   </.link>
                 <% end %>
                 <li>
