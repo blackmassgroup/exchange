@@ -12,7 +12,7 @@ defmodule VExchangeWeb.CoreComponents do
   use Phoenix.Component
 
   alias Phoenix.LiveView.JS
-  import VExchangeWeb.Gettext
+  use Gettext, backend: VExchangeWeb.Gettext
 
   @doc """
   Renders a modal.
