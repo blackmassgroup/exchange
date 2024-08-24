@@ -2,7 +2,6 @@ defmodule VExchange.Services.Cloudflare do
   use Tesla
 
   plug Tesla.Middleware.BaseUrl, "https://api.cloudflare.com/client/v4"
-
   plug Tesla.Middleware.JSON
 
   def get_ips() do

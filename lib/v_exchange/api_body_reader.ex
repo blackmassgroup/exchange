@@ -1,6 +1,9 @@
 defmodule VExchange.ApiBodyReader do
   @upload_paths ["/api/upload", "/api/samples/new"]
 
+  @doc """
+  Reads the body of the request and updates the connection params.
+  """
   def read_body(%Plug.Conn{request_path: path} = conn, opts) when path in @upload_paths do
     size = VExchange.Samples.size_limit()
     addl_opts = [read_length: size, length: size, read_timeout: 20_000]

@@ -302,7 +302,7 @@ defmodule VExchangeWeb.Layouts do
     """
   end
 
-  def desktop_menu(%{current_user: %{}} = assigns) do
+  def desktop_menu(%{current_user: cur_user} = assigns) when cur_user != nil do
     ~H"""
     <div class="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-72 xl:flex-col">
       <!-- Sidebar component, swap this element with another sidebar if you like -->

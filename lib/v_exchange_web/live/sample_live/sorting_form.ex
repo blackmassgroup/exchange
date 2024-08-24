@@ -4,8 +4,8 @@ defmodule VExchangeWeb.SampleLive.SortingForm do
   alias VExchangeWeb.Live.EctoHelper
 
   @fields %{
-    sort_by: EctoHelper.enum([:Hash, :Size, :Type, :"First seen", :"S3 object key", :tags]),
-    sort_dir: EctoHelper.enum([:asc, :desc])
+    "sort_by" => EctoHelper.enum([:Hash, :Size, :Type, :"First seen", :"S3 object key", :tags]),
+    "sort_dir" => EctoHelper.enum([:asc, :desc])
   }
 
   @default_values %{

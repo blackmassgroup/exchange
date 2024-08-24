@@ -102,20 +102,20 @@ Hooks.SplitFlap = {
         function () {
           element.setAttribute("data-letter", originalAttribute);
         },
-        false
+        false,
       );
       element.addEventListener(
         "animationiteration",
         function () {
           element.setAttribute("data-letter", test[i++]);
         },
-        false
+        false,
       );
     };
 
     var changingElements = Array.from(
       document.querySelectorAll("[data-letter]"),
-      mapFn
+      mapFn,
     );
   },
   mounted() {
@@ -153,23 +153,23 @@ Hooks.SplitFlap = {
         function () {
           element.setAttribute("data-letter", originalAttribute);
         },
-        false
+        false,
       );
       element.addEventListener(
         "animationiteration",
         function () {
           element.setAttribute("data-letter", test[i++]);
         },
-        false
+        false,
       );
     };
 
     var changingElements = Array.from(
       document.querySelectorAll("[data-letter]"),
-      mapFn
+      mapFn,
     );
-  }
-}
+  },
+};
 
 let liveSocket = new LiveSocket("/live", Socket, {
   uploaders: Uploaders,
@@ -179,13 +179,13 @@ let liveSocket = new LiveSocket("/live", Socket, {
 
 // Show progress bar on live navigation and form submits. Only displays if still
 // loading after 120 msec
-topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
+topbar.config({ barColors: { 0: "#29d" }, shadowColor: "rgba(0, 0, 0, .3)" });
 
 let topBarScheduled = undefined;
 window.addEventListener("phx:page-loading-start", () => {
-  if(!topBarScheduled) {
+  if (!topBarScheduled) {
     topBarScheduled = setTimeout(() => topbar.show(), 120);
-  };
+  }
 });
 window.addEventListener("phx:page-loading-stop", () => {
   clearTimeout(topBarScheduled);
