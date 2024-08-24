@@ -251,4 +251,17 @@ defmodule VExchange.Samples do
       sha512: sha512
     }
   end
+
+  @one_mb 1_048_576
+  @size_limit_mbs 50
+
+  @doc """
+  Returns the size limit for sample uploads
+  """
+  def size_limit(), do: @one_mb * @size_limit_mbs
+
+  @doc """
+  Returns true if we the file is below our
+  """
+  def is_below_size_limit(binary), do: byte_size(binary) <= size_limit()
 end

@@ -118,7 +118,7 @@ defmodule VExchangeWeb.SampleLive.FormComponent do
        accept: :any,
        max_entries: 10,
        external: &presign_upload/2,
-       max_file_size: 50_000_000
+       max_file_size: Samples.size_limit()
      )}
   end
 

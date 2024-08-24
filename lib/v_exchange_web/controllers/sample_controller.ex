@@ -25,13 +25,15 @@ defmodule VExchangeWeb.SampleController do
 
   def create(conn, %{"file" => file} = _params) when is_binary(file) do
     VExchange.Repo.transaction(fn ->
-      with params <- Samples.build_sample_params(file),
+      with true <- Samples.is_below_size_limit(file),
+           params <- Samples.build_sample_params(file),
            {:ok, sample} <- Samples.create_sample(params),
            {:ok, _sample} <- S3.put_object(sample.s3_object_key, file, :wasabi),
            {:ok, _} = S3.copy_file_to_daily_backups(sample.sha256) do
         sample
       else
         {:error, %Ecto.Changeset{}} -> VExchange.Repo.rollback(:invalid_sample)
+        false -> VExchange.Repo.rollback(:too_large)
         _ -> VExchange.Repo.rollback(:cloud_provider_error)
       end
     end)
@@ -46,6 +48,12 @@ defmodule VExchangeWeb.SampleController do
         |> put_status(:unprocessable_entity)
         |> put_view(html: VExchangeWeb.ErrorHTML, json: VExchangeWeb.ErrorJSON)
         |> render(:"422")
+
+      {:error, :too_large} ->
+        conn
+        |> put_status(:request_entity_too_large)
+        |> put_view(html: VExchangeWeb.ErrorHTML, json: VExchangeWeb.ErrorJSON)
+        |> render(:"413")
 
       _ ->
         conn
