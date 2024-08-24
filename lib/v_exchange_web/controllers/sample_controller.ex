@@ -23,20 +23,24 @@ defmodule VExchangeWeb.SampleController do
     end
   end
 
-  # malcore_api_key =
-  #   conn.assigns.current_user.malcore_api_key || System.get_env("MALCORE_API_KEY")
-
-  # {:ok, _user} <- MalcoreRuntime.upload(malcore_api_key, sample.id)
-
   def create(conn, %{"file" => file} = _params) when is_binary(file) do
-    # wrap in a transaction
-    with params <- build_sample_params(file),
-         {:ok, sample} <- Samples.create_sample(params),
-         {:ok, _sample} <- S3.put_object(sample.s3_object_key, file, :wasabi) do
-      conn
-      |> put_status(:created)
-      |> render(:show_id, sample: sample)
-    else
+    VExchange.Repo.transaction(fn ->
+      with params <- Samples.build_sample_params(file),
+           {:ok, sample} <- Samples.create_sample(params),
+           {:ok, _sample} <- S3.put_object(sample.s3_object_key, file, :wasabi),
+           {:ok, _} = S3.copy_file_to_daily_backups(sample.sha256) do
+        sample
+      else
+        {:error, %Ecto.Changeset{}} -> VExchange.Repo.rollback(:invalid_sample)
+        _ -> VExchange.Repo.rollback(:cloud_provider_error)
+      end
+    end)
+    |> case do
+      {:ok, sample} ->
+        conn
+        |> put_status(:created)
+        |> render(:show_id, sample: sample)
+
       {:error, %Ecto.Changeset{}} ->
         conn
         |> put_status(:unprocessable_entity)
@@ -56,41 +60,5 @@ defmodule VExchangeWeb.SampleController do
     |> put_status(:bad_request)
     |> put_view(html: VExchangeWeb.ErrorHTML, json: VExchangeWeb.ErrorJSON)
     |> render(:"400")
-  end
-
-  def build_sample_params(file) do
-    type = "unknown"
-
-    md5 =
-      :crypto.hash(:md5, file)
-      |> Base.encode16()
-      |> String.downcase()
-
-    sha1 =
-      :crypto.hash(:sha, file)
-      |> Base.encode16()
-      |> String.downcase()
-
-    sha256 =
-      :crypto.hash(:sha256, file)
-      |> Base.encode16()
-      |> String.downcase()
-
-    sha512 =
-      :crypto.hash(:sha3_512, file)
-      |> Base.encode16()
-      |> String.downcase()
-
-    %{
-      md5: md5,
-      sha1: sha1,
-      sha256: sha256,
-      sha512: sha512,
-      type: type,
-      size: byte_size(file),
-      names: [sha256],
-      s3_object_key: sha256,
-      first_seen: DateTime.utc_now() |> DateTime.truncate(:second)
-    }
   end
 end

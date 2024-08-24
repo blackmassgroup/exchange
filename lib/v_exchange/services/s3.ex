@@ -1,4 +1,6 @@
 defmodule VExchange.Services.S3 do
+  alias ExAws.S3
+
   @doc """
   Returns the base URL for the bucket.
   """
@@ -18,7 +20,7 @@ defmodule VExchange.Services.S3 do
   Returns a binary of the file from S3.
   """
   def get_file_binary(object_key) do
-    ExAws.S3.get_object(get_wasabi_bucket(), object_key) |> ExAws.request(wasabi_config())
+    S3.get_object(get_wasabi_bucket(), object_key) |> ExAws.request(wasabi_config())
   end
 
   @doc """
@@ -30,7 +32,7 @@ defmodule VExchange.Services.S3 do
     config_opts = wasabi_config()
 
     ExAws.Config.new(:s3, config_opts)
-    |> ExAws.S3.presigned_url(:get, bucket, s3_object_key, opts)
+    |> S3.presigned_url(:get, bucket, s3_object_key, opts)
     |> case do
       {:ok, url} -> url
       _ -> "#"
@@ -51,13 +53,12 @@ defmodule VExchange.Services.S3 do
   @doc """
   Upload an object to s3
   """
-
   def put_object(object_key, binary, :wasabi) do
     opts = [{:content_type, "application/octet-stream"}]
     config_opts = wasabi_config()
 
     get_wasabi_bucket()
-    |> ExAws.S3.put_object(object_key, binary, opts)
+    |> S3.put_object(object_key, binary, opts)
     |> ExAws.request(config_opts)
   end
 
@@ -66,7 +67,39 @@ defmodule VExchange.Services.S3 do
     config_opts = wasabi_config()
 
     get_private_wasabi_bucket()
-    |> ExAws.S3.put_object(object_key, binary, opts)
+    |> S3.put_object(object_key, binary, opts)
     |> ExAws.request(config_opts)
+  end
+
+  @doc """
+  Copies a file from the mwdb bucket to the private vxug for processing.
+  """
+  def copy_file_to_daily_backups(src_object) do
+    dest_bucket = get_private_wasabi_bucket()
+    src_bucket = get_wasabi_bucket()
+    date = Date.utc_today() |> Date.to_iso8601()
+    dest_object = "/Daily/#{date}/#{src_object}"
+    config_opts = wasabi_config()
+
+    S3.put_object_copy(dest_bucket, dest_object, src_bucket, src_object)
+    |> ExAws.request(config_opts)
+  end
+
+  @doc """
+  Files uploaded through the admin UI are uploaded direct to s3 and have to be properly renamed.
+  """
+  def rename_uploaded_file(sha256, name) do
+    bucket = get_wasabi_bucket()
+    opts = wasabi_config()
+
+    with(
+      {:ok, _body} <- S3.put_object_copy(bucket, sha256, bucket, name) |> ExAws.request(opts),
+      {:ok, _body} <- S3.delete_object(bucket, name) |> ExAws.request(opts)
+    ) do
+      {:ok, sha256}
+    else
+      _ ->
+        {:error, :s3_file_rename_failure}
+    end
   end
 end

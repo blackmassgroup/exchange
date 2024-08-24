@@ -172,9 +172,9 @@ defmodule VExchangeWeb.SampleLive.FormComponent do
     end
   end
 
-  defp save_sample(%{assigns: %{uploads: %{s3_object_key: uploads}}} = socket, :new, params) do
+  defp save_sample(%{assigns: %{uploads: %{s3_object_key: uploads}}} = socket, :new, _params) do
     Enum.reduce(uploads.entries, Ecto.Multi.new(), fn upload, acc ->
-      build_complete_sample_params(upload, params)
+      build_sample_and_rename_uploads(upload)
       |> then(&(acc |> Ecto.Multi.insert(upload.client_name, &1)))
     end)
     |> VExchange.Repo.Local.transaction()
@@ -182,13 +182,6 @@ defmodule VExchangeWeb.SampleLive.FormComponent do
       {:ok, _samples} ->
         if Application.get_env(:v_exchange, :env) != :test do
           QueryCache.update()
-
-          # malcore_api_key =
-          #   socket.assigns.current_user.malcore_api_key || System.get_env("MALCORE_API_KEY")
-
-          # Enum.map(samples, fn {_name, %{id: id}} ->
-          #   MalcoreRuntime.upload(malcore_api_key, id)
-          # end)
         end
 
         socket =
@@ -199,6 +192,7 @@ defmodule VExchangeWeb.SampleLive.FormComponent do
         {:noreply, socket}
 
       {:error, failed_operation, failed_value, _changes_so_far} ->
+        # TODO Delete Orphaned Files
         errors =
           Enum.map(failed_value.errors, fn {field, {msg, _}} ->
             "#{failed_operation} #{field} #{msg}"
@@ -211,48 +205,15 @@ defmodule VExchangeWeb.SampleLive.FormComponent do
     end
   end
 
-  defp build_complete_sample_params(upload, _params) do
-    type = if upload.client_type == "", do: "unknown", else: upload.client_type
-    s3_object = get_s3_object({:error, :starting}, upload.client_name)
+  defp build_sample_and_rename_uploads(%{client_type: _, client_name: _} = upload) do
+    file_binary = get_s3_object({:error, :starting}, upload.client_name)
 
-    md5 =
-      :crypto.hash(:md5, s3_object)
-      |> Base.encode16()
-      |> String.downcase()
-
-    sha1 =
-      :crypto.hash(:sha, s3_object)
-      |> Base.encode16()
-      |> String.downcase()
-
-    sha256 =
-      :crypto.hash(:sha256, s3_object)
-      |> Base.encode16()
-      |> String.downcase()
-
-    sha512 =
-      :crypto.hash(:sha3_512, s3_object)
-      |> Base.encode16()
-      |> String.downcase()
-
-    case rename_uploaded_file(sha256, upload.client_name) do
-      {:ok, _} ->
-        attrs = %{
-          md5: md5,
-          sha1: sha1,
-          sha256: sha256,
-          sha512: sha512,
-          type: type,
-          size: upload.client_size,
-          names: [upload.client_name],
-          s3_object_key: upload.client_name,
-          first_seen: DateTime.utc_now() |> DateTime.truncate(:second)
-        }
-
-        %Sample{}
-        |> Sample.changeset(attrs)
-
-      {:error, _} ->
+    with %{} = attrs <- Samples.build_sample_params(file_binary, upload),
+         {:ok, _} <- S3.rename_uploaded_file(attrs.sha256, upload.client_name),
+         {:ok, _} <- S3.copy_file_to_daily_backups(attrs.sha256) do
+      Sample.changeset(%Sample{}, attrs)
+    else
+      _ ->
         {:error, :s3_rename_error}
     end
   end
@@ -268,23 +229,5 @@ defmodule VExchangeWeb.SampleLive.FormComponent do
 
   defp get_s3_object({:ok, response}, _client_name) do
     Map.get(response, :body)
-  end
-
-  defp rename_uploaded_file(sha256, original_file_name) do
-    bucket = S3.get_wasabi_bucket()
-    config_opts = S3.wasabi_config()
-
-    with(
-      {:ok, _body} <-
-        ExAws.S3.put_object_copy(bucket, sha256, bucket, original_file_name)
-        |> ExAws.request(config_opts),
-      {:ok, _body} <-
-        ExAws.S3.delete_object(bucket, original_file_name) |> ExAws.request(config_opts)
-    ) do
-      {:ok, :success}
-    else
-      _ ->
-        {:error, :s3_file_rename_failure}
-    end
   end
 end

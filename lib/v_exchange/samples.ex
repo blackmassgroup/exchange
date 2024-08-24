@@ -172,4 +172,83 @@ defmodule VExchange.Samples do
     from(s in Sample, where: s.sha256 == ^sha256)
     |> Repo.one()
   end
+
+  @doc """
+  Returns params for inserting a `Sample` record from a binary file
+  """
+  def build_sample_params(file) when is_binary(file) do
+    type = "unknown"
+
+    %{
+      md5: md5,
+      sha1: sha1,
+      sha256: sha256,
+      sha512: sha512
+    } = get_hashes(file)
+
+    %{
+      md5: md5,
+      sha1: sha1,
+      sha256: sha256,
+      sha512: sha512,
+      type: type,
+      size: byte_size(file),
+      names: [sha256],
+      s3_object_key: sha256,
+      first_seen: DateTime.utc_now() |> DateTime.truncate(:second)
+    }
+  end
+
+  # Used for direct to s3 uploads
+  def build_sample_params(file, upload) when is_binary(file) do
+    type = if upload.client_type == "", do: "unknown", else: upload.client_type
+
+    %{
+      md5: md5,
+      sha1: sha1,
+      sha256: sha256,
+      sha512: sha512
+    } = get_hashes(file)
+
+    %{
+      md5: md5,
+      sha1: sha1,
+      sha256: sha256,
+      sha512: sha512,
+      type: type,
+      size: upload.client_size,
+      names: [upload.client_name],
+      s3_object_key: sha256,
+      first_seen: DateTime.utc_now() |> DateTime.truncate(:second)
+    }
+  end
+
+  defp get_hashes(file) do
+    md5 =
+      :crypto.hash(:md5, file)
+      |> Base.encode16()
+      |> String.downcase()
+
+    sha1 =
+      :crypto.hash(:sha, file)
+      |> Base.encode16()
+      |> String.downcase()
+
+    sha256 =
+      :crypto.hash(:sha256, file)
+      |> Base.encode16()
+      |> String.downcase()
+
+    sha512 =
+      :crypto.hash(:sha3_512, file)
+      |> Base.encode16()
+      |> String.downcase()
+
+    %{
+      md5: md5,
+      sha1: sha1,
+      sha256: sha256,
+      sha512: sha512
+    }
+  end
 end
