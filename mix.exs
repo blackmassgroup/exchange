@@ -56,7 +56,6 @@ defmodule VExchange.MixProject do
       {:poison, "~> 3.0"},
       {:bandit, "~> 1.2"},
       {:hackney, "~> 1.9"},
-      # optional dependency
       {:sweet_xml, "~> 0.7"},
       {:tesla, "~> 1.4"},
       {:number, "~> 1.0.1"},
