@@ -20,5 +20,5 @@ defmodule VExchangeWeb.Gettext do
 
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
-  use Gettext, otp_app: :v_exchange
+  use Gettext.Backend, otp_app: :v_exchange
 end
