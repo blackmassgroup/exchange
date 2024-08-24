@@ -14,7 +14,7 @@ config :v_exchange, Oban,
   engine: Oban.Engines.Basic,
   queues: [default: 10, vxu_uploads: 1, file_uploads: 50],
   plugins: [
-    {Oban.Plugins.Cron, crontab: [{"0 0 * * *", VExchange.ObanJobs.DailyUploader}]},
+    {Oban.Plugins.Cron, crontab: []},
     {Oban.Plugins.Pruner, max_age: three_days},
     Oban.Plugins.Lifeline,
     Oban.Plugins.Reindexer
