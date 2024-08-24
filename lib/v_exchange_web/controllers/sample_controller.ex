@@ -23,7 +23,7 @@ defmodule VExchangeWeb.SampleController do
     end
   end
 
-  def create(conn, %{"file" => file} = _params) when is_binary(file) do
+  def create(conn, %{"file" => file} = _params) do
     VExchange.Repo.transaction(fn ->
       with true <- Samples.is_below_size_limit(file),
            params <- Samples.build_sample_params(file),
