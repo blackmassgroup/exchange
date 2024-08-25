@@ -19,13 +19,13 @@ defmodule VExchange.ApiBodyReader do
 
   defp handle_read({:ok, body, conn}, _conn, _opts) do
     conn = update_params(conn, body)
-    {:ok, body, conn}
+    {:ok, "", conn}
   end
 
   defp handle_read({:more, partial_body, conn}, _original_conn, opts) do
     {:ok, body, conn} = read_body(conn, opts)
     conn = update_params(conn, partial_body <> body)
-    {:ok, partial_body <> body, conn}
+    {:ok, "", conn}
   end
 
   defp handle_read({:error, _reason}, conn, _opts) do
