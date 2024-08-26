@@ -19,7 +19,7 @@ defmodule VExchange.MixProject do
   def application do
     [
       mod: {VExchange.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :os_mon]
     ]
   end
 
@@ -69,7 +69,8 @@ defmodule VExchange.MixProject do
       {:remote_ip, "~> 1.1"},
       {:tesla_curl, "~> 1.2.1", only: :dev},
       {:sobelow, "~> 0.13.0"},
-      {:error_tracker, "~> 0.2"}
+      {:error_tracker, "~> 0.2"},
+      {:ecto_psql_extras, "~> 0.6"}
     ]
   end
 

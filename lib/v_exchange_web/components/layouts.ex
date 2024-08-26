@@ -242,6 +242,13 @@ defmodule VExchangeWeb.Layouts do
                         🐛
                         Error Tracker
                       </.link>
+
+                      <.link
+                        href={~p"/dashboard"}
+                        class="text-gray-400 hover:text-white hover:bg-zinc-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                      >
+                        💻 Dashboard
+                      </.link>
                     <% end %>
                     <li>
                       <.link
@@ -391,6 +398,12 @@ defmodule VExchangeWeb.Layouts do
                   >
                     🐛
                     Error Tracker
+                  </.link>
+                  <.link
+                    href={~p"/dashboard"}
+                    class="text-gray-400 hover:text-white hover:bg-zinc-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                  >
+                    💻 Dashboard
                   </.link>
                 <% end %>
                 <li>
