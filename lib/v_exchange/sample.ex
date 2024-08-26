@@ -13,7 +13,8 @@ defmodule VExchange.Sample do
     :sha256,
     :sha512,
     :tags,
-    :id
+    :id,
+    :user_id
   ]
 
   @required []
@@ -21,6 +22,7 @@ defmodule VExchange.Sample do
   @derive {Jason.Encoder, only: @allowed}
 
   schema "samples" do
+    belongs_to :user, VExchange.Accounts.User
     field :first_seen, :utc_datetime
     field :names, {:array, :string}
     field :md5, :string
@@ -48,6 +50,7 @@ defmodule VExchange.Sample do
     |> unique_constraint(:sha256)
     |> unique_constraint(:sha512)
     |> unique_constraint(:samples_pkey)
+    |> foreign_key_constraint(:user_id)
     |> validate_required(@required)
   end
 end

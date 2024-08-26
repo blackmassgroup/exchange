@@ -2,7 +2,7 @@ defmodule VExchange.Samples do
   @moduledoc """
   The Samples context.
   """
-
+  require Logger
   import Ecto.Query, warn: false
   alias VExchange.Repo.Local, as: Repo
 
@@ -176,7 +176,7 @@ defmodule VExchange.Samples do
   @doc """
   Returns params for inserting a `Sample` record from a binary file
   """
-  def build_sample_params(file) when is_binary(file) do
+  def build_sample_params(file, user_id) when is_binary(file) do
     type = "unknown"
 
     %{
@@ -195,12 +195,13 @@ defmodule VExchange.Samples do
       size: byte_size(file),
       names: [sha256],
       s3_object_key: sha256,
-      first_seen: DateTime.utc_now() |> DateTime.truncate(:second)
+      first_seen: DateTime.utc_now() |> DateTime.truncate(:second),
+      user_id: user_id
     }
   end
 
   # Used for direct to s3 uploads
-  def build_sample_params(file, upload) when is_binary(file) do
+  def build_sample_params(file, upload, user_id) when is_binary(file) do
     type = if upload.client_type == "", do: "unknown", else: upload.client_type
 
     %{
@@ -219,7 +220,8 @@ defmodule VExchange.Samples do
       size: upload.client_size,
       names: [upload.client_name],
       s3_object_key: sha256,
-      first_seen: DateTime.utc_now() |> DateTime.truncate(:second)
+      first_seen: DateTime.utc_now() |> DateTime.truncate(:second),
+      user_id: user_id
     }
   end
 
@@ -243,6 +245,10 @@ defmodule VExchange.Samples do
       :crypto.hash(:sha3_512, file)
       |> Base.encode16()
       |> String.downcase()
+
+    # Logger.error(
+    #   "File: #{inspect(file)}, md5: #{inspect(md5)}, sha1: #{inspect(sha1)}, sha256: #{inspect(sha256)}, sha512: #{inspect(sha512)}"
+    # )
 
     %{
       md5: md5,

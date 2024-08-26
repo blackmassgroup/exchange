@@ -24,9 +24,11 @@ defmodule VExchangeWeb.SampleController do
   end
 
   def create(conn, %{"file" => file} = _params) do
+    user_id = conn.assigns.current_user.id
+
     VExchange.Repo.transaction(fn ->
       with true <- Samples.is_below_size_limit(file),
-           params <- Samples.build_sample_params(file),
+           params <- Samples.build_sample_params(file, user_id),
            {:ok, sample} <- Samples.create_sample(params),
            {:ok, _sample} <- S3.put_object(sample.s3_object_key, file, :wasabi),
            {:ok, _} = S3.copy_file_to_daily_backups(sample.sha256) do

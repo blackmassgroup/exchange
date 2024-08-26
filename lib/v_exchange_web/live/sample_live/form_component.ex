@@ -174,7 +174,7 @@ defmodule VExchangeWeb.SampleLive.FormComponent do
 
   defp save_sample(%{assigns: %{uploads: %{s3_object_key: uploads}}} = socket, :new, _params) do
     Enum.reduce(uploads.entries, Ecto.Multi.new(), fn upload, acc ->
-      build_sample_and_rename_uploads(upload)
+      build_sample_and_rename_uploads(upload, socket.assigns.current_user.id)
       |> then(&(acc |> Ecto.Multi.insert(upload.client_name, &1)))
     end)
     |> VExchange.Repo.Local.transaction()
@@ -205,10 +205,10 @@ defmodule VExchangeWeb.SampleLive.FormComponent do
     end
   end
 
-  defp build_sample_and_rename_uploads(%{client_type: _, client_name: _} = upload) do
+  defp build_sample_and_rename_uploads(%{client_type: _, client_name: _} = upload, user_id) do
     file_binary = get_s3_object({:error, :starting}, upload.client_name)
 
-    with %{} = attrs <- Samples.build_sample_params(file_binary, upload),
+    with %{} = attrs <- Samples.build_sample_params(file_binary, upload, user_id),
          {:ok, _} <- S3.rename_uploaded_file(attrs.sha256, upload.client_name),
          {:ok, _} <- S3.copy_file_to_daily_backups(attrs.sha256) do
       Sample.changeset(%Sample{}, attrs)
