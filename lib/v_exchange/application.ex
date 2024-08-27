@@ -27,8 +27,7 @@ defmodule VExchange.Application do
       # Start a worker by calling: VExchange.Worker.start_link(arg)
       # {VExchange.Worker, arg}
       {Cluster.Supervisor, [topologies, [name: VExchange.ClusterSupervisor]]},
-      {Oban, Application.fetch_env!(:v_exchange, Oban)},
-      VExchange.QueryCache
+      {Oban, Application.fetch_env!(:v_exchange, Oban)}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

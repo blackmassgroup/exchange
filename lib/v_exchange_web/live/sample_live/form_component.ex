@@ -1,7 +1,6 @@
 defmodule VExchangeWeb.SampleLive.FormComponent do
   use VExchangeWeb, :live_component
 
-  alias VExchange.QueryCache
   alias VExchange.Samples
   alias VExchange.Sample
   alias VExchange.Services.S3
@@ -165,7 +164,7 @@ defmodule VExchangeWeb.SampleLive.FormComponent do
         {:noreply,
          socket
          |> put_flash(:info, "Sample updated successfully")
-         |> push_navigate(to: socket.assigns.navigate)}
+         |> push_navigate(to: socket.assigns.navigate, replace: true)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
@@ -179,15 +178,18 @@ defmodule VExchangeWeb.SampleLive.FormComponent do
     end)
     |> VExchange.Repo.Local.transaction()
     |> case do
-      {:ok, _samples} ->
+      {:ok, samples} ->
         if Application.get_env(:v_exchange, :env) != :test do
-          QueryCache.update()
+          Enum.each(
+            samples,
+            &Phoenix.PubSub.broadcast(VExchange.PubSub, "samples", {:new_sample, &1})
+          )
         end
 
         socket =
           socket
           |> put_flash(:info, "Sample(s) created successfully")
-          |> push_patch(to: ~p(/samples))
+          |> push_navigate(to: ~p"/samples", replace: true)
 
         {:noreply, socket}
 
@@ -201,7 +203,8 @@ defmodule VExchangeWeb.SampleLive.FormComponent do
 
         message = "There was a problem with one or more of your uploads. #{errors}"
 
-        {:noreply, put_flash(socket, :error, message) |> push_patch(to: ~p(/samples))}
+        {:noreply,
+         put_flash(socket, :error, message) |> push_navigate(to: ~p"/samples", replace: true)}
     end
   end
 

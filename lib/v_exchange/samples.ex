@@ -7,7 +7,7 @@ defmodule VExchange.Samples do
   alias VExchange.Repo.Local, as: Repo
 
   alias VExchange.Sample
-  alias VExchange.QueryCache
+  alias Phoenix.PubSub
 
   @doc """
   Returns the list of samples.
@@ -18,23 +18,19 @@ defmodule VExchange.Samples do
       [%Sample{}, ...]
 
   """
+
   def list_samples(opts \\ %{}) do
+    limit = Map.get(opts, :limit, 10)
+
     from(s in Sample)
     |> filter_by_hash(opts)
+    |> order(opts)
+    |> limit([_], ^limit)
     |> Repo.all()
   end
 
-  def super_quick_list_samples() do
-    query = from(s in Sample, limit: 10)
-
-    Repo.all(query)
-  end
-
-  def quick_list_samples() do
-    query = from(s in Sample, order_by: [desc: s.inserted_at], limit: 20)
-
-    Repo.all(query)
-  end
+  defp order(qry, %{order: :asc}), do: order_by(qry, [s], asc: s.inserted_at)
+  defp order(qry, _opts), do: order_by(qry, [s], desc: s.inserted_at)
 
   defp filter_by_hash(query, %{hash: hash}) when byte_size(hash) not in [32, 40, 64, 128] do
     query
@@ -106,9 +102,9 @@ defmodule VExchange.Samples do
     |> Sample.changeset(attrs)
     |> Repo.insert()
     |> case do
-      {:ok, _} = result ->
+      {:ok, sample} = result ->
         if Application.get_env(:v_exchange, :env) != :test do
-          QueryCache.update()
+          PubSub.broadcast(VExchange.PubSub, "samples", {:new_sample, sample})
         end
 
         result
