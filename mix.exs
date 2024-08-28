@@ -70,7 +70,8 @@ defmodule VExchange.MixProject do
       {:tesla_curl, "~> 1.2.1", only: :dev},
       {:sobelow, "~> 0.13.0"},
       {:error_tracker, "~> 0.2"},
-      {:ecto_psql_extras, "~> 0.6"}
+      {:ecto_psql_extras, "~> 0.6"},
+      {:ecto_dev_logger, "~> 0.13", only: [:dev, :test]}
     ]
   end
 

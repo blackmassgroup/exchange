@@ -9,6 +9,10 @@ defmodule VExchange.Application do
   def start(_type, _args) do
     topologies = Application.get_env(:libcluster, :topologies) || []
 
+    if Code.ensure_loaded?(Ecto.DevLogger) do
+      Ecto.DevLogger.install(VExchange.Repo.Local)
+    end
+
     children = [
       # Start the Telemetry supervisor
       VExchangeWeb.Telemetry,

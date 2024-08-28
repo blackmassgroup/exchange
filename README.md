@@ -4,26 +4,23 @@
 
 - [LiveView Authentication](https://fly.io/phoenix-files/phx-gen-auth/)
 - User Role and Permission system
-- Direct to S3/Wasabi upload with LiveView
-  - https://hexdocs.pm/phoenix_live_view/uploads-external.html
-- Generates presigned urls for secure download
+- [Direct to S3/Wasabi upload with LiveView](https://hexdocs.pm/phoenix_live_view/uploads-external.html#direct-to-s3-compatible)
+- Presigned urls for secure download
 - Calculates file hashes with [`:crypto.hash/2`](https://www.erlang.org/doc/man/crypto.html#hash-2)
-- ~~Uploads to [Triage](https://tria.ge/) on upload to Vx Underground via [Oban Job Scheduler](https://hexdocs.pm/oban/Oban.html) and notifies the user of completion with `Phoenix.Channels`.~~
-- Checks for VT Report on load of the `Sample` show page.
 - Uses [`libcluster`](https://fly.io/docs/elixir/the-basics/clustering/#adding-libcluster) and [`fly_postgres`](https://hexdocs.pm/fly_postgres/readme.html) for scalability
-- Has [CI/CD](https://fly.io/docs/elixir/advanced-guides/github-actions-elixir-ci-cd/) setup and is deployed on Fly.io.
+- [CI/CD](https://fly.io/docs/elixir/advanced-guides/github-actions-elixir-ci-cd/) setup and is deployed on Fly.io.
 - ~~Custom Discord Logger backend~~
 - Upload, login and get sample API routes
 
 ### Built With
 
 - **Postgres**
-- **erlang** 
-- [**Elixir**](https://hexdocs.pm/elixir/Kernel.html) 
+- **erlang**
+- [**Elixir**](https://hexdocs.pm/elixir/Kernel.html)
 - [**Phoenix**](https://hexdocs.pm/phoenix/Phoenix.html)
 - [**Phoenix LiveView**](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html)
 - **NodeJS**
-- [**TailwindCSS**](https://tailwindcss.com/docs/installation) 
+- [**TailwindCSS**](https://tailwindcss.com/docs/installation)
 
 ## Getting Started
 
@@ -83,7 +80,7 @@ if TOKEN == "":
         PASSWORD=input("Enter your password: ")
         r = requests.post(API_LOGIN, data={"email":EMAIL, "password":PASSWORD})
         TOKEN = r.json()["data"]["token"]
- 
+
 def process_file(subdir, file):
     filename = os.path.join(subdir, file)
     with open(filename, "rb+") as f:

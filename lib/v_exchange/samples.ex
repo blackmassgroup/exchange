@@ -18,43 +18,91 @@ defmodule VExchange.Samples do
       [%Sample{}, ...]
 
   """
+  def list_samples(opts \\ %{})
 
-  def list_samples(opts \\ %{}) do
-    limit = Map.get(opts, :limit, 10)
+  def list_samples(%{hash: hash} = opts) do
+    limit = Map.get(opts, :limit, 20)
 
     from(s in Sample)
-    |> filter_by_hash(opts)
-    |> order(opts)
-    |> limit([_], ^limit)
+    |> filter_by_hash(%{hash: hash})
+    |> limit(^limit)
+    |> order_by([s], desc: s.inserted_at)
+    |> select(
+      [s],
+      struct(s, [
+        :id,
+        :user_id,
+        :first_seen,
+        :names,
+        :md5,
+        :sha1,
+        :sha256,
+        :sha512,
+        :s3_object_key,
+        :size,
+        :type,
+        :tags,
+        :inserted_at,
+        :updated_at
+      ])
+    )
     |> Repo.all()
   end
 
-  defp order(qry, %{order: :asc}), do: order_by(qry, [s], asc: s.inserted_at)
-  defp order(qry, _opts), do: order_by(qry, [s], desc: s.inserted_at)
+  def list_samples(opts) do
+    limit = Map.get(opts, :limit, 20)
+    order = Map.get(opts, :order, :desc)
+
+    from(s in Sample)
+    |> order_by([s], {^order, s.inserted_at})
+    |> limit(^limit)
+    |> select(
+      [s],
+      struct(s, [
+        :id,
+        :user_id,
+        :first_seen,
+        :names,
+        :md5,
+        :sha1,
+        :sha256,
+        :sha512,
+        :s3_object_key,
+        :size,
+        :type,
+        :tags,
+        :inserted_at,
+        :updated_at
+      ])
+    )
+    |> Repo.all()
+  end
 
   defp filter_by_hash(query, %{hash: hash}) when byte_size(hash) not in [32, 40, 64, 128] do
     query
   end
 
   defp filter_by_hash(query, %{hash: hash}) when byte_size(hash) == 32 do
-    where(query, [s], s.md5 == ^hash)
+    from s in query, where: s.md5 == ^hash
   end
 
   defp filter_by_hash(query, %{hash: hash}) when byte_size(hash) == 40 do
-    where(query, [s], s.sha1 == ^hash)
+    from s in query, where: s.sha1 == ^hash
   end
 
   defp filter_by_hash(query, %{hash: hash}) when byte_size(hash) == 64 do
-    where(query, [s], s.sha256 == ^hash)
+    from s in query, where: s.sha256 == ^hash
   end
 
   defp filter_by_hash(query, %{hash: hash}) when byte_size(hash) == 128 do
-    where(query, [s], s.sha512 == ^hash)
+    from s in query, where: s.sha512 == ^hash
   end
 
   defp filter_by_hash(query, _), do: query
 
-  def get_sample_count!(), do: Repo.aggregate(Sample, :count)
+  def get_sample_count!() do
+    Repo.one(from s in Sample, select: fragment("count(*) :: integer"))
+  end
 
   @doc """
   Gets a single sample.
@@ -241,10 +289,6 @@ defmodule VExchange.Samples do
       :crypto.hash(:sha3_512, file)
       |> Base.encode16()
       |> String.downcase()
-
-    # Logger.error(
-    #   "File: #{inspect(file)}, md5: #{inspect(md5)}, sha1: #{inspect(sha1)}, sha256: #{inspect(sha256)}, sha512: #{inspect(sha512)}"
-    # )
 
     %{
       md5: md5,
