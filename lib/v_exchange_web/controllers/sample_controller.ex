@@ -31,7 +31,7 @@ defmodule VExchangeWeb.SampleController do
            params <- Samples.build_sample_params(file, user_id),
            {:ok, sample} <- Samples.create_sample(params),
            {:ok, _sample} <- S3.put_object(sample.s3_object_key, file, :wasabi),
-           {:ok, _} = skip_smelly_upload_for_daily(user_id) do
+           {:ok, _} = skip_smelly_upload_for_daily(sample.sha256, user_id) do
         sample
       else
         {:error, %Ecto.Changeset{}} -> VExchange.Repo.rollback(:invalid_sample)

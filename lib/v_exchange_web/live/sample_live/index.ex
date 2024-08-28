@@ -101,7 +101,7 @@ defmodule VExchangeWeb.SampleLive.Index do
   def handle_info({:new_sample, new_sample}, socket) do
     current_samples = socket.assigns.new_samples
     current_count = socket.assigns.count
-    new_samples = [new_sample | (current_samples.result || [])]
+    new_samples = [new_sample | current_samples.result || []]
 
     samples = AsyncResult.ok(current_samples, new_samples)
     count = AsyncResult.ok(current_count, (current_count.result || 0) + 1)
