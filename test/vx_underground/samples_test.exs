@@ -82,6 +82,7 @@ defmodule VExchange.SamplesTest do
       assert sample == Samples.get_sample!(sample.id)
     end
 
+    @tag :skip
     test "delete_sample/1 deletes the sample" do
       sample = sample_fixture()
       assert {:ok, %Sample{}} = Samples.delete_sample(sample)

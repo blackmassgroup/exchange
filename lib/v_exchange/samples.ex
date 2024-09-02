@@ -5,10 +5,12 @@ defmodule VExchange.Samples do
   require Logger
   import Ecto.Query, warn: false
 
+  alias VExchange.CleanHashes
   alias Phoenix.PubSub
   alias VExchange.ObanJobs.Vt.SubmitVt
   alias VExchange.Repo.Local, as: Repo
   alias VExchange.Sample
+  alias VExchange.CleanHashes
   alias VExchange.Services.VirusTotal
   alias VExchange.Services.S3
 
@@ -217,15 +219,16 @@ defmodule VExchange.Samples do
 
   """
   def delete_sample(%Sample{} = sample) do
-    with {:ok, sample} = result <- Repo.delete(sample),
-         {:ok, _} <- S3.delete_exchange_object(sample.sha256) do
+    with(
+      {:ok, _} <- CleanHashes.create_clean_hash(%{sha256: sample.sha256}),
+      {:ok, sample} = result <- Repo.delete(sample),
+      {:ok, _} <- S3.delete_exchange_object(sample.sha256)
+    ) do
       if Application.get_env(:v_exchange, :env) != :test do
         PubSub.broadcast(VExchange.PubSub, "samples", {:deleted_sample, sample})
       end
 
       result
-    else
-      result -> result
     end
   end
 
