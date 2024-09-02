@@ -12,6 +12,10 @@ defmodule VExchange.Samples do
   @doc """
   Returns the list of samples.
 
+  Possible options:
+  - `:limit`: The maximum number of samples to return.
+  - `:hash`: The hash of the sample to search for.
+
   ## Examples
 
       iex> list_samples()
@@ -100,6 +104,9 @@ defmodule VExchange.Samples do
 
   defp filter_by_hash(query, _), do: query
 
+  @doc """
+  Gets the count of samples in the database.
+  """
   def get_sample_count!() do
     Repo.one(from s in Sample, select: fragment("count(*) :: integer"))
   end
@@ -124,10 +131,10 @@ defmodule VExchange.Samples do
   Gets a single sample.
   ## Examples
 
-      iex> get_sample!(123)
-      %Sample{}
+      iex> get_sample(123)
+      {:ok, %Sample{}}
 
-      iex> get_sample!(456)
+      iex> get_sample(456)
       nil
 
   """
@@ -135,6 +142,9 @@ defmodule VExchange.Samples do
 
   @doc """
   Creates a sample.
+
+  Queues the job to submits the sample to VirusTotal for processing
+  and broadcasts a PubSub event for the ui to update.
 
   ## Examples
 
@@ -182,6 +192,9 @@ defmodule VExchange.Samples do
 
   @doc """
   Deletes a sample.
+
+  Also removes the sample from the cloud provider and
+  broadcasts a PubSub event for the ui to update.
 
   ## Examples
 

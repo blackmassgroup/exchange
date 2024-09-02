@@ -1,4 +1,4 @@
-defmodule VExchange.ObanJobs.DailyUploader do
+defmodule VExchange.ObanJobs.CloudMigration.DailyUploader do
   @moduledoc """
   A module responsible for queuing file upload jobs to S3 on a daily basis.
 
@@ -9,7 +9,7 @@ defmodule VExchange.ObanJobs.DailyUploader do
   use Oban.Worker, queue: :vxu_uploads, max_attempts: 15
   alias VExchange.Repo
   alias VExchange.Sample
-  alias VExchange.ObanJobs.FileUploader
+  alias VExchange.ObanJobs.CloudMigration.FileUploader
   import Ecto.Query
 
   require Logger
@@ -17,11 +17,11 @@ defmodule VExchange.ObanJobs.DailyUploader do
   @impl Oban.Worker
 
   def perform(%Oban.Job{args: %{"date" => date}}) do
-    Logger.info("DailyUploader - Starting upload process for date: #{date}")
+    Logger.info("CloudMigration.DailyUploader - Starting upload process for date: #{date}")
 
     case fetch_samples_for_date(date) do
       {:ok, []} ->
-        Logger.info("DailyUploader - No files to process for date: #{date}")
+        Logger.info("CloudMigration.DailyUploader - No files to process for date: #{date}")
         :ok
 
       {:ok, samples} ->
@@ -34,7 +34,7 @@ defmodule VExchange.ObanJobs.DailyUploader do
 
     case fetch_samples_for_date(date) do
       {:ok, []} ->
-        Logger.info("DailyUploader - No files to process for date: #{date}")
+        Logger.info("CloudMigration.DailyUploader - No files to process for date: #{date}")
         :ok
 
       {:ok, samples} ->
@@ -57,7 +57,7 @@ defmodule VExchange.ObanJobs.DailyUploader do
     - {:ok, samples}: A tuple containing `:ok` and a list of samples.
   """
   def fetch_samples_for_date(date) do
-    Logger.info("DailyUploader - Fetching sample ids for date: #{date}")
+    Logger.info("CloudMigration.DailyUploader - Fetching sample ids for date: #{date}")
 
     start_datetime = Date.from_iso8601!(date) |> DateTime.new!(~T[00:00:00], "Etc/UTC")
     end_datetime = DateTime.add(start_datetime, 86400 - 1, :second)
@@ -68,7 +68,10 @@ defmodule VExchange.ObanJobs.DailyUploader do
       )
       |> Repo.all()
 
-    Logger.info("DailyUploader - Fetched #{length(samples)} sample ids for date: #{date}")
+    Logger.info(
+      "CloudMigration.DailyUploader - Fetched #{length(samples)} sample ids for date: #{date}"
+    )
+
     {:ok, samples}
   end
 

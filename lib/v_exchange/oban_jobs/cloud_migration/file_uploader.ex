@@ -1,4 +1,4 @@
-defmodule VExchange.ObanJobs.FileUploader do
+defmodule VExchange.ObanJobs.CloudMigration.FileUploader do
   use Oban.Worker,
     queue: :file_uploads,
     max_attempts: 5,
@@ -19,12 +19,18 @@ defmodule VExchange.ObanJobs.FileUploader do
             :ok
 
           {:error, reason} ->
-            Logger.error("FileUploader - Failed to upload file: #{upload_path} - #{reason}")
+            Logger.error(
+              "CloudMigration.FileUploader - Failed to upload file: #{upload_path} - #{reason}"
+            )
+
             {:error, reason}
         end
 
       {:error, reason} ->
-        Logger.error("FileUploader - Failed to fetch file: #{s3_object_key} - #{reason}")
+        Logger.error(
+          "CloudMigration.FileUploader - Failed to fetch file: #{s3_object_key} - #{reason}"
+        )
+
         {:error, reason}
     end
   end
