@@ -169,13 +169,13 @@ defmodule VExchange.Samples do
         if Application.get_env(:v_exchange, :env) != :test do
           PubSub.broadcast(VExchange.PubSub, "samples", {:new_sample, sample})
 
-          %{
-            "sha256" => sample.sha256,
-            "is_new" => true,
-            "is_first_request" => true
-          }
-          |> SubmitVt.new()
-          |> Oban.insert()
+          # %{
+          #   "sha256" => sample.sha256,
+          #   "is_new" => true,
+          #   "is_first_request" => true
+          # }
+          # |> SubmitVt.new()
+          # |> Oban.insert()
         end
 
         result
@@ -427,5 +427,21 @@ defmodule VExchange.Samples do
     |> List.flatten()
     |> Enum.reject(&is_nil/1)
     |> Enum.uniq()
+  end
+
+  @doc """
+  Queues all samples for VirusTotal processing
+  """
+  def queue_for_vt(opts) do
+    list_samples(opts)
+    |> Enum.each(fn sample ->
+      %{
+        "sha256" => sample.sha256,
+        "is_new" => false,
+        "is_first_request" => true
+      }
+      |> SubmitVt.new()
+      |> Oban.insert()
+    end)
   end
 end
