@@ -113,6 +113,29 @@ defmodule VExchangeWeb.SampleLive.Index do
     {:noreply, socket}
   end
 
+  def handle_info({:deleted_sample, new_sample}, socket) do
+    current_samples = socket.assigns.new_samples
+    current_count = socket.assigns.count
+    new_samples = Enum.reject(current_samples.result, &(&1.sha256 == new_sample.sha256))
+
+    samples = AsyncResult.ok(current_samples, new_samples)
+    count = AsyncResult.ok(current_count, (current_count.result || 0) - 1)
+
+    socket =
+      assign(socket, :samples, samples)
+      |> assign(:count, count)
+
+    socket =
+      if new_sample.user_id == socket.assigns.current_user.id do
+        socket
+        |> put_flash(:warning, "Non-Malware Sample deleted")
+      else
+        socket
+      end
+
+    {:noreply, socket}
+  end
+
   def format_time(past_datetime) do
     current_datetime = NaiveDateTime.utc_now()
 
