@@ -31,7 +31,9 @@ defmodule VExchange.Application do
       # Start a worker by calling: VExchange.Worker.start_link(arg)
       # {VExchange.Worker, arg}
       {Cluster.Supervisor, [topologies, [name: VExchange.ClusterSupervisor]]},
-      {Oban, Application.fetch_env!(:v_exchange, Oban)}
+      {Oban, Application.fetch_env!(:v_exchange, Oban)},
+      # Start the vt rate limiter with initial limit
+      {VExchange.VtApiRateLimiter, Application.get_env(:v_exchange, :vt_api_rate_limit, 1700)}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
