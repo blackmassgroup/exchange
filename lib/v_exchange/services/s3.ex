@@ -102,4 +102,22 @@ defmodule VExchange.Services.S3 do
         {:error, :s3_file_rename_failure}
     end
   end
+
+  @doc """
+  Deletes an object from the exchange bucket.
+  """
+  def delete_exchange_object(sha256) do
+    bucket = get_wasabi_bucket()
+    opts = wasabi_config()
+
+    with(
+      {:ok, %{status_code: 200}} <-
+        S3.delete_object(bucket, sha256) |> ExAws.request(opts)
+    ) do
+      {:ok, sha256}
+    else
+      _ ->
+        {:error, :delete_exchange_object_failure}
+    end
+  end
 end
