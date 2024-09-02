@@ -4,6 +4,7 @@ defmodule VExchangeWeb.SampleLive.FormComponent do
   alias VExchange.Samples
   alias VExchange.Sample
   alias VExchange.Services.S3
+  alias VExchange.ObanJobs.Vt.SubmitVt
 
   @impl true
   def render(assigns) do
@@ -182,8 +183,20 @@ defmodule VExchangeWeb.SampleLive.FormComponent do
         if Application.get_env(:v_exchange, :env) != :test do
           Enum.each(
             samples,
-            &Phoenix.PubSub.broadcast(VExchange.PubSub, "samples", {:new_sample, &1})
+            fn {_name, sample} ->
+              Phoenix.PubSub.broadcast(VExchange.PubSub, "samples", {:new_sample, sample})
+            end
           )
+
+          Enum.map(samples, fn {_name, sample} ->
+            %{
+              "sha256" => sample.sha256,
+              "is_new" => true,
+              "is_first_request" => true
+            }
+            |> SubmitVt.new()
+            |> Oban.insert()
+          end)
         end
 
         socket =

@@ -166,6 +166,14 @@ defmodule VExchange.Samples do
       {:ok, sample} = result ->
         if Application.get_env(:v_exchange, :env) != :test do
           PubSub.broadcast(VExchange.PubSub, "samples", {:new_sample, sample})
+
+          %{
+            "sha256" => sample.sha256,
+            "is_new" => true,
+            "is_first_request" => true
+          }
+          |> SubmitVt.new()
+          |> Oban.insert()
         end
 
         result
