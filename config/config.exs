@@ -7,18 +7,24 @@
 # General application configuration
 import Config
 
-three_days = 259_200
+one_day = 86_400
+pruner_max_age = one_day
+
+oban_plugins =
+  [
+    {Oban.Plugins.Pruner, max_age: pruner_max_age},
+    Oban.Plugins.Lifeline,
+    Oban.Plugins.Reindexer
+  ]
+
+oban_queues = [default: 10, vxu_uploads: 1, file_uploads: 50, vt_api: 5]
 
 config :v_exchange, Oban,
   repo: VExchange.Repo.Local,
   engine: Oban.Engines.Basic,
-  queues: [default: 10, vxu_uploads: 1, file_uploads: 50],
-  plugins: [
-    {Oban.Plugins.Cron, crontab: []},
-    {Oban.Plugins.Pruner, max_age: three_days},
-    Oban.Plugins.Lifeline,
-    Oban.Plugins.Reindexer
-  ]
+  queues: oban_queues,
+  plugins: oban_plugins,
+  shutdown_grace_period: :timer.seconds(60)
 
 config :v_exchange, env: Mix.env()
 

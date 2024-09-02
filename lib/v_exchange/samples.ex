@@ -4,10 +4,13 @@ defmodule VExchange.Samples do
   """
   require Logger
   import Ecto.Query, warn: false
-  alias VExchange.Repo.Local, as: Repo
 
-  alias VExchange.Sample
   alias Phoenix.PubSub
+  alias VExchange.ObanJobs.Vt.SubmitVt
+  alias VExchange.Repo.Local, as: Repo
+  alias VExchange.Sample
+  alias VExchange.Services.VirusTotal
+  alias VExchange.Services.S3
 
   @doc """
   Returns the list of samples.
@@ -206,7 +209,23 @@ defmodule VExchange.Samples do
 
   """
   def delete_sample(%Sample{} = sample) do
-    Repo.delete(sample)
+    with {:ok, sample} = result <- Repo.delete(sample),
+         {:ok, _} <- S3.delete_exchange_object(sample.sha256) do
+      if Application.get_env(:v_exchange, :env) != :test do
+        PubSub.broadcast(VExchange.PubSub, "samples", {:deleted_sample, sample})
+      end
+
+      result
+    else
+      result -> result
+    end
+  end
+
+  def delete_sample(nil), do: {:error, :nil_sent}
+
+  def delete_sample(sha256) do
+    get_sample_by_sha256(sha256)
+    |> delete_sample()
   end
 
   @doc """
@@ -323,4 +342,79 @@ defmodule VExchange.Samples do
   Returns true if we the file is below our
   """
   def is_below_size_limit(binary), do: byte_size(binary) <= size_limit()
+
+  @doc """
+  Processes the result of the status check
+
+  If the sample is malware, we update the local sample data and post a comment
+  """
+  def process_vt_result(attrs) do
+    comment = "File present on vx-underground.org | virus.exchange."
+    sha256 = Map.get(attrs, "sha256")
+
+    with true <- VirusTotal.is_malware?(attrs),
+         {:ok, _} <- VirusTotal.post_file_comment(sha256, comment),
+         {:ok, sample} <- update_sample_from_vt(attrs) do
+      {:ok, sample}
+    else
+      false ->
+        case delete_sample(sha256) do
+          {:ok, %Sample{}} ->
+            {:ok, :not_malware}
+
+          {:error, %Ecto.Changeset{}} ->
+            Logger.error(
+              "Failed to delete sha256: #{sha256} from local database for not being malware"
+            )
+
+          {:error, _} ->
+            Logger.error(
+              "Failed to delete sha256: #{sha256} from cloud provider database for not being malware"
+            )
+        end
+
+      {:error, %Ecto.Changeset{} = _cs} ->
+        Logger.error("Error updating local sample #{sha256} from VT")
+        {:error, :error_updating_local_sample}
+
+      _ ->
+        Logger.error("Error posting comment for #{sha256} to VT")
+        {:error, :posting_comment}
+    end
+  end
+
+  @doc """
+  Updates a Sample from VT get sampe response
+
+  Expects the response to be verified by `VirusTotal.is_malware?/1` already
+  """
+  def update_sample_from_vt(attrs) do
+    sha256 = Map.get(attrs, "sha256")
+    sample = get_sample_by_sha256(sha256)
+
+    names =
+      [Map.get(attrs, "names", nil) | sample.names]
+      |> List.flatten()
+      |> Enum.reject(&is_nil/1)
+
+    new_attrs = %{
+      names: names,
+      tags: extract_tags(attrs) ++ sample.tags
+    }
+
+    update_sample(sample, new_attrs)
+  end
+
+  defp extract_tags(attrs) do
+    [
+      attrs["tags"],
+      attrs["type_tags"],
+      [attrs["popular_threat_classification"]["suggested_threat_label"]],
+      Enum.map(attrs["popular_threat_category"] || [], & &1["value"]),
+      Enum.map(attrs["popular_threat_name"] || [], & &1["value"])
+    ]
+    |> List.flatten()
+    |> Enum.reject(&is_nil/1)
+    |> Enum.uniq()
+  end
 end
