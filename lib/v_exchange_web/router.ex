@@ -51,6 +51,16 @@ defmodule VExchangeWeb.Router do
   # scope "/api", VExchangeWeb do
   #   pipe_through :api
   # end
+  #
+
+  # Uncomment to use Oban Dashboard
+  #
+  # import Oban.Web.Router
+
+  # scope "/dev" do
+  #   pipe_through :browser_insecure
+  #   oban_dashboard("/oban")
+  # end
 
   # Enable Swoosh mailbox preview in development
   if Application.compile_env(:v_exchange, :dev_routes) do
