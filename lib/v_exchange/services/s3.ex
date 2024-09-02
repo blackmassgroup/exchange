@@ -1,5 +1,6 @@
 defmodule VExchange.Services.S3 do
   alias ExAws.S3
+  require Logger
 
   @doc """
   Returns the base URL for the bucket.
@@ -111,12 +112,13 @@ defmodule VExchange.Services.S3 do
     opts = wasabi_config()
 
     with(
-      {:ok, %{status_code: 200}} <-
+      {:ok, %{status_code: 204}} <-
         S3.delete_object(bucket, sha256) |> ExAws.request(opts)
     ) do
       {:ok, sha256}
     else
-      _ ->
+      error ->
+        Logger.error("Error deleting object from S3: #{inspect(error)}")
         {:error, :delete_exchange_object_failure}
     end
   end
