@@ -17,7 +17,7 @@ oban_plugins =
     Oban.Plugins.Reindexer
   ]
 
-oban_queues = [default: 10, vxu_uploads: 1, file_uploads: 50, vt_api: 250]
+oban_queues = [default: 10, vxu_uploads: 1, file_uploads: 50, vt_api: 50]
 
 config :v_exchange, Oban,
   repo: VExchange.Repo.Local,
