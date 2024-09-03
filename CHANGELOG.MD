@@ -1,0 +1,39 @@
+# CHANGELOG
+
+## 3.0
+
+1. VT API Rate Limiter:
+   - A new module `VExchange.VtApiRateLimiter` has been implemented to manage rate limiting for VirusTotal API requests.
+   - It uses a GenServer to maintain counters for different priority levels and enforces a total request limit.
+   - The rate limiter is started in the application supervision tree with an initial limit configured in the runtime.exs file.
+
+2. Oban Jobs:
+   - Two new Oban job modules have been added: `VExchange.ObanJobs.Vt.StatusCheckVt` and `VExchange.ObanJobs.Vt.SubmitVt`.
+   - These jobs handle the submission of samples to VirusTotal and checking the status of submitted samples.
+   - They use the VT API Rate Limiter to respect rate limits when making API calls.
+
+3. VirusTotal Service:
+   - The module `VExchange.Services.VirusTotalPost` has been foled into `VExchange.Services.VirusTotal`
+   - It provides functions for getting sample information, submitting files for processing, posting comments, and checking analysis status.
+
+4. Samples Context:
+   - The `VExchange.Samples` module has been updated to include functions for updating samples based on VirusTotal data and triggering VirusTotal submissions.
+
+5. Configuration Changes:
+   - New runtime configuration options have been added for virus total and rate limiting.
+   - The Oban configuration has been updated to include new queues specifically for virus total requests.
+
+6. Application Startup:
+   - The `VExchange.Application` module now starts the VT API Rate Limiter as part of the application supervision tree.
+
+These changes have several impacts on the application:
+
+1. Improved VirusTotal Integration: The application can now submit samples to VirusTotal, retrieve analysis results, and update sample information based on VirusTotal data.
+
+2. Rate Limiting: The VT API Rate Limiter ensures that the application respects VirusTotal's rate limits, preventing API abuse and potential service disruptions.
+
+3. Background Processing: The use of Oban jobs allows for asynchronous processing of VirusTotal-related tasks, improving application responsiveness.
+
+4. Configurability: The new configuration options allow for easier deployment and management of the application in different environments.
+
+5. Scalability: The use of Oban and the rate limiter makes the application more scalable, as it can handle a large number of sample submissions and analysis requests without overwhelming the VirusTotal API.

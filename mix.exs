@@ -4,7 +4,7 @@ defmodule VExchange.MixProject do
   def project do
     [
       app: :v_exchange,
-      version: "2.5.0",
+      version: "3.0.0",
       elixir: "~> 1.17",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
