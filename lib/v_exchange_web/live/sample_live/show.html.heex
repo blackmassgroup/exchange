@@ -62,7 +62,6 @@
     </:item>
     <:item title="Virus Total">
       <.link
-        :if={@virus_total != :does_not_exist}
         href={"https://www.virustotal.com/gui/file/#{@sample.sha256}"}
         target="_blank"
         class="mb-5"
@@ -71,14 +70,6 @@
           Visit on Virus Total
         </.button>
       </.link>
-
-      <pre :if={@virus_total != :does_not_exist}>
-      <%= Poison.encode!(@virus_total, pretty: true) %>
-    </pre>
-
-      <p :if={@virus_total == :does_not_exist}>
-        File doesn't exist on virus total yet.
-      </p>
     </:item>
     <:item title="Triage">
       <.link

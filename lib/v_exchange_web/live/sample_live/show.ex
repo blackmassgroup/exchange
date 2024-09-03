@@ -1,7 +1,7 @@
 defmodule VExchangeWeb.SampleLive.Show do
   use VExchangeWeb, :live_view
 
-  alias VExchange.Services.{TriageSearch, VirusTotal}
+  alias VExchange.Services.{TriageSearch}
   alias VExchange.Samples
   alias VExchangeWeb.SampleChannel
 
@@ -24,20 +24,10 @@ defmodule VExchangeWeb.SampleLive.Show do
              put_flash(socket, :error, "Sample does not exist") |> push_navigate(to: ~p(/samples))}
 
           _ ->
-            virus_total =
-              case VirusTotal.get_sample(sample.sha256) do
-                {:ok, virus_total} ->
-                  virus_total
-
-                {:error, _} ->
-                  :does_not_exist
-              end
-
             {:ok,
              socket
              |> assign(:page_title, page_title(socket.assigns.live_action))
              |> assign(:sample, sample)
-             |> assign(:virus_total, virus_total)
              |> assign(:triage, :triage_not_processed)}
         end
       else
