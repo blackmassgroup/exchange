@@ -8,7 +8,7 @@ defmodule VExchange.Accounts.UserNotifier do
     email =
       new()
       |> to(recipient)
-      |> from({"VExchange", "contact@example.com"})
+      |> from({"VExchange", "contact@mwdb.vx-underground.org"})
       |> subject(subject)
       |> text_body(body)
 
