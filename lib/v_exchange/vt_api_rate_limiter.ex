@@ -66,7 +66,7 @@ defmodule VExchange.VtApiRateLimiter do
 
   @impl true
   def handle_call({:get_snooze_time, priority}, _from, state) do
-    {:reply, get_snooze_time(priority), state}
+    {:reply, get_snooze(priority), state}
   end
 
   @impl true
@@ -87,23 +87,6 @@ defmodule VExchange.VtApiRateLimiter do
     GenServer.call(__MODULE__, {:allow_request, priority})
   end
 
-  # Schedules a reset of the counters.
-  defp schedule_reset do
-    Process.send_after(self(), :reset, @default_interval)
-  end
-
-  @doc """
-  Returns the snooze time for a given priority.
-  """
-  def get_snooze_time(priority) do
-    case priority do
-      0 -> 15
-      1 -> 30
-      2 -> 45
-      3 -> 60
-    end
-  end
-
   @doc """
   Sets the limit for the rate limiter.
   """
@@ -116,5 +99,24 @@ defmodule VExchange.VtApiRateLimiter do
   """
   def get_stats do
     GenServer.call(__MODULE__, :get_stats)
+  end
+
+  def get_snooze_time(priority) do
+    GenServer.call(__MODULE__, {:get_snooze_time, priority})
+  end
+
+  # Schedules a reset of the counters.
+  defp schedule_reset do
+    Process.send_after(self(), :reset, @default_interval)
+  end
+
+  # Returns the snooze time for a given priority.
+  defp get_snooze(priority) do
+    case priority do
+      0 -> 15
+      1 -> 30
+      2 -> 45
+      3 -> 60
+    end
   end
 end
