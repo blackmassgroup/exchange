@@ -89,14 +89,15 @@ defmodule VExchange.Services.VirusTotal do
     }
 
     case post(url, body, headers: [{"content-type", "application/json"}]) do
-      {:ok, %Tesla.Env{body: body, status: 200}} ->
+      {:ok, %Tesla.Env{body: body, status: status}} when status in [200, 409] ->
         {:ok, body["data"]}
 
       {:ok, %Tesla.Env{status: status}} ->
         {:error, "Failed with status: #{status}"}
 
-      _ ->
-        {:error, :request_failed}
+      {:error, reason} ->
+        Logger.error("Failed to post to VirusTotal: #{inspect(reason)}")
+        {:error, "Failed with reason: #{inspect(reason)}"}
     end
   end
 
