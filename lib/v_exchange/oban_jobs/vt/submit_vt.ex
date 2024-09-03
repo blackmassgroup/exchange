@@ -116,13 +116,16 @@ defmodule VExchange.ObanJobs.Vt.SubmitVt do
       :ok <- VtApiRateLimiter.allow_request(priority),
       {:ok, %{"type" => "analysis", "id" => id}} <- VirusTotal.submit_for_processing(binary)
     ) do
-      %{
-        "task_id" => sha256,
-        "analysis_id" => id,
-        "priority" => max(priority - 1, 0)
-      }
-      |> StatusCheckVt.new()
-      |> Oban.insert!(scheduled_at: DateTime.add(DateTime.utc_now(), 60))
+      job =
+        %{
+          "task_id" => sha256,
+          "analysis_id" => id,
+          "priority" => max(priority - 1, 0)
+        }
+        |> StatusCheckVt.new()
+        |> Oban.insert!(scheduled_at: DateTime.add(DateTime.utc_now(), 60))
+
+      {:ok, job}
     else
       {:ok, %{"attributes" => %{"last_analysis_results" => _} = attrs}} ->
         Samples.process_vt_result(attrs)
