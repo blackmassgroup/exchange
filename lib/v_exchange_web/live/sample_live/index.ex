@@ -17,9 +17,7 @@ defmodule VExchangeWeb.SampleLive.Index do
       socket
       |> assign(:search, "")
       |> assign(:samples, AsyncResult.loading())
-      |> start_async(:samples, fn -> Samples.list_samples(%{order: :asc, limit: 20}) end)
-      |> assign(:new_samples, AsyncResult.loading())
-      |> start_async(:new_samples, fn -> Samples.list_samples(%{limit: 20}) end)
+      |> start_async(:samples, fn -> Samples.list_samples(%{order: :desc, limit: 20}) end)
       |> assign(:count, AsyncResult.loading())
       |> start_async(:count, fn -> Samples.get_sample_count!() end)
 
@@ -99,7 +97,7 @@ defmodule VExchangeWeb.SampleLive.Index do
 
   @impl true
   def handle_info({:new_sample, new_sample}, socket) do
-    current_samples = socket.assigns.new_samples
+    current_samples = socket.assigns.samples
     current_count = socket.assigns.count
     new_samples = [new_sample | current_samples.result || []]
 
@@ -107,14 +105,14 @@ defmodule VExchangeWeb.SampleLive.Index do
     count = AsyncResult.ok(current_count, (current_count.result || 0) + 1)
 
     socket =
-      assign(socket, :new_samples, samples)
+      assign(socket, :samples, samples)
       |> assign(:count, count)
 
     {:noreply, socket}
   end
 
   def handle_info({:deleted_sample, new_sample}, socket) do
-    current_samples = socket.assigns.new_samples
+    current_samples = socket.assigns.samples
     current_count = socket.assigns.count
     new_samples = Enum.reject(current_samples.result, &(&1.sha256 == new_sample.sha256))
 
@@ -309,6 +307,9 @@ defmodule VExchangeWeb.SampleLive.Index do
                   </span>
                 </div>
               </div>
+              <time datetime={sample.inserted_at} class="flex-none text-xs text-gray-400">
+                Uploaded: <%= format_time(sample.inserted_at) %>
+              </time>
             </div>
 
             <.link
@@ -380,7 +381,7 @@ defmodule VExchangeWeb.SampleLive.Index do
                   />
                 </svg>
 
-                <time datetime="2023-01-23T11:00" class="flex-none text-xs">
+                <time datetime={sample.inserted_at} class="flex-none text-xs">
                   <%= format_time(sample.inserted_at) %>
                 </time>
               </div>
