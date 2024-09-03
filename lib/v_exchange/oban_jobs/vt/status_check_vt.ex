@@ -14,9 +14,7 @@ defmodule VExchange.ObanJobs.Vt.StatusCheckVt do
   @impl Oban.Worker
   def perform(%Oban.Job{args: %{"task_id" => sha256, "priority" => priority, "analysis_id" => id}}) do
     with(
-      :ok <- VtApiRateLimiter.allow_request(priority),
       {:ok, %{"attributes" => %{"status" => "completed"}}} <- VirusTotal.get_analysis(id),
-      :ok <- VtApiRateLimiter.allow_request(priority),
       {:ok, %{"attributes" => attrs}} <- VirusTotal.get_sample(sha256)
     ) do
       Samples.process_vt_result(attrs)
