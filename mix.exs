@@ -63,7 +63,7 @@ defmodule VExchange.MixProject do
       {:libcluster, "~> 3.3"},
       {:fly_postgres, "~> 0.3.0"},
       {:oban, "~> 2.14"},
-      {:oban_web, "~> 2.10", repo: "oban", only: :dev},
+      # {:oban_web, "~> 2.10", repo: "oban", only: :dev},
       {:timex, "~> 3.7"},
       {:inet_cidr, "~> 1.0.0"},
       {:paraxial, "~> 2.6.0"},
