@@ -6,7 +6,7 @@ defmodule VExchangeWeb.Plugs.ApiKeyValidator do
   def call(conn, _opts) do
     api_key =
       get_req_header(conn, "authorization")
-      |> List.first()
+      |> List.first("")
       |> String.split("Bearer ")
       |> List.last()
 
