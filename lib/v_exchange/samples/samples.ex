@@ -201,6 +201,17 @@ defmodule VExchange.Samples do
     sample
     |> Sample.changeset(attrs)
     |> Repo.update()
+    |> case do
+      {:ok, sample} = result ->
+        if Application.get_env(:v_exchange, :env) != :test do
+          PubSub.broadcast(VExchange.PubSub, "samples", {:updated_sample, sample})
+        end
+
+        result
+
+      result ->
+        result
+    end
   end
 
   @doc """
