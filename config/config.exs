@@ -7,8 +7,8 @@
 # General application configuration
 import Config
 
-one_day = 86_400
-pruner_max_age = one_day
+one_hour = 3600
+pruner_max_age = one_hour
 
 oban_plugins =
   [
