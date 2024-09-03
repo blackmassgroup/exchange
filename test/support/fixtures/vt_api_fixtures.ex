@@ -13,7 +13,8 @@ defmodule VExchange.VtApiFixtures do
       |> Enum.into(%{
         http_response_code: 42,
         raw_request: "some raw_request",
-        raw_response: "some raw_response"
+        raw_response: "some raw_response",
+        url: "some url"
       })
       |> VExchange.VtApi.create_vt_api_request()
 

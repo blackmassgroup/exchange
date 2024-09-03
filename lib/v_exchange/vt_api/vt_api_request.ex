@@ -15,5 +15,6 @@ defmodule VExchange.VtApi.VtApiRequest do
   def changeset(vt_api_request, attrs) do
     vt_api_request
     |> cast(attrs, [:raw_request, :raw_response, :http_response_code, :url])
+    |> validate_required([:raw_request, :url])
   end
 end
