@@ -404,25 +404,27 @@ defmodule VExchange.Samples do
     sample = get_sample_by_sha256(sha256)
 
     names =
-      [Map.get(attrs, "names", nil) | sample.names]
+      [Map.get(attrs, "names", []) | (sample && sample.names) || []]
       |> List.flatten()
       |> Enum.reject(&is_nil/1)
 
     new_attrs = %{
       names: names,
-      tags: extract_tags(attrs) ++ sample.tags
+      tags: extract_tags(attrs) ++ ((sample && sample.tags) || [])
     }
+
+    Logger.debug("New attrs: #{inspect(new_attrs)}")
 
     update_sample(sample, new_attrs)
   end
 
   defp extract_tags(attrs) do
     [
-      attrs["tags"],
-      attrs["type_tags"],
-      [attrs["popular_threat_classification"]["suggested_threat_label"]],
-      Enum.map(attrs["popular_threat_category"] || [], & &1["value"]),
-      Enum.map(attrs["popular_threat_name"] || [], & &1["value"])
+      Map.get(attrs, "tags", []),
+      Map.get(attrs, "type_tags", []),
+      [Map.get(attrs, ["popular_threat_classification", "suggested_threat_label"], nil)],
+      (Map.get(attrs, "popular_threat_category") || []) |> Enum.map(& &1["value"]),
+      (Map.get(attrs, "popular_threat_name") || []) |> Enum.map(& &1["value"])
     ]
     |> List.flatten()
     |> Enum.reject(&is_nil/1)

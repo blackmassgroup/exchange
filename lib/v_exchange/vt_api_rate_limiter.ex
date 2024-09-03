@@ -22,6 +22,7 @@ defmodule VExchange.VtApiRateLimiter do
 
   @impl true
   def init(init_arg) do
+    schedule_reset()
     {:ok, init_arg}
   end
 

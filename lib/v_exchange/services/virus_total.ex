@@ -14,6 +14,7 @@ defmodule VExchange.Services.VirusTotal do
   """
   use Tesla
   alias Tesla.Multipart
+  require Logger
 
   @public_url "https://www.virustotal.com/api/v3"
 
