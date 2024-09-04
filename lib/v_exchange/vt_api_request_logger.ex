@@ -21,6 +21,10 @@ defmodule VExchange.VtApiRequestLogger do
     end
   end
 
+  defp get_request_body(%{method: "POST", url: "https://www.virustotal.com/api/v3/files"}) do
+    "We don't log raw binaries to our database"
+  end
+
   defp get_request_body(%{body: nil, method: method, url: url}) do
     method_string = Atom.to_string(method) |> String.upcase()
     "No Request body, this was a #{method_string} request to #{url}"
