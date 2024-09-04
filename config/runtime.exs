@@ -118,7 +118,7 @@ if config_env() == :prod do
     api_key: System.get_env("MAILGUN_API_KEY"),
     domain: System.get_env("MAILGUN_DOMAIN")
 
-  config :swoosh, :api_client, Swoosh.ApiClient.Hackney
+  config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: VExchange.Finch, local: false
 
   #
   # For this example you need include a HTTP client required by Swoosh API client.
