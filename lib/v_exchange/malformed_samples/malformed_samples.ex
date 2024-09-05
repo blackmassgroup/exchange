@@ -112,8 +112,10 @@ defmodule VExchange.MalformedSamples do
         VExchange.Samples.stream_samples_from_last_6_months(@batch_size)
         |> Stream.chunk_every(1000)
         |> Stream.each(fn chunk ->
-          jobs = Enum.map(chunk, &%{sha256: &1})
-          {:ok, _} = Oban.insert_all(CleanSamples, jobs)
+          Enum.map(chunk, fn sha256 ->
+            CleanSamples.new(%{"sha256" => sha256})
+          end)
+          |> Oban.insert_all()
         end)
         |> Stream.run()
       end,

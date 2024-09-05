@@ -7,7 +7,8 @@ defmodule VExchange.ObanJobs.CleanSamples do
     with {:ok, %{body: body}} <- VExchange.Services.S3.get_file_binary(sha256),
          true <-
            String.contains?(body, ~S(name=\"file\";)) or
-             String.contains?(body, "Content-Disposition: form-data;") do
+             String.contains?(body, "Content-Disposition: form-data;") or
+             String.contains?(body, ~S("file\":)) do
       VExchange.MalformedSamples.create_malformed_sample(%{sha256: sha256})
     end
   end
