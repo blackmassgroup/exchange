@@ -101,4 +101,23 @@ defmodule VExchange.MalformedSamples do
   def change_malformed_sample(%MalformedSample{} = malformed_sample, attrs \\ %{}) do
     MalformedSample.changeset(malformed_sample, attrs)
   end
+
+  alias VExchange.ObanJobs.CleanSamples
+
+  @batch_size 10_000
+
+  def queue_jobs do
+    VExchange.Repo.transaction(
+      fn ->
+        VExchange.Samples.stream_samples_from_last_6_months(@batch_size)
+        |> Stream.chunk_every(1000)
+        |> Stream.each(fn chunk ->
+          jobs = Enum.map(chunk, &%{sha256: &1})
+          {:ok, _} = Oban.insert_all(CleanSamples, jobs)
+        end)
+        |> Stream.run()
+      end,
+      timeout: :infinity
+    )
+  end
 end
