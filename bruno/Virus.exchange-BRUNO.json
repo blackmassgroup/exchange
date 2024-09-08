@@ -1,0 +1,203 @@
+{
+  "name": "Virus.exchange",
+  "version": "1",
+  "items": [
+    {
+      "type": "http",
+      "name": "Get Sample",
+      "seq": 2,
+      "request": {
+        "url": "{{base_url}}/api/samples/sha256",
+        "method": "GET",
+        "headers": [
+          {
+            "name": "User-Agent",
+            "value": "insomnium/0.2.3",
+            "enabled": true
+          },
+          {
+            "name": "Authorization",
+            "value": "Bearer {{api_key}}",
+            "enabled": true
+          }
+        ],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "Login",
+      "seq": 1,
+      "request": {
+        "url": "{{base_url}}/api/login",
+        "method": "POST",
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/json",
+            "enabled": true
+          },
+          {
+            "name": "User-Agent",
+            "value": "insomnium/0.2.3",
+            "enabled": true
+          }
+        ],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{\n  \"email\": \"{{user_name}}\",\n  \"password\": \"{{password}}\"\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "New Upload",
+      "seq": 4,
+      "request": {
+        "url": "{{base_url}}/api/samples/new",
+        "method": "POST",
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "multipart/form-data",
+            "enabled": true
+          },
+          {
+            "name": "authorization",
+            "value": "Bearer {{api_key}}",
+            "enabled": true
+          },
+          {
+            "name": "",
+            "value": "",
+            "enabled": true
+          }
+        ],
+        "params": [],
+        "body": {
+          "mode": "multipartForm",
+          "formUrlEncoded": [],
+          "multipartForm": [
+            {
+              "type": "file",
+              "name": "file",
+              "value": [
+                "/Users/john/Desktop/Screenshot 2024-09-02 at 11.48.34 PM.png"
+              ],
+              "enabled": true
+            }
+          ]
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    }
+  ],
+  "environments": [
+    {
+      "variables": [
+        {
+          "name": "user_name",
+          "value": "",
+          "enabled": true,
+          "secret": true,
+          "type": "text"
+        },
+        {
+          "name": "password",
+          "value": "",
+          "enabled": true,
+          "secret": true,
+          "type": "text"
+        },
+        {
+          "name": "api_key",
+          "value": "",
+          "enabled": true,
+          "secret": true,
+          "type": "text"
+        },
+        {
+          "name": "base_url",
+          "value": "",
+          "enabled": true,
+          "secret": true,
+          "type": "text"
+        }
+      ],
+      "name": "Dev"
+    },
+    {
+      "variables": [
+        {
+          "name": "username",
+          "value": "",
+          "enabled": true,
+          "secret": true,
+          "type": "text"
+        },
+        {
+          "name": "password",
+          "value": "",
+          "enabled": true,
+          "secret": true,
+          "type": "text"
+        },
+        {
+          "name": "api_key",
+          "value": "",
+          "enabled": true,
+          "secret": true,
+          "type": "text"
+        },
+        {
+          "name": "base_url",
+          "value": "",
+          "enabled": true,
+          "secret": true,
+          "type": "text"
+        }
+      ],
+      "name": "Prod"
+    }
+  ],
+  "root": {
+    "docs": "# Collection for working with Virus.exchange API"
+  },
+  "brunoConfig": {
+    "version": "1",
+    "name": "Virus.exchange",
+    "type": "collection",
+    "ignore": [
+      "node_modules",
+      ".git"
+    ]
+  }
+}

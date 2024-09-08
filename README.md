@@ -61,39 +61,17 @@
 
 ### API Routes
 
+### Bruno Collection
+
+Bruno is a Postman,Insomnia/Insomnia alternative.
+
+Setup
+
+1. Install, on mac `brew install bruno`; others see their [website](https://www.usebruno.com/)
+2. Import the collection from `/bruno`
+3. Set ENV vars
+4. Enjoy.
+
+> I also provide a Postman friendly import file as well
+
 Documentation can be found at [here](https://docs.virus.exchange) and requires an API key generated when a user signs up.
-
-Example script using the upload API to upload all files from a sub directory.
-
-```python
-import requests, os, sys
-from concurrent.futures import ThreadPoolExecutor
-
-MAX_WORKERS = 10
-API_LOGIN = "https://virus.exchange/api/login"
-API_UPLOAD = "https://virus.exchange/api/upload"
-
-TOKEN=""
-EMAIL="ur email"
-
-if TOKEN == "":
-        PASSWORD=input("Enter your password: ")
-        r = requests.post(API_LOGIN, data={"email":EMAIL, "password":PASSWORD})
-        TOKEN = r.json()["data"]["token"]
-
-def process_file(subdir, file):
-    filename = os.path.join(subdir, file)
-    with open(filename, "rb+") as f:
-        file_content = f.read()
-        r = requests.post(API_UPLOAD, headers={'Authorization': f"Bearer {TOKEN}", "Content-Type": "application/x-www-form-urlencoded"}, data=file_content)
-        print(f"{os.path.basename(filename)}: STATUS({r.status_code}) {r.text}")
-
-def main(directory):
-    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-        for subdir, dirs, files in os.walk(directory):
-            for file in files:
-                executor.submit(process_file, subdir, file)
-
-if __name__ == '__main__':
-    main(sys.argv[1])
-```
