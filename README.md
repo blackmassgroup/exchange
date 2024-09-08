@@ -1,4 +1,4 @@
-# VExchange
+# Exchange
 
 ## Features
 
@@ -9,8 +9,10 @@
 - Calculates file hashes with [`:crypto.hash/2`](https://www.erlang.org/doc/man/crypto.html#hash-2)
 - Uses [`libcluster`](https://fly.io/docs/elixir/the-basics/clustering/#adding-libcluster) and [`fly_postgres`](https://hexdocs.pm/fly_postgres/readme.html) for scalability
 - [CI/CD](https://fly.io/docs/elixir/advanced-guides/github-actions-elixir-ci-cd/) setup and is deployed on Fly.io.
-- ~~Custom Discord Logger backend~~
 - Upload, login and get sample API routes
+- ~~Custom Discord Logger backend~~
+- Applicaiton Error tracking
+- Uses Oban for retryable jobs.
 
 ### Built With
 
@@ -19,7 +21,6 @@
 - [**Elixir**](https://hexdocs.pm/elixir/Kernel.html)
 - [**Phoenix**](https://hexdocs.pm/phoenix/Phoenix.html)
 - [**Phoenix LiveView**](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html)
-- **NodeJS**
 - [**TailwindCSS**](https://tailwindcss.com/docs/installation)
 
 ## Getting Started
@@ -33,19 +34,6 @@
    ```zsh
     brew update
     brew install erlang elixir nodejs postgres
-   ```
-
-   2. Or if you prefer `asdf`
-
-   ```zsh
-    brew update
-    brew install asdf
-
-    asdf plugin-add erlang
-    asdf plugin-add elixir
-    asdf plugin-add nodejs
-
-    asdf install
    ```
 
 ### Installation
@@ -74,4 +62,4 @@ Setup
 
 > I also provide a Postman friendly import file as well
 
-Documentation can be found at [here](https://docs.virus.exchange) and requires an API key generated when a user signs up.
+Documentation can be found at [here](https://docs.virus.exchange) and requires an API key that can be found under user settings in the exchange app.
