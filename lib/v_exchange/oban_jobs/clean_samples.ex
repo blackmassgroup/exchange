@@ -1,6 +1,7 @@
 defmodule VExchange.ObanJobs.CleanSamples do
   @max_attempts 20
   use Oban.Worker, queue: :clean_samples, max_attempts: @max_attempts
+  alias VExchange.MalformedSamples
 
   def perform(%Oban.Job{args: %{"sha256" => sha256}}) do
     # Step 1: Check if the file is malformed
@@ -19,7 +20,7 @@ defmodule VExchange.ObanJobs.CleanSamples do
       |> case do
         {:ok, sample} ->
           MalformedSamples.get_malformed_sample_by_sha(sample.sha256)
-          |> MalformedSamples.update_malformed_sample(%{sample_id: sample.id})
+          |> MalformedSamples.delete_malformed_sample()
 
         error ->
           error
