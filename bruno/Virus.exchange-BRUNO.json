@@ -80,18 +80,8 @@
         "method": "POST",
         "headers": [
           {
-            "name": "Content-Type",
-            "value": "multipart/form-data",
-            "enabled": true
-          },
-          {
             "name": "authorization",
             "value": "Bearer {{api_key}}",
-            "enabled": true
-          },
-          {
-            "name": "",
-            "value": "",
             "enabled": true
           }
         ],
@@ -120,6 +110,7 @@
       }
     }
   ],
+  "activeEnvironmentUid": "LF3dSPfwJKmUCspBiYef8",
   "environments": [
     {
       "variables": [

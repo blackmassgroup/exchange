@@ -79,20 +79,8 @@
         "method": "POST",
         "header": [
           {
-            "key": "Content-Type",
-            "value": "multipart/form-data",
-            "disabled": false,
-            "type": "default"
-          },
-          {
             "key": "authorization",
             "value": "Bearer {{api_key}}",
-            "disabled": false,
-            "type": "default"
-          },
-          {
-            "key": "",
-            "value": "",
             "disabled": false,
             "type": "default"
           }
