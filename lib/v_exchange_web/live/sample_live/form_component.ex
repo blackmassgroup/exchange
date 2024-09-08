@@ -188,15 +188,15 @@ defmodule VExchangeWeb.SampleLive.FormComponent do
             end
           )
 
-          # Enum.map(samples, fn {_name, sample} ->
-          #   %{
-          #     "sha256" => sample.sha256,
-          #     "is_new" => true,
-          #     "is_first_request" => true
-          #   }
-          #   |> SubmitVt.new()
-          #   |> Oban.insert()
-          # end)
+          Enum.map(samples, fn {_name, sample} ->
+            %{
+              "sha256" => sample.sha256,
+              "is_new" => true,
+              "is_first_request" => true
+            }
+            |> SubmitVt.new()
+            |> Oban.insert()
+          end)
         end
 
         socket =
