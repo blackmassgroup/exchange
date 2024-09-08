@@ -1,6 +1,20 @@
 # CHANGELOG
 
-## 3.0
+## 2024.9.7
+
+- Code to triage effected files.
+- Introducing new **BREAKING** API changes, binaries will no longer be accepted as raw request body, multipart forms are being implemented .
+
+## 2024.9.4
+
+- Code to triage effected files.
+
+## 2024.9.3
+
+- Disabled VT submissions and API due to a bug in our input script.
+- Making the API routes a little more bullet proof before opening them up again.
+
+## 2024.9.2
 
 1. VT API Rate Limiter:
    - A new module `VExchange.VtApiRateLimiter` has been implemented to manage rate limiting for VirusTotal API requests.
@@ -37,3 +51,7 @@ These changes have several impacts on the application:
 4. Configurability: The new configuration options allow for easier deployment and management of the application in different environments.
 
 5. Scalability: The use of Oban and the rate limiter makes the application more scalable, as it can handle a large number of sample submissions and analysis requests without overwhelming the VirusTotal API.
+
+## 2024.9.1
+
+- Track User Uploads
