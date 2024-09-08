@@ -97,18 +97,22 @@ defmodule VExchangeWeb.SampleLive.Index do
 
   @impl true
   def handle_info({:new_sample, new_sample}, socket) do
-    current_samples = socket.assigns.samples
-    current_count = socket.assigns.count
-    new_samples = [new_sample | current_samples.result || []]
+    if socket.assigns.search == "" and socket.assigns.samples.loading == false do
+      current_samples = socket.assigns.samples
+      current_count = socket.assigns.count
+      new_samples = [new_sample | current_samples.result || []]
 
-    samples = AsyncResult.ok(current_samples, new_samples)
-    count = AsyncResult.ok(current_count, (current_count.result || 0) + 1)
+      samples = AsyncResult.ok(current_samples, new_samples)
+      count = AsyncResult.ok(current_count, (current_count.result || 0) + 1)
 
-    socket =
-      assign(socket, :samples, samples)
-      |> assign(:count, count)
+      socket =
+        assign(socket, :samples, samples)
+        |> assign(:count, count)
 
-    {:noreply, socket}
+      {:noreply, socket}
+    else
+      {:noreply, socket}
+    end
   end
 
   def handle_info({:deleted_sample, new_sample}, socket) do
