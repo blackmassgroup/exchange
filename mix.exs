@@ -2,9 +2,11 @@ defmodule VExchange.MixProject do
   use Mix.Project
 
   def project do
+    %{day: day, month: month, year: year} = Date.utc_today()
+
     [
       app: :v_exchange,
-      version: "2024.9.4",
+      version: "#{year}.#{month}.#{day}",
       elixir: "~> 1.17",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
