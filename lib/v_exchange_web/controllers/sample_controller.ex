@@ -75,7 +75,7 @@ defmodule VExchangeWeb.SampleController do
   end
 
   def create(conn, params) do
-    "SampleController.create - User: #{inspect(conn.assigns.current_user.email)} - Invalid params: #{inspect(params)}"
+    "SampleController.create - User: #{inspect(conn.assigns.current_user.email)} - Invalid params: #{inspect(params) |> String.slice(0, 100)}"
     |> Logger.error()
 
     conn
