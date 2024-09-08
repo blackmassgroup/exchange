@@ -7,7 +7,7 @@ defmodule VExchange.Samples do
 
   alias VExchange.CleanHashes
   alias Phoenix.PubSub
-  alias VExchange.ObanJobs.Vt.SubmitVt
+  # alias VExchange.ObanJobs.Vt.SubmitVt
   alias VExchange.Repo.Local, as: Repo
   alias VExchange.Sample
   alias VExchange.CleanHashes
