@@ -5,7 +5,8 @@ defmodule VExchangeWeb.SampleController do
 
   plug VExchangeWeb.Plugs.ApiKeyValidator
 
-  alias VExchange.Services.S3
+  require Logger
+
   alias VExchange.Samples
 
   def show(conn, %{"sha256" => sha256}) do
@@ -23,55 +24,63 @@ defmodule VExchangeWeb.SampleController do
     end
   end
 
-  def create(conn, %{"file" => file} = _params) do
-    user_id = conn.assigns.current_user.id
+  def create(conn, %{"file" => %Plug.Upload{path: path, filename: filename}} = _params) do
+    case File.read(path) do
+      {:ok, file} ->
+        user_id = conn.assigns.current_user.id
 
-    VExchange.Repo.transaction(fn ->
-      with true <- Samples.is_below_size_limit(file),
-           params <- Samples.build_sample_params(file, user_id),
-           {:ok, sample} <- Samples.create_sample(params),
-           {:ok, _sample} <- S3.put_object(sample.s3_object_key, file, :wasabi),
-           {:ok, _} = skip_smelly_upload_for_daily(sample.sha256, user_id) do
-        sample
-      else
-        {:error, %Ecto.Changeset{}} -> VExchange.Repo.rollback(:invalid_sample)
-        false -> VExchange.Repo.rollback(:too_large)
-        _ -> VExchange.Repo.rollback(:cloud_provider_error)
-      end
-    end)
-    |> case do
-      {:ok, sample} ->
-        conn
-        |> put_status(:created)
-        |> render(:show_id, sample: sample)
+        Samples.create_from_binary(%{"file" => file, "filename" => filename}, user_id)
+        |> case do
+          {:ok, sample} ->
+            conn
+            |> put_status(:created)
+            |> render(:show_id, sample: sample)
 
-      {:error, %Ecto.Changeset{}} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> put_view(html: VExchangeWeb.ErrorHTML, json: VExchangeWeb.ErrorJSON)
-        |> render(:"422")
+          {:error, %Ecto.Changeset{}} ->
+            conn
+            |> put_status(:unprocessable_entity)
+            |> put_view(json: VExchangeWeb.ErrorJSON)
+            |> render(:"422")
 
-      {:error, :too_large} ->
-        conn
-        |> put_status(:request_entity_too_large)
-        |> put_view(html: VExchangeWeb.ErrorHTML, json: VExchangeWeb.ErrorJSON)
-        |> render(:"413")
+          {:error, :too_large} ->
+            conn
+            |> put_status(:request_entity_too_large)
+            |> put_view(json: VExchangeWeb.ErrorJSON)
+            |> render(:"413")
 
-      _ ->
+          {:error, :duplicate} ->
+            conn
+            |> put_status(:conflict)
+            |> put_view(json: VExchangeWeb.ErrorJSON)
+            |> render(:"409")
+
+          err ->
+            "SampleController.create - User: #{inspect(conn.assigns.current_user.email)} - create_from_binary: #{inspect(err)}"
+            |> Logger.error()
+
+            conn
+            |> put_status(500)
+            |> put_view(json: VExchangeWeb.ErrorJSON)
+            |> render(:"500")
+        end
+
+      err ->
+        "SampleController.create - User: #{inspect(conn.assigns.current_user.email)} - Couldn't read file: #{inspect(err)}"
+        |> Logger.error()
+
         conn
-        |> put_status(500)
         |> put_view(html: VExchangeWeb.ErrorHTML, json: VExchangeWeb.ErrorJSON)
         |> render(:"500")
     end
   end
 
-  def create(conn, _params) do
+  def create(conn, params) do
+    "SampleController.create - User: #{inspect(conn.assigns.current_user.email)} - Invalid params: #{inspect(params)}"
+    |> Logger.error()
+
     conn
     |> put_status(:bad_request)
     |> put_view(html: VExchangeWeb.ErrorHTML, json: VExchangeWeb.ErrorJSON)
     |> render(:"400")
   end
-
-  defp skip_smelly_upload_for_daily(_sha, 516), do: {:ok, %{}}
-  defp skip_smelly_upload_for_daily(sha, _), do: S3.copy_file_to_daily_backups(sha)
 end

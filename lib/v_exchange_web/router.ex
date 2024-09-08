@@ -38,7 +38,7 @@ defmodule VExchangeWeb.Router do
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug :accepts, ["json", "multipart"]
   end
 
   scope "/", VExchangeWeb do
@@ -80,8 +80,9 @@ defmodule VExchangeWeb.Router do
   scope "/", VExchangeWeb do
     pipe_through [:api]
 
-    # post "/api/upload", SampleController, :create
-    # post "/api/samples/new", SampleController, :create
+    post "/api/upload", SampleController, :create
+    post "/api/samples/new", SampleController, :create
+
     get "/api/samples/:sha256", SampleController, :show
   end
 

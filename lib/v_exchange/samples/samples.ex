@@ -323,7 +323,10 @@ defmodule VExchange.Samples do
     }
   end
 
-  defp get_hashes(file) do
+  @doc """
+  Returns the hashes for a given file binary.
+  """
+  def get_hashes(file) do
     md5 =
       :crypto.hash(:md5, file)
       |> Base.encode16()
@@ -429,6 +432,7 @@ defmodule VExchange.Samples do
     update_sample(sample, new_attrs)
   end
 
+  # Extracts tags from the VT response
   defp extract_tags(attrs) do
     [
       Map.get(attrs, "tags", []),
@@ -443,29 +447,45 @@ defmodule VExchange.Samples do
   end
 
   @doc """
-  Queues all samples for VirusTotal processing
+  Creates a sample from a binary file.
+
+  ## Parameters
+    - file: The binary file to be uploaded.
+    - user_id: The user ID of the user who is uploading the file.
+
+  ## Returns
+    - The created sample.
   """
-  def queue_for_vt(opts) do
-    list_samples(opts)
-    |> Enum.each(fn sample ->
-      %{
-        "sha256" => sample.sha256,
-        "is_new" => false,
-        "is_first_request" => true
-      }
-      |> SubmitVt.new()
-      |> Oban.insert()
+  def create_from_binary(%{"file" => file} = _params, user_id) when is_bitstring(file) do
+    VExchange.Repo.transaction(fn ->
+      with true <- is_below_size_limit(file),
+           params <- build_sample_params(file, user_id),
+           {:ok, sample} <- create_sample(params),
+           {:ok, _sample} <- S3.put_object(sample.s3_object_key, file, :wasabi),
+           {:ok, _} = skip_smelly_upload_for_daily(sample.sha256, user_id) do
+        sample
+      else
+        {:error, %Ecto.Changeset{} = cs} ->
+          if(
+            Enum.any?(cs.errors, fn
+              {_, {"has already been taken", _}} -> true
+              _ -> false
+            end)
+          ) do
+            VExchange.Repo.rollback(:duplicate)
+          else
+            VExchange.Repo.rollback(:invalid_sample)
+          end
+
+        false ->
+          VExchange.Repo.rollback(:too_large)
+
+        _error ->
+          VExchange.Repo.rollback(:cloud_provider_error)
+      end
     end)
   end
 
-  def stream_select_samples(batch_size \\ 1000) do
-    six_months_ago = DateTime.utc_now() |> DateTime.add(-180, :day)
-    one_year_ago = DateTime.utc_now() |> DateTime.add(-360, :day)
-
-    Sample
-    |> where([s], s.inserted_at >= ^one_year_ago and s.inserted_at <= ^six_months_ago)
-    |> order_by([s], s.id)
-    |> select([s], s.sha256)
-    |> VExchange.Repo.stream(max_rows: batch_size)
-  end
+  defp skip_smelly_upload_for_daily(_sha, 516), do: {:ok, %{}}
+  defp skip_smelly_upload_for_daily(sha, _), do: S3.copy_file_to_daily_backups(sha)
 end
