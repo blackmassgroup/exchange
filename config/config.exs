@@ -12,8 +12,8 @@ pruner_max_age = one_hour
 
 oban_plugins =
   [
-    {Oban.Plugins.Pruner, max_age: pruner_max_age},
-    Oban.Plugins.Lifeline,
+    Oban.Plugins.Pruner,
+    {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(10)},
     Oban.Plugins.Reindexer
   ]
 
@@ -22,7 +22,7 @@ oban_queues = [
   vxu_uploads: 1,
   file_uploads: 50,
   vt_api: 150,
-  clean_samples: [limit: 250, paused: false]
+  clean_samples: [limit: 200, paused: false]
 ]
 
 config :v_exchange, Oban,

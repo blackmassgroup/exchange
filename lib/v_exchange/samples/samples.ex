@@ -7,7 +7,7 @@ defmodule VExchange.Samples do
 
   alias VExchange.CleanHashes
   alias Phoenix.PubSub
-  # alias VExchange.ObanJobs.Vt.SubmitVt
+  alias VExchange.ObanJobs.Vt.SubmitVt
   alias VExchange.Repo.Local, as: Repo
   alias VExchange.Sample
   alias VExchange.CleanHashes
@@ -169,13 +169,13 @@ defmodule VExchange.Samples do
         if Application.get_env(:v_exchange, :env) != :test do
           PubSub.broadcast(VExchange.PubSub, "samples", {:new_sample, sample})
 
-          # %{
-          #   "sha256" => sample.sha256,
-          #   "is_new" => true,
-          #   "is_first_request" => true
-          # }
-          # |> SubmitVt.new()
-          # |> Oban.insert()
+          %{
+            "sha256" => sample.sha256,
+            "is_new" => true,
+            "is_first_request" => true
+          }
+          |> SubmitVt.new()
+          |> Oban.insert()
         end
 
         result
@@ -379,7 +379,8 @@ defmodule VExchange.Samples do
 
     with true <- VirusTotal.is_malware?(attrs),
          {:ok, _} <- VirusTotal.post_file_comment(sha256, comment),
-         {:ok, sample} <- update_sample_from_vt(attrs) do
+         {:ok, sample} <- update_sample_from_vt(attrs),
+         {:ok, _} <- S3.copy_file_to_daily_backups(sha256) do
       {:ok, sample}
     else
       false ->
@@ -461,8 +462,7 @@ defmodule VExchange.Samples do
       with true <- is_below_size_limit(file),
            params <- build_sample_params(file, user_id),
            {:ok, sample} <- create_sample(params),
-           {:ok, _sample} <- S3.put_object(sample.s3_object_key, file, :wasabi),
-           {:ok, _} = skip_smelly_upload_for_daily(sample.sha256, user_id) do
+           {:ok, _sample} <- S3.put_object(sample.s3_object_key, file, :wasabi) do
         sample
       else
         {:error, %Ecto.Changeset{} = cs} ->
@@ -485,7 +485,4 @@ defmodule VExchange.Samples do
       end
     end)
   end
-
-  defp skip_smelly_upload_for_daily(_sha, 516), do: {:ok, %{}}
-  defp skip_smelly_upload_for_daily(sha, _), do: S3.copy_file_to_daily_backups(sha)
 end

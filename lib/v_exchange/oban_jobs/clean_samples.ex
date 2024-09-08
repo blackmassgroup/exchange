@@ -6,10 +6,7 @@ defmodule VExchange.ObanJobs.CleanSamples do
   def perform(%Oban.Job{args: %{"sha256" => sha256}}) do
     # Step 1: Check if the file is malformed
     # with {:ok, %{body: body}} <- VExchange.Services.S3.get_file_binary(sha256),
-    #      true <-
-    #        String.contains?(body, ~S(name=\"file\";)) or
-    #          String.contains?(body, "Content-Disposition: form-data;") or
-    #          String.contains?(body, ~S("file\":)) do
+    #      true <- String.contains?(body, "Content-Disposition: form-data;") do
     #   VExchange.MalformedSamples.create_malformed_sample(%{sha256: sha256})
     # end
 
@@ -18,8 +15,12 @@ defmodule VExchange.ObanJobs.CleanSamples do
          cleaned_binary <- clean_file(body) do
       VExchange.Samples.create_from_binary(%{"file" => cleaned_binary}, 516)
       |> case do
-        {:ok, sample} ->
-          MalformedSamples.get_malformed_sample_by_sha(sample.sha256)
+        {:ok, _sample} ->
+          MalformedSamples.get_malformed_sample_by_sha(sha256)
+          |> MalformedSamples.delete_malformed_sample()
+
+        {:error, :duplicate} ->
+          MalformedSamples.get_malformed_sample_by_sha(sha256)
           |> MalformedSamples.delete_malformed_sample()
 
         error ->
