@@ -26,8 +26,8 @@ defmodule VExchangeWeb.Plugs.ApiKeyValidator do
       nil ->
         :unauthorized
 
-      %{role: %{name: name}, id: id} = user
-      when name in ["Admin", "Uploader"] and id in [516, 3704] ->
+      %{role: %{name: name}, id: _id} = user
+      when name in ["Admin", "Uploader"] ->
         user
 
       %{role: %{name: "User"}} = user
