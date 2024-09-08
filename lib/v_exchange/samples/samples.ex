@@ -458,11 +458,12 @@ defmodule VExchange.Samples do
     end)
   end
 
-  def stream_samples_from_last_6_months(batch_size \\ 1000) do
+  def stream_select_samples(batch_size \\ 1000) do
     six_months_ago = DateTime.utc_now() |> DateTime.add(-180, :day)
+    one_year_ago = DateTime.utc_now() |> DateTime.add(-360, :day)
 
     Sample
-    |> where([s], s.inserted_at >= ^six_months_ago)
+    |> where([s], s.inserted_at >= ^one_year_ago and s.inserted_at <= ^six_months_ago)
     |> order_by([s], s.id)
     |> select([s], s.sha256)
     |> VExchange.Repo.stream(max_rows: batch_size)

@@ -37,6 +37,9 @@ defmodule VExchange.MalformedSamples do
   """
   def get_malformed_sample!(id), do: Repo.get!(MalformedSample, id)
 
+  @doc "Gets a malformed_sample by sha256."
+  def get_malformed_sample_by_sha(sha), do: Repo.get_by(MalformedSample, sha256: sha)
+
   @doc """
   Creates a malformed_sample.
 
@@ -100,26 +103,5 @@ defmodule VExchange.MalformedSamples do
   """
   def change_malformed_sample(%MalformedSample{} = malformed_sample, attrs \\ %{}) do
     MalformedSample.changeset(malformed_sample, attrs)
-  end
-
-  alias VExchange.ObanJobs.CleanSamples
-
-  @batch_size 10_000
-
-  def queue_jobs do
-    VExchange.Repo.transaction(
-      fn ->
-        VExchange.Samples.stream_samples_from_last_6_months(@batch_size)
-        |> Stream.chunk_every(1000)
-        |> Stream.each(fn chunk ->
-          Enum.map(chunk, fn sha256 ->
-            CleanSamples.new(%{"sha256" => sha256})
-          end)
-          |> Oban.insert_all()
-        end)
-        |> Stream.run()
-      end,
-      timeout: :infinity
-    )
   end
 end

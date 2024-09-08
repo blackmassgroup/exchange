@@ -17,7 +17,13 @@ oban_plugins =
     Oban.Plugins.Reindexer
   ]
 
-oban_queues = [default: 10, vxu_uploads: 1, file_uploads: 50, vt_api: 150, clean_samples: 250]
+oban_queues = [
+  default: 10,
+  vxu_uploads: 1,
+  file_uploads: 50,
+  vt_api: 150,
+  clean_samples: [limit: 250, paused: false]
+]
 
 config :v_exchange, Oban,
   repo: VExchange.Repo.Local,
