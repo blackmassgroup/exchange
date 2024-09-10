@@ -32,4 +32,28 @@ defmodule VExchange.ObanJobs.CloudMigration.JobScheduler do
       Logger.info("Inserted DailyUploader job for date: #{date}")
     end)
   end
+
+  import Ecto.Query
+
+  def queue_all_files_for_vt() do
+    VExchange.Repo.transaction(fn ->
+      from("samples")
+      |> order_by([s], desc: s.inserted_at)
+      |> select([s], s.sha256)
+      |> VExchange.Repo.stream(max_rows: 10_000)
+      |> Stream.chunk_every(1000)
+      |> Stream.each(fn chunk ->
+        Enum.map(chunk, fn sha256 ->
+          %{
+            "sha256" => sha256,
+            "is_new" => false,
+            "is_first_request" => true
+          }
+          |> VExchange.ObanJobsSubmitVt.new()
+        end)
+        |> Oban.insert_all()
+      end)
+      |> Stream.run()
+    end)
+  end
 end
