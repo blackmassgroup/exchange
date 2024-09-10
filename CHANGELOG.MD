@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2024.9.10
+
+- Multipart forms for API uploads implemented.
+- VT Submission for verification
+
 ## 2024.9.7
 
 - Code to triage effected files.

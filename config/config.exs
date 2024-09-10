@@ -21,7 +21,7 @@ oban_queues = [
   default: 10,
   vxu_uploads: 1,
   file_uploads: 50,
-  vt_api: [limit: 100, paused: true],
+  vt_api: [limit: 100, paused: false],
   clean_samples: [limit: 200, paused: false]
 ]
 
