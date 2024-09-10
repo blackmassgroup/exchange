@@ -116,57 +116,65 @@ defmodule VExchangeWeb.SampleLive.Index do
   end
 
   def handle_info({:deleted_sample, new_sample}, socket) do
-    current_samples = socket.assigns.samples
-    current_count = socket.assigns.count
-    new_samples = Enum.reject(current_samples.result || [], &(&1.sha256 == new_sample.sha256))
+    if socket.assigns.search == "" and socket.assigns.samples.loading == false do
+      current_samples = socket.assigns.samples
+      current_count = socket.assigns.count
+      new_samples = Enum.reject(current_samples.result || [], &(&1.sha256 == new_sample.sha256))
 
-    samples = AsyncResult.ok(current_samples, new_samples)
-    count = AsyncResult.ok(current_count, (current_count.result || 0) - 1)
+      samples = AsyncResult.ok(current_samples, new_samples)
+      count = AsyncResult.ok(current_count, (current_count.result || 0) - 1)
 
-    socket =
-      assign(socket, :samples, samples)
-      |> assign(:count, count)
+      socket =
+        assign(socket, :samples, samples)
+        |> assign(:count, count)
 
-    socket =
-      if new_sample.user_id == socket.assigns.current_user.id do
-        socket
-        |> put_flash(:warning, "Non-Malware Sample deleted")
-      else
-        socket
-      end
+      socket =
+        if new_sample.user_id == socket.assigns.current_user.id do
+          socket
+          |> put_flash(:warning, "Non-Malware Sample deleted")
+        else
+          socket
+        end
 
-    {:noreply, socket}
+      {:noreply, socket}
+    else
+      {:noreply, socket}
+    end
   end
 
   def handle_info({:updated_sample, new_sample}, socket) do
-    current_samples = socket.assigns.samples
-    current_count = socket.assigns.count
+    if socket.assigns.search == "" and socket.assigns.samples.loading == false do
+      current_samples = socket.assigns.samples
+      current_count = socket.assigns.count
 
-    new_samples =
-      Enum.map(current_samples.result || [], fn sample ->
-        if sample.sha256 == new_sample.sha256 do
-          new_sample
+      new_samples =
+        Enum.map(current_samples.result || [], fn sample ->
+          if sample.sha256 == new_sample.sha256 do
+            new_sample
+          else
+            sample
+          end
+        end)
+
+      samples = AsyncResult.ok(current_samples, new_samples)
+      count = AsyncResult.ok(current_count, (current_count.result || 0) - 1)
+
+      socket =
+        assign(socket, :samples, samples)
+        |> assign(:count, count)
+
+      socket =
+        if new_sample.user_id == socket.assigns.current_user.id do
+          socket
+          |> put_flash(:warning, "Non-Malware Sample deleted")
         else
-          sample
+          socket
         end
-      end)
 
-    samples = AsyncResult.ok(current_samples, new_samples)
-    count = AsyncResult.ok(current_count, (current_count.result || 0) - 1)
-
-    socket =
-      assign(socket, :samples, samples)
-      |> assign(:count, count)
-
-    socket =
-      if new_sample.user_id == socket.assigns.current_user.id do
-        socket
-        |> put_flash(:warning, "Non-Malware Sample deleted")
-      else
-        socket
-      end
-
-    {:noreply, socket}
+      {:noreply, socket}
+    else
+      {:noreply, socket}
+    end
   end
 
   def format_time(past_datetime) do
