@@ -68,7 +68,7 @@ defmodule VExchangeWeb.Layouts do
     ~H"""
     <div
       id="mobile-menu-canvas-menu"
-      class="relative z-50 xl:hidden"
+      class="relative z-50 hidden"
       role="dialog"
       aria-modal="true"
       style="display: none;"
@@ -107,8 +107,8 @@ defmodule VExchangeWeb.Layouts do
                 Powered by Vx Underground
               </p>
 
-              <p class="rounded-full bg-emerald-900 px-2 text-[0.6125rem] font-medium leading-6 text-emerald-500 w-11">
-                <%= Application.spec(:v_exchange)[:vsn] %>
+              <p class="rounded-full bg-emerald-900 px-2 text-[0.6125rem] font-medium leading-6 text-emerald-500">
+                v <%= Application.spec(:v_exchange)[:vsn] %>
               </p>
             </div>
 
@@ -322,8 +322,8 @@ defmodule VExchangeWeb.Layouts do
           <p class="rounded-full pb-2 text-[0.6125rem] text-xl leading-6 text-zinc-300 mr-2">
             Powered by Vx Underground
           </p>
-          <p class="rounded-full bg-emerald-900 px-2 text-[0.6125rem] font-medium leading-6 text-zinc-300 w-11">
-            <%= Application.spec(:v_exchange)[:vsn] %>
+          <p class="rounded-full bg-emerald-900 px-2 text-[0.6125rem] font-medium leading-6 text-zinc-300">
+            v <%= Application.spec(:v_exchange)[:vsn] %>
           </p>
         </div>
         <nav class="flex flex-1 flex-col">

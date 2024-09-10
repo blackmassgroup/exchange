@@ -636,7 +636,9 @@ defmodule VExchangeWeb.CoreComponents do
           <dt class="w-1/4 flex-none text-[0.8125rem] leading-6 text-zinc-500 dark:text-zinc-300">
             <%= item.title %>
           </dt>
-          <dd class="text-sm leading-6 text-white dark:text-zinc-200"><%= render_slot(item) %></dd>
+          <dd class="text-sm leading-6 text-zinc-300  dark:text-zinc-200">
+            <%= render_slot(item) %>
+          </dd>
         </div>
       </dl>
     </div>
