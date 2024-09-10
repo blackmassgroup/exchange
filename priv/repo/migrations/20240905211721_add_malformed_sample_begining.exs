@@ -1,4 +1,4 @@
-defmodule VExchange.Repo.Local.Migrations.AddMalformedSampleBegining do
+defmodule Exchange.Repo.Local.Migrations.AddMalformedSampleBegining do
   use Ecto.Migration
 
   def change do

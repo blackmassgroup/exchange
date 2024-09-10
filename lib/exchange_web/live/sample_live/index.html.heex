@@ -1,0 +1,52 @@
+<.search_header search={@search} current_user={@current_user} />
+
+<main class="">
+  <header class="flex items-center justify-between border-b border-white/5 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+    <h1 class="text-base font-semibold leading-7 text-white">
+      <.async_result :let={count} assign={@count}>
+        <:loading>Counting samples...</:loading>
+        <:failed :let={_failure}>there was an counting the samples</:failed>
+        <%= count |> Number.Delimit.number_to_delimited(delimiter: ",", precision: 0) %> Samples to date
+      </.async_result>
+    </h1>
+    <.link
+      :if={@current_user.role && @current_user.role.name in ["Admin", "Uploader"]}
+      patch={~p"/samples/new"}
+    >
+      <.button class="text-sm font-semibold leading-6">Upload New</.button>
+    </.link>
+  </header>
+
+  <p
+    :if={@samples.result == [] and connected?(@socket) and @search != ""}
+    class="text-base font-semibold leading-7 text-gray-500 py-7 px-6"
+  >
+    No results
+  </p>
+  <p
+    :if={@samples.result == [] and connected?(@socket) and @search == ""}
+    class="text-xl leading-7 text-gray-700 py-7 px-6 max-wd-sm"
+  >
+    Please use the seach bar to find samples by md5, sha1, sha256 or sha512,
+    <br />click the upload button to upload a new sample or click on a sample in the recent activity feed to view it.
+  </p>
+
+  <.main_sample_list samples={@samples} current_user={@current_user} />
+
+  <.modal
+    :if={@live_action in [:new, :edit]}
+    id="sample-modal"
+    show
+    on_cancel={JS.patch(~p"/samples")}
+  >
+    <.live_component
+      module={ExchangeWeb.SampleLive.FormComponent}
+      id={@sample.id || :new}
+      title={@page_title}
+      action={@live_action}
+      sample={@sample}
+      navigate={~p"/samples"}
+      current_user={@current_user}
+    />
+  </.modal>
+</main>

@@ -1,4 +1,4 @@
-defmodule VExchange.Repo.Local.Migrations.Gen do
+defmodule Exchange.Repo.Local.Migrations.Gen do
   @moduledoc """
   Migration to reimport all objects from CSV.
   """
@@ -47,7 +47,7 @@ defmodule VExchange.Repo.Local.Migrations.Gen do
     #       id: id
     #     }
 
-    #     VExchange.Samples.create_sample(attrs)
+    #     Exchange.Samples.create_sample(attrs)
     # end)
     # |> Enum.to_list()
   end

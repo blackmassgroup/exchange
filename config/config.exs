@@ -25,35 +25,35 @@ oban_queues = [
   clean_samples: [limit: 200, paused: false]
 ]
 
-config :v_exchange, Oban,
-  repo: VExchange.Repo.Local,
+config :exchange, Oban,
+  repo: Exchange.Repo.Local,
   engine: Oban.Engines.Basic,
   queues: oban_queues,
   plugins: oban_plugins,
   shutdown_grace_period: :timer.seconds(60)
 
-config :v_exchange, env: Mix.env()
+config :exchange, env: Mix.env()
 
-config :v_exchange,
-  ecto_repos: [VExchange.Repo.Local]
+config :exchange,
+  ecto_repos: [Exchange.Repo.Local]
 
 config :error_tracker,
-  repo: VExchange.Repo.Local,
-  otp_app: :v_exchange
+  repo: Exchange.Repo.Local,
+  otp_app: :exchange
 
-config :v_exchange, VExchange.Repo.Local,
+config :exchange, Exchange.Repo.Local,
   priv: "priv/repo",
   timeout: :infinity
 
 # Configures the endpoint
-config :v_exchange, VExchangeWeb.Endpoint,
+config :exchange, ExchangeWeb.Endpoint,
   adapter: Bandit.PhoenixAdapter,
   url: [host: "localhost"],
   render_errors: [
-    formats: [html: VExchangeWeb.ErrorHTML, json: VExchangeWeb.ErrorJSON],
+    formats: [html: ExchangeWeb.ErrorHTML, json: ExchangeWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: VExchange.PubSub,
+  pubsub_server: Exchange.PubSub,
   live_view: [signing_salt: "hnZZR7D2"]
 
 # Configures the mailer
@@ -63,7 +63,7 @@ config :v_exchange, VExchangeWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :v_exchange, VExchange.Mailer, adapter: Swoosh.Adapters.Local
+config :exchange, Exchange.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configure esbuild (the version is required)
 config :esbuild,

@@ -1,4 +1,4 @@
-defmodule VExchange.Repo.Migrations.CreateSamples do
+defmodule Exchange.Repo.Migrations.CreateSamples do
   use Ecto.Migration
 
   def change do

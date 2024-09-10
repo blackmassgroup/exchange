@@ -1,4 +1,4 @@
-defmodule VExchange.Repo.Local.Migrations.Sha256Index do
+defmodule Exchange.Repo.Local.Migrations.Sha256Index do
   use Ecto.Migration
 
   def change do

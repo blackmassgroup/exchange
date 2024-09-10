@@ -1,4 +1,4 @@
-defmodule VExchange.Repo.Local.Migrations.AdjustTags do
+defmodule Exchange.Repo.Local.Migrations.AdjustTags do
   use Ecto.Migration
 
   def change do

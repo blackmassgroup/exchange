@@ -1,4 +1,4 @@
-defmodule VExchange.Repo.Local.Migrations.AddSamplesIndexes do
+defmodule Exchange.Repo.Local.Migrations.AddSamplesIndexes do
   use Ecto.Migration
 
   def up do

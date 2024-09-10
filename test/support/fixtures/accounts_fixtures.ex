@@ -1,7 +1,7 @@
-defmodule VExchange.AccountsFixtures do
+defmodule Exchange.AccountsFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `VExchange.Accounts` context.
+  entities via the `Exchange.Accounts` context.
   """
 
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
@@ -19,7 +19,7 @@ defmodule VExchange.AccountsFixtures do
     {:ok, user} =
       attrs
       |> valid_user_attributes()
-      |> VExchange.Accounts.register_user()
+      |> Exchange.Accounts.register_user()
 
     user
   end
@@ -44,7 +44,7 @@ defmodule VExchange.AccountsFixtures do
           "tags" => ["create", "read", "update", "delete"]
         }
       })
-      |> VExchange.Accounts.create_role()
+      |> Exchange.Accounts.create_role()
 
     role
   end
@@ -60,7 +60,7 @@ defmodule VExchange.AccountsFixtures do
           "tags" => ["create", "read", "update", "delete"]
         }
       })
-      |> VExchange.Accounts.create_role()
+      |> Exchange.Accounts.create_role()
 
     role
   end

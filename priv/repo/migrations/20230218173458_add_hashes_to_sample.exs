@@ -1,4 +1,4 @@
-defmodule VExchange.Repo.Migrations.AddHashesToSample do
+defmodule Exchange.Repo.Migrations.AddHashesToSample do
   use Ecto.Migration
 
   def change do

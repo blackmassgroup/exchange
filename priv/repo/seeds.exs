@@ -5,12 +5,12 @@
 # Inside the script, you can read and write to any of your
 # repositories directly:
 #
-#     VExchange.Repo.insert!(%VExchange.SomeSchema{})
+#     Exchange.Repo.insert!(%Exchange.SomeSchema{})
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
-for role <- VExchange.Accounts.DefaultRoles.all() do
-  unless VExchange.Accounts.get_role_by_name!(role.name) do
-    {:ok, _role} = VExchange.Accounts.create_role(role)
+for role <- Exchange.Accounts.DefaultRoles.all() do
+  unless Exchange.Accounts.get_role_by_name!(role.name) do
+    {:ok, _role} = Exchange.Accounts.create_role(role)
   end
 end

@@ -1,4 +1,4 @@
-defmodule VExchange.Repo.Local.Migrations.DropMalformedSamplesTable do
+defmodule Exchange.Repo.Local.Migrations.DropMalformedSamplesTable do
   use Ecto.Migration
 
   def change do

@@ -1,4 +1,4 @@
-defmodule VExchange.Repo.Local.Migrations.RecreateIndexSha512 do
+defmodule Exchange.Repo.Local.Migrations.RecreateIndexSha512 do
   use Ecto.Migration
 
   def change do

@@ -1,10 +1,10 @@
-defmodule VExchange.Repo.Local.Migrations.AddAiKeysToExistingUsers do
+defmodule Exchange.Repo.Local.Migrations.AddAiKeysToExistingUsers do
   use Ecto.Migration
-  alias VExchange.Accounts.User
-  alias VExchange.Repo.Local, as: Repo
+  alias Exchange.Accounts.User
+  alias Exchange.Repo.Local, as: Repo
 
   def up do
-    VExchange.Accounts.list_users()
+    Exchange.Accounts.list_users()
     |> Enum.each(fn
       %{api_key: nil} = user ->
         User.api_key_changeset(user, %{api_key: generate_api_key()}) |> Repo.update!()

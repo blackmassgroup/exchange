@@ -1,10 +1,10 @@
-defmodule VExchange.AccountsTest do
-  use VExchange.DataCase
+defmodule Exchange.AccountsTest do
+  use Exchange.DataCase
 
-  alias VExchange.Accounts
+  alias Exchange.Accounts
 
-  import VExchange.AccountsFixtures
-  alias VExchange.Accounts.{User, UserToken}
+  import Exchange.AccountsFixtures
+  alias Exchange.Accounts.{User, UserToken}
 
   describe "get_user_by_email/1" do
     test "does not return the user if the email does not exist" do
@@ -519,9 +519,9 @@ defmodule VExchange.AccountsTest do
   end
 
   describe "roles" do
-    alias VExchange.Accounts.Role
+    alias Exchange.Accounts.Role
 
-    import VExchange.AccountsFixtures
+    import Exchange.AccountsFixtures
 
     @invalid_attrs %{name: nil, permissions: nil}
 

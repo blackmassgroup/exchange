@@ -1,4 +1,4 @@
-defmodule VExchange.Repo.Migrations.AddFlyPostgresProc do
+defmodule Exchange.Repo.Migrations.AddFlyPostgresProc do
   use Ecto.Migration
 
   def up do

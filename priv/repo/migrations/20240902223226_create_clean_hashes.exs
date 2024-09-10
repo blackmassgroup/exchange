@@ -1,4 +1,4 @@
-defmodule VExchange.Repo.Migrations.CreateCleanHashes do
+defmodule Exchange.Repo.Migrations.CreateCleanHashes do
   use Ecto.Migration
 
   def change do

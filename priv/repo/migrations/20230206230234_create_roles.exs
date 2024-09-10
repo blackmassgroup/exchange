@@ -1,4 +1,4 @@
-defmodule VExchange.Repo.Migrations.CreateRoles do
+defmodule Exchange.Repo.Migrations.CreateRoles do
   use Ecto.Migration
 
   def change do

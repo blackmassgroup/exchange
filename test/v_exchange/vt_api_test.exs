@@ -1,12 +1,12 @@
-defmodule VExchange.VtApiTest do
-  use VExchange.DataCase
+defmodule Exchange.VtApiTest do
+  use Exchange.DataCase
 
-  alias VExchange.VtApi
+  alias Exchange.VtApi
 
   describe "vt_api_requests" do
-    alias VExchange.VtApi.VtApiRequest
+    alias Exchange.VtApi.VtApiRequest
 
-    import VExchange.VtApiFixtures
+    import Exchange.VtApiFixtures
 
     @invalid_attrs %{raw_request: nil, raw_response: nil, http_response_code: nil}
 

@@ -1,7 +1,7 @@
-defmodule VExchange.CleanHashesFixtures do
+defmodule Exchange.CleanHashesFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `VExchange.CleanHashes` context.
+  entities via the `Exchange.CleanHashes` context.
   """
 
   @doc """
@@ -13,7 +13,7 @@ defmodule VExchange.CleanHashesFixtures do
       |> Enum.into(%{
         sha256: "some sha256"
       })
-      |> VExchange.CleanHashes.create_clean_hash()
+      |> Exchange.CleanHashes.create_clean_hash()
 
     clean_hash
   end

@@ -1,12 +1,12 @@
-defmodule VExchange.SamplesTest do
-  use VExchange.DataCase
+defmodule Exchange.SamplesTest do
+  use Exchange.DataCase
 
-  alias VExchange.Samples
+  alias Exchange.Samples
 
   describe "samples" do
-    alias VExchange.Sample
+    alias Exchange.Sample
 
-    import VExchange.SamplesFixtures
+    import Exchange.SamplesFixtures
 
     @invalid_attrs %{
       first_seen: nil,

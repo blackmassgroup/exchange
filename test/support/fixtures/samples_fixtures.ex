@@ -1,7 +1,7 @@
-defmodule VExchange.SamplesFixtures do
+defmodule Exchange.SamplesFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `VExchange.Samples` context.
+  entities via the `Exchange.Samples` context.
   """
 
   @doc """
@@ -24,7 +24,7 @@ defmodule VExchange.SamplesFixtures do
         sha512:
           "38ae7e95990689ff4f209f765452a164ef22ce5fd805ebc185278b8aa03196b3f7e76df17da6d755d3e4cd58caae8c485e4cd01c913b91d14de68b6e701dbe86"
       })
-      |> VExchange.Samples.create_sample()
+      |> Exchange.Samples.create_sample()
 
     sample
   end

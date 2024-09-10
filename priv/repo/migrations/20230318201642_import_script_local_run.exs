@@ -1,4 +1,4 @@
-defmodule VExchange.Repo.Local.Migrations.ImportScriptLocalRun do
+defmodule Exchange.Repo.Local.Migrations.ImportScriptLocalRun do
   use Ecto.Migration
 
   def change do

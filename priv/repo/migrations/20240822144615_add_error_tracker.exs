@@ -1,4 +1,4 @@
-defmodule VExchange.Repo.Local.Migrations.AddErrorTracker do
+defmodule Exchange.Repo.Local.Migrations.AddErrorTracker do
   use Ecto.Migration
 
   def up, do: ErrorTracker.Migration.up()

@@ -1,11 +1,11 @@
-defmodule VExchange.MixProject do
+defmodule Exchange.MixProject do
   use Mix.Project
 
   def project do
     %{day: day, month: month, year: year} = Date.utc_today()
 
     [
-      app: :v_exchange,
+      app: :exchange,
       version: "#{year}.#{month}.#{day}",
       elixir: "~> 1.17",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -20,7 +20,7 @@ defmodule VExchange.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {VExchange.Application, []},
+      mod: {Exchange.Application, []},
       extra_applications: [:logger, :runtime_tools, :os_mon]
     ]
   end

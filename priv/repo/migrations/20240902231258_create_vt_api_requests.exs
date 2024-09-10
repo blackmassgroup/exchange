@@ -1,4 +1,4 @@
-defmodule VExchange.Repo.Migrations.CreateVtApiRequests do
+defmodule Exchange.Repo.Migrations.CreateVtApiRequests do
   use Ecto.Migration
 
   def change do

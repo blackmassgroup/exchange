@@ -1,7 +1,7 @@
-defmodule VExchange.VtApiFixtures do
+defmodule Exchange.VtApiFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `VExchange.VtApi` context.
+  entities via the `Exchange.VtApi` context.
   """
 
   @doc """
@@ -16,7 +16,7 @@ defmodule VExchange.VtApiFixtures do
         raw_response: "some raw_response",
         url: "some url"
       })
-      |> VExchange.VtApi.create_vt_api_request()
+      |> Exchange.VtApi.create_vt_api_request()
 
     vt_api_request
   end

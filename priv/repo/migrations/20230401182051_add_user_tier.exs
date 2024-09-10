@@ -1,4 +1,4 @@
-defmodule VExchange.Repo.Local.Migrations.AddUserTier do
+defmodule Exchange.Repo.Local.Migrations.AddUserTier do
   use Ecto.Migration
 
   def change do

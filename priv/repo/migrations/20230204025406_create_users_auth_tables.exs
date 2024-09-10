@@ -1,4 +1,4 @@
-defmodule VExchange.Repo.Migrations.CreateUsersAuthTables do
+defmodule Exchange.Repo.Migrations.CreateUsersAuthTables do
   use Ecto.Migration
 
   def change do

@@ -1,4 +1,4 @@
-defmodule VExchange.Repo.Local.Migrations.AddUserIdToSamplesTable do
+defmodule Exchange.Repo.Local.Migrations.AddUserIdToSamplesTable do
   use Ecto.Migration
 
   def change do

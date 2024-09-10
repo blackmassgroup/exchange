@@ -1,4 +1,4 @@
-defmodule VExchange.Repo.Local.Migrations.AddUniqueIndexes do
+defmodule Exchange.Repo.Local.Migrations.AddUniqueIndexes do
   use Ecto.Migration
 
   def change do

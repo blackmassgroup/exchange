@@ -1,7 +1,7 @@
 import Config
 
 # Configure your database
-config :v_exchange, VExchange.Repo.Local,
+config :exchange, Exchange.Repo.Local,
   username: "postgres",
   password: "postgres",
   hostname: "localhost",
@@ -17,7 +17,7 @@ config :v_exchange, VExchange.Repo.Local,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with esbuild to bundle .js and .css sources.
-config :v_exchange, VExchangeWeb.Endpoint,
+config :exchange, ExchangeWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {127, 0, 0, 1}, port: 4000],
@@ -60,17 +60,17 @@ config :v_exchange, VExchangeWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :v_exchange, VExchangeWeb.Endpoint,
+config :exchange, ExchangeWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/v_exchange_web/(controllers|live|components)/.*(ex|heex)$"
+      ~r"lib/exchange_web/(controllers|live|components)/.*(ex|heex)$"
     ]
   ]
 
 # Enable dev routes for dashboard and mailbox
-config :v_exchange, dev_routes: true
+config :exchange, dev_routes: true
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n", backends: []

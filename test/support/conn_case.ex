@@ -1,4 +1,4 @@
-defmodule VExchangeWeb.ConnCase do
+defmodule ExchangeWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -11,7 +11,7 @@ defmodule VExchangeWeb.ConnCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use VExchangeWeb.ConnCase, async: true`, although
+  by setting `use ExchangeWeb.ConnCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -20,27 +20,27 @@ defmodule VExchangeWeb.ConnCase do
   using do
     quote do
       # The default endpoint for testing
-      @endpoint VExchangeWeb.Endpoint
+      @endpoint ExchangeWeb.Endpoint
 
-      use VExchangeWeb, :verified_routes
+      use ExchangeWeb, :verified_routes
 
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
-      import VExchangeWeb.ConnCase
+      import ExchangeWeb.ConnCase
     end
   end
 
   setup tags do
-    VExchange.DataCase.setup_sandbox(tags)
+    Exchange.DataCase.setup_sandbox(tags)
     setup_roles()
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 
   def setup_roles() do
-    for role <- VExchange.Accounts.DefaultRoles.all() do
-      unless VExchange.Accounts.get_role_by_name!(role.name) do
-        {:ok, _role} = VExchange.Accounts.create_role(role)
+    for role <- Exchange.Accounts.DefaultRoles.all() do
+      unless Exchange.Accounts.get_role_by_name!(role.name) do
+        {:ok, _role} = Exchange.Accounts.create_role(role)
       end
     end
   end
@@ -54,7 +54,7 @@ defmodule VExchangeWeb.ConnCase do
   test context.
   """
   def register_and_log_in_user(%{conn: conn}) do
-    user = VExchange.AccountsFixtures.user_fixture()
+    user = Exchange.AccountsFixtures.user_fixture()
     %{conn: log_in_user(conn, user), user: user}
   end
 
@@ -64,7 +64,7 @@ defmodule VExchangeWeb.ConnCase do
   It returns an updated `conn`.
   """
   def log_in_user(conn, user) do
-    token = VExchange.Accounts.generate_user_session_token(user)
+    token = Exchange.Accounts.generate_user_session_token(user)
 
     conn
     |> Phoenix.ConnTest.init_test_session(%{})

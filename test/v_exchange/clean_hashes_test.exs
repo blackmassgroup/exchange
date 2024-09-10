@@ -1,12 +1,12 @@
-defmodule VExchange.CleanHashesTest do
-  use VExchange.DataCase
+defmodule Exchange.CleanHashesTest do
+  use Exchange.DataCase
 
-  alias VExchange.CleanHashes
+  alias Exchange.CleanHashes
 
   describe "clean_hashes" do
-    alias VExchange.CleanHashes.CleanHash
+    alias Exchange.CleanHashes.CleanHash
 
-    import VExchange.CleanHashesFixtures
+    import Exchange.CleanHashesFixtures
 
     @invalid_attrs %{sha256: nil}
 

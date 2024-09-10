@@ -43,7 +43,7 @@
 3.  Start Phoenix server with `iex -S mix phx.server`
     1. Now you can visit [`localhost:4000`](http://localhost:4000) or [`localhost:4001`](https://localhost:4001) from your browser.
 4.  Once you register a user, you make it admin by running this in the same window you ran `iex -S mix phx.server` in (yes we run commands in a running server)
-    1.  `VExchange.Accounts.get_user!(1) |> VExchange.Accounts.add_role_to_user("Admin")`
+    1.  `Exchange.Accounts.get_user!(1) |> Exchange.Accounts.add_role_to_user("Admin")`
 
 > You can run unit tests with the command `mix test`
 
