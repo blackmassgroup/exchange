@@ -4,6 +4,7 @@
 
 - Multipart forms for API uploads implemented.
 - VT Submission for verification
+- UI bug fixes
 
 ## 2024.9.7
 
