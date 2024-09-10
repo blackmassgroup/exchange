@@ -1,4 +1,4 @@
-defmodule VExchange.VtApiRequestLogger do
+defmodule VExchange.VtApi.VtApiRequestLogger do
   @behaviour Tesla.Middleware
   alias VExchange.VtApi
 
