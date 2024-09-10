@@ -36,12 +36,6 @@ defmodule VExchangeWeb.SampleController do
             |> put_status(:created)
             |> render(:show_id, sample: sample)
 
-          {:error, %Ecto.Changeset{}} ->
-            conn
-            |> put_status(:unprocessable_entity)
-            |> put_view(json: VExchangeWeb.ErrorJSON)
-            |> render(:"422")
-
           {:error, :too_large} ->
             conn
             |> put_status(:request_entity_too_large)

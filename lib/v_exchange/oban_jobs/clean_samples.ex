@@ -1,31 +1,38 @@
 defmodule VExchange.ObanJobs.CleanSamples do
   @max_attempts 20
   use Oban.Worker, queue: :clean_samples, max_attempts: @max_attempts
-  alias VExchange.MalformedSamples
+  alias VExchange.Samples
+  alias VExchange.Services.S3
 
-  def perform(%Oban.Job{args: %{"sha256" => sha256}}) do
-    # Step 1: Check if the file is malformed
-    # with {:ok, %{body: body}} <- VExchange.Services.S3.get_file_binary(sha256),
-    #      true <- String.contains?(body, "Content-Disposition: form-data;") do
-    #   VExchange.MalformedSamples.create_malformed_sample(%{sha256: sha256})
-    # end
+  def perform(%Oban.Job{args: %{"sha256" => sha256, "sample_id" => sample_id}}) do
+    with {:ok, %{body: body}} <- S3.get_file_binary(sha256),
+         true <- String.starts_with?(body, "--"),
+         cleaned_binary <- clean_file(body),
+         {:ok, _sample} <- Samples.create_from_binary(%{"file" => cleaned_binary}, 516),
+         %{id: _} = sample <- Samples.get_sample(sample_id) do
+      Samples.delete_sample(sample)
+    else
+      false ->
+        {:ok, :clean_file}
 
-    # Step 2: Clean the file
-    with {:ok, %{body: body}} <- VExchange.Services.S3.get_file_binary(sha256),
-         cleaned_binary <- clean_file(body) do
-      VExchange.Samples.create_from_binary(%{"file" => cleaned_binary}, 516)
-      |> case do
-        {:ok, _sample} ->
-          MalformedSamples.get_malformed_sample_by_sha(sha256)
-          |> MalformedSamples.delete_malformed_sample()
+      nil ->
+        Samples.get_sample!(sample_id)
+        |> Samples.delete_sample()
 
-        {:error, :duplicate} ->
-          MalformedSamples.get_malformed_sample_by_sha(sha256)
-          |> MalformedSamples.delete_malformed_sample()
+      {:ok, _sample} ->
+        Samples.get_sample!(sample_id)
+        |> Samples.delete_sample()
 
-        error ->
-          error
-      end
+      {:error, :duplicate} ->
+        Samples.get_sample!(sample_id)
+        |> Samples.delete_sample()
+
+      {:error, {:http_error, 404, _}} ->
+        Samples.get_sample!(sample_id)
+        |> Samples.delete_sample()
+
+      {:error, _} = error ->
+        error
     end
   end
 

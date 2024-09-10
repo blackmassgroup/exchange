@@ -10,6 +10,7 @@ defmodule VExchange.Samples do
   alias VExchange.ObanJobs.Vt.SubmitVt
   alias VExchange.Repo.Local, as: Repo
   alias VExchange.Sample
+  alias VExchange.Samples
   alias VExchange.CleanHashes
   alias VExchange.Services.VirusTotal
   alias VExchange.Services.S3
@@ -232,10 +233,10 @@ defmodule VExchange.Samples do
   def delete_sample(%Sample{} = sample) do
     with(
       {:ok, _} <- CleanHashes.create_clean_hash(%{sha256: sample.sha256}),
-      {:ok, sample} = result <- Repo.delete(sample),
-      {:ok, _} <- S3.delete_exchange_object(sample.sha256)
+      {:ok, sample} = result <- Repo.delete(sample)
     ) do
       if Application.get_env(:v_exchange, :env) != :test do
+        S3.delete_exchange_object(sample.sha256)
         PubSub.broadcast(VExchange.PubSub, "samples", {:deleted_sample, sample})
       end
 
@@ -458,31 +459,33 @@ defmodule VExchange.Samples do
     - The created sample.
   """
   def create_from_binary(%{"file" => file} = _params, user_id) when is_bitstring(file) do
-    VExchange.Repo.transaction(fn ->
-      with true <- is_below_size_limit(file),
-           params <- build_sample_params(file, user_id),
-           {:ok, sample} <- create_sample(params),
-           {:ok, _sample} <- S3.put_object(sample.s3_object_key, file, :wasabi) do
-        sample
-      else
-        {:error, %Ecto.Changeset{} = cs} ->
-          if(
-            Enum.any?(cs.errors, fn
-              {_, {"has already been taken", _}} -> true
-              _ -> false
-            end)
-          ) do
-            VExchange.Repo.rollback(:duplicate)
-          else
-            VExchange.Repo.rollback(:invalid_sample)
-          end
+    with true <- is_below_size_limit(file),
+         params <- build_sample_params(file, user_id),
+         nil <- Samples.get_sample_by_sha256(params.sha256),
+         {:ok, _sample} <- S3.put_object(params.s3_object_key, file, :wasabi),
+         {:ok, sample} <- create_sample(params) do
+      {:ok, sample}
+    else
+      {:error, %Ecto.Changeset{} = cs} ->
+        if(
+          Enum.any?(cs.errors, fn
+            {_, {"has already been taken", _}} -> true
+            _ -> false
+          end)
+        ) do
+          {:error, :duplicate}
+        else
+          {:error, :invalid_sample}
+        end
 
-        false ->
-          VExchange.Repo.rollback(:too_large)
+      false ->
+        {:error, :too_large}
 
-        _error ->
-          VExchange.Repo.rollback(:cloud_provider_error)
-      end
-    end)
+      %Sample{} ->
+        {:error, :duplicate}
+
+      _error ->
+        {:error, :cloud_provider_error}
+    end
   end
 end
