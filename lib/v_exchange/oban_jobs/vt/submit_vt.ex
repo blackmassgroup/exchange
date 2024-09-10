@@ -29,7 +29,7 @@ defmodule VExchange.ObanJobs.Vt.SubmitVt do
   use Oban.Worker, queue: :vt_api, max_attempts: @max_attempts
   require Logger
   alias VExchange.Services.VirusTotal
-  alias VExchange.VtApiRateLimiter
+  alias VExchange.VtApi.VtApiRateLimiter
   alias VExchange.Services.S3
   alias VExchange.Samples
   alias VExchange.ObanJobs.Vt.StatusCheckVt

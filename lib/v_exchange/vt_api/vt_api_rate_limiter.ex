@@ -1,4 +1,4 @@
-defmodule VExchange.VtApiRateLimiter do
+defmodule VExchange.VtApi.VtApiRateLimiter do
   @moduledoc """
   A module responsible for rate limiting VT API requests.
 

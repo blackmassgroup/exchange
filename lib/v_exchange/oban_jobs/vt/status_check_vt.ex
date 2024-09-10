@@ -7,7 +7,7 @@ defmodule VExchange.ObanJobs.Vt.StatusCheckVt do
   @max_attempts 20
   use Oban.Worker, queue: :vt_api, max_attempts: @max_attempts
 
-  alias VExchange.VtApiRateLimiter
+  alias VExchange.VtApi.VtApiRateLimiter
   alias VExchange.Services.VirusTotal
   alias VExchange.Samples
 

@@ -49,7 +49,7 @@ defmodule VExchange.ObanJobs.CloudMigration.JobScheduler do
             "is_new" => false,
             "is_first_request" => true
           }
-          |> VExchange.ObanJobsSubmitVt.new()
+          |> VExchange.ObanJobs.Vt.SubmitVt.new()
         end)
         |> Oban.insert_all()
       end)
