@@ -1,4 +1,0 @@
-#TODO
-
-Scale down PG volume
-clear binaries out of VT logs
