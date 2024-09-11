@@ -11,7 +11,7 @@
 - [CI/CD](https://fly.io/docs/elixir/advanced-guides/github-actions-elixir-ci-cd/) setup and is deployed on Fly.io.
 - Upload, login and get sample API routes
 - ~~Custom Discord Logger backend~~
-- Applicaiton Error tracking
+- Application Error tracking
 - Uses Oban for retryable jobs.
 
 ### Built With
@@ -56,7 +56,7 @@ Bruno is a Postman,Insomnia/Insomnia alternative.
 Setup
 
 1. Install, on mac `brew install bruno`; others see their [website](https://www.usebruno.com/)
-2. Import the collection from `/bruno`
+2. Import the collection from [here](https://github.com/blackmassgroup/exchange-api-client-library)
 3. Set ENV vars
 4. Enjoy.
 
