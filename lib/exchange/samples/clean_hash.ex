@@ -1,4 +1,4 @@
-defmodule Exchange.CleanHashes.CleanHash do
+defmodule Exchange.Samples.CleanHash do
   use Ecto.Schema
   import Ecto.Changeset
 

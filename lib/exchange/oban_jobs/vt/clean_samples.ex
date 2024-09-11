@@ -1,4 +1,4 @@
-defmodule Exchange.ObanJobs.CleanSamples do
+defmodule Exchange.ObanJobs.Vt.CleanSamples do
   @max_attempts 20
   use Oban.Worker, queue: :clean_samples, max_attempts: @max_attempts
   alias Exchange.Samples

@@ -148,5 +148,5 @@ if config_env() == :prod do
     paraxial_url: "https://app.paraxial.io",
     fetch_cloud_ips: true
 
-  config :exchange, :vt_api_rate_limit, 1700
+  config :exchange, :vt_api_rate_limit, 1500
 end

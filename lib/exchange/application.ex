@@ -33,8 +33,7 @@ defmodule Exchange.Application do
       {Cluster.Supervisor, [topologies, [name: Exchange.ClusterSupervisor]]},
       {Oban, Application.fetch_env!(:exchange, Oban)},
       # Start the vt rate limiter with initial limit
-      {Exchange.VtApi.VtApiRateLimiter,
-       Application.get_env(:exchange, :vt_api_rate_limit, 1700)}
+      {Exchange.VtApi.VtApiRateLimiter, Application.get_env(:exchange, :vt_api_rate_limit, 1500)}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -13,7 +13,7 @@ defmodule Exchange.CleanHashesFixtures do
       |> Enum.into(%{
         sha256: "some sha256"
       })
-      |> Exchange.CleanHashes.create_clean_hash()
+      |> Exchange.Samples.CleanHashes.create_clean_hash()
 
     clean_hash
   end

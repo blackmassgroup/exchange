@@ -1,4 +1,4 @@
-defmodule Exchange.CleanHashes do
+defmodule Exchange.Samples.CleanHashes do
   @moduledoc """
   The CleanHashes context.
   """
@@ -6,7 +6,7 @@ defmodule Exchange.CleanHashes do
   import Ecto.Query, warn: false
   alias Exchange.Repo
 
-  alias Exchange.CleanHashes.CleanHash
+  alias Exchange.Samples.CleanHash
 
   @doc """
   Returns the list of clean_hashes.

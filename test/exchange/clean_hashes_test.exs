@@ -1,10 +1,10 @@
 defmodule Exchange.CleanHashesTest do
   use Exchange.DataCase
 
-  alias Exchange.CleanHashes
+  alias Exchange.Samples.CleanHashes
 
   describe "clean_hashes" do
-    alias Exchange.CleanHashes.CleanHash
+    alias Exchange.Samples.CleanHash
 
     import Exchange.CleanHashesFixtures
 
@@ -35,13 +35,18 @@ defmodule Exchange.CleanHashesTest do
       clean_hash = clean_hash_fixture()
       update_attrs = %{sha256: "some updated sha256"}
 
-      assert {:ok, %CleanHash{} = clean_hash} = CleanHashes.update_clean_hash(clean_hash, update_attrs)
+      assert {:ok, %CleanHash{} = clean_hash} =
+               CleanHashes.update_clean_hash(clean_hash, update_attrs)
+
       assert clean_hash.sha256 == "some updated sha256"
     end
 
     test "update_clean_hash/2 with invalid data returns error changeset" do
       clean_hash = clean_hash_fixture()
-      assert {:error, %Ecto.Changeset{}} = CleanHashes.update_clean_hash(clean_hash, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               CleanHashes.update_clean_hash(clean_hash, @invalid_attrs)
+
       assert clean_hash == CleanHashes.get_clean_hash!(clean_hash.id)
     end
 

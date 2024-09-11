@@ -5,13 +5,12 @@ defmodule Exchange.Samples do
   require Logger
   import Ecto.Query, warn: false
 
-  alias Exchange.CleanHashes
   alias Phoenix.PubSub
   alias Exchange.ObanJobs.Vt.SubmitVt
   alias Exchange.Repo.Local, as: Repo
   alias Exchange.Sample
   alias Exchange.Samples
-  alias Exchange.CleanHashes
+  alias Exchange.Samples.CleanHashes
   alias Exchange.Services.VirusTotal
   alias Exchange.Services.S3
   alias Exchange.VtApi.VtApiRateLimiter
