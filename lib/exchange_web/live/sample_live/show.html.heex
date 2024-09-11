@@ -71,7 +71,7 @@
       <.link
         :if={
           @triage not in [:does_not_exist, :triage_has_no_data, :triage_not_processed] and
-            List.first(@triage["data"]) |> Map.get("id") !== nil
+            Map.get(@triage, "data", []) |> List.first() |> Map.get("id") !== nil
         }
         href={"https://tria.ge/#{List.first(@triage["data"]) |> Map.get("id")}"}
         target="_blank"

@@ -406,9 +406,9 @@ defmodule Exchange.Samples do
         Logger.error("Error updating local sample #{sha256} from VT")
         {:error, :error_updating_local_sample}
 
-      _ ->
+      error ->
         Logger.error("Error posting comment for #{sha256} to VT")
-        {:error, :posting_comment}
+        {:error, {:posting_comment, error}}
     end
   end
 
