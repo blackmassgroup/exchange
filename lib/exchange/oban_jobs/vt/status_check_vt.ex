@@ -17,7 +17,8 @@ defmodule Exchange.ObanJobs.Vt.StatusCheckVt do
       {:ok, %{"attributes" => %{"status" => "completed"}}} <- VirusTotal.get_analysis(id),
       {:ok, %{"attributes" => attrs}} <- VirusTotal.get_sample(sha256)
     ) do
-      Samples.process_vt_result(attrs)
+      Map.put(attrs, "priority", priority)
+      |> Samples.process_vt_result()
     else
       _ ->
         {:snooze, VtApiRateLimiter.get_snooze_time(priority)}

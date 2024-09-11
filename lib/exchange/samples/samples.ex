@@ -14,6 +14,7 @@ defmodule Exchange.Samples do
   alias Exchange.CleanHashes
   alias Exchange.Services.VirusTotal
   alias Exchange.Services.S3
+  alias Exchange.VtApi.VtApiRateLimiter
 
   @doc """
   Returns the list of samples.
@@ -377,8 +378,10 @@ defmodule Exchange.Samples do
   def process_vt_result(attrs) do
     comment = "File present on vx-underground.org | virus.exchange."
     sha256 = Map.get(attrs, "sha256")
+    priority = Map.get(attrs, "priority", 4)
 
     with true <- VirusTotal.is_malware?(attrs),
+         :ok <- VtApiRateLimiter.allow_request(priority),
          {:ok, _} <- VirusTotal.post_file_comment(sha256, comment),
          {:ok, sample} <- update_sample_from_vt(attrs),
          {:ok, _} <- S3.copy_file_to_daily_backups(sha256) do

@@ -127,7 +127,8 @@ defmodule Exchange.ObanJobs.Vt.SubmitVt do
       {:ok, job}
     else
       {:ok, %{"attributes" => %{"last_analysis_results" => _} = attrs}} ->
-        Samples.process_vt_result(attrs)
+        Map.put(attrs, "priority", priority)
+        |> Samples.process_vt_result()
 
       _error ->
         snooze_time = VtApiRateLimiter.get_snooze_time(priority)
