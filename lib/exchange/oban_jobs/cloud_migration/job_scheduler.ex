@@ -33,27 +33,51 @@ defmodule Exchange.ObanJobs.CloudMigration.JobScheduler do
     end)
   end
 
-  import Ecto.Query
+  defmodule Test do
+    import Ecto.Query
 
-  def queue_all_files_for_vt() do
-    Exchange.Repo.transaction(fn ->
-      from("samples")
-      |> order_by([s], desc: s.inserted_at)
-      |> select([s], s.sha256)
-      |> Exchange.Repo.stream(max_rows: 10_000)
-      |> Stream.chunk_every(1000)
-      |> Stream.each(fn chunk ->
-        Enum.map(chunk, fn sha256 ->
-          %{
-            "sha256" => sha256,
-            "is_new" => false,
-            "is_first_request" => true
-          }
-          |> Exchange.ObanJobs.Vt.SubmitVt.new()
-        end)
-        |> Oban.insert_all()
-      end)
+    def queue_all_files_for_vt() do
+      # Adjust this value based on your system's capacity
+      batch_size = 100
+      # Delay between batches in milliseconds
+      delay_ms = 1000
+
+      Stream.resource(
+        fn -> 0 end,
+        fn offset ->
+          query =
+            from(s in "samples",
+              order_by: [desc: s.inserted_at],
+              select: s.sha256,
+              limit: ^batch_size,
+              offset: ^offset
+            )
+
+          case Exchange.Repo.all(query) do
+            [] ->
+              {:halt, offset}
+
+            batch ->
+              jobs =
+                Enum.map(batch, fn sha256 ->
+                  %{
+                    "sha256" => sha256,
+                    "is_new" => false,
+                    "is_first_request" => true
+                  }
+                  |> Exchange.ObanJobs.Vt.SubmitVt.new()
+                end)
+
+              Oban.insert_all(jobs)
+
+              # Add delay between batches
+              Process.sleep(delay_ms)
+              {[length(batch)], offset + batch_size}
+          end
+        end,
+        fn _offset -> :ok end
+      )
       |> Stream.run()
-    end)
+    end
   end
 end
