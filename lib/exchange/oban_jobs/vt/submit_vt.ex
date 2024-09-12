@@ -26,7 +26,11 @@ defmodule Exchange.ObanJobs.Vt.SubmitVt do
 
   """
   @max_attempts 20
-  use Oban.Worker, queue: :vt_api, max_attempts: @max_attempts
+  use Oban.Worker,
+    queue: :vt_api,
+    max_attempts: @max_attempts,
+    unique: [period: :infinity]
+
   require Logger
   alias Exchange.Services.VirusTotal
   alias Exchange.VtApi.VtApiRateLimiter
