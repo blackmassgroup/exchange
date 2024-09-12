@@ -17,7 +17,7 @@ oban_plugins =
     Oban.Plugins.Reindexer,
     {Oban.Plugins.Cron,
      crontab: [
-       {"0 0 * * *", Exchange.ObanJobs.Vt.ClearApiLogs}
+       {"0 * * * *", Exchange.ObanJobs.Vt.ClearApiLogs}
      ]}
   ]
 

@@ -377,13 +377,15 @@ defmodule Exchange.Samples do
   def process_vt_result(attrs) do
     comment = "File present on vx-underground.org | virus.exchange."
     sha256 = Map.get(attrs, "sha256")
-    priority = Map.get(attrs, "priority", 4)
+    priority = Map.get(attrs, "priority", 3)
+
+    is_new_upload = priority in [0, 1]
 
     with true <- VirusTotal.is_malware?(attrs),
          :ok <- VtApiRateLimiter.allow_request(priority),
          {:ok, _} <- VirusTotal.post_file_comment(sha256, comment),
          {:ok, sample} <- update_sample_from_vt(attrs),
-         {:ok, _} <- S3.copy_file_to_daily_backups(sha256) do
+         {:ok, _} <- S3.copy_file_to_daily_backups(sha256, is_new_upload) do
       {:ok, sample}
     else
       false ->

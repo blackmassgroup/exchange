@@ -44,8 +44,11 @@ defmodule Exchange.Services.VirusTotal do
       {:ok, %Tesla.Env{body: body, status: 200}} ->
         {:ok, body["data"]}
 
-      _ ->
-        {:error, :does_not_exist}
+      {:ok, %Tesla.Env{body: body, status: 429}} ->
+        {:error, :too_many_requests}
+
+        _ -
+          {:error, :does_not_exist}
     end
   end
 

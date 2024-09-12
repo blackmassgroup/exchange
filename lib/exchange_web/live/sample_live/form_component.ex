@@ -226,7 +226,7 @@ defmodule ExchangeWeb.SampleLive.FormComponent do
 
     with %{} = attrs <- Samples.build_sample_params(file_binary, upload, user_id),
          {:ok, _} <- S3.rename_uploaded_file(attrs.sha256, upload.client_name),
-         {:ok, _} <- S3.copy_file_to_daily_backups(attrs.sha256) do
+         {:ok, _} <- S3.copy_file_to_daily_backups(attrs.sha256, true) do
       Sample.changeset(%Sample{}, attrs)
     else
       _ ->
