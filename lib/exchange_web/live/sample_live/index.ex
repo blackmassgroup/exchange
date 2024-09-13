@@ -97,17 +97,25 @@ defmodule ExchangeWeb.SampleLive.Index do
 
   @impl true
   def handle_info({:new_sample, new_sample}, socket) do
-    if socket.assigns.search == "" and socket.assigns.samples.loading == false do
+    if socket.assigns.search == "" and socket.assigns.samples.loading == nil do
       current_samples = socket.assigns.samples
       current_count = socket.assigns.count
       new_samples = [new_sample | current_samples.result || []]
 
       samples = AsyncResult.ok(current_samples, new_samples)
-      count = AsyncResult.ok(current_count, (current_count.result || 0) + 1)
 
       socket =
         assign(socket, :samples, samples)
-        |> assign(:count, count)
+
+      socket =
+        if socket.assigns.count.loading == nil do
+          count = AsyncResult.ok(current_count, (current_count.result || 0) + 1)
+
+          socket
+          |> assign(:count, count)
+        else
+          socket
+        end
 
       {:noreply, socket}
     else
@@ -116,17 +124,25 @@ defmodule ExchangeWeb.SampleLive.Index do
   end
 
   def handle_info({:deleted_sample, new_sample}, socket) do
-    if socket.assigns.search == "" and socket.assigns.samples.loading == false do
+    if socket.assigns.search == "" and socket.assigns.samples.loading == nil do
       current_samples = socket.assigns.samples
       current_count = socket.assigns.count
       new_samples = Enum.reject(current_samples.result || [], &(&1.sha256 == new_sample.sha256))
 
       samples = AsyncResult.ok(current_samples, new_samples)
-      count = AsyncResult.ok(current_count, (current_count.result || 0) - 1)
 
       socket =
         assign(socket, :samples, samples)
-        |> assign(:count, count)
+
+      socket =
+        if socket.assigns.count.loading == nil do
+          count = AsyncResult.ok(current_count, (current_count.result || 0) + 1)
+
+          socket
+          |> assign(:count, count)
+        else
+          socket
+        end
 
       socket =
         if new_sample.user_id == socket.assigns.current_user.id do
@@ -143,7 +159,7 @@ defmodule ExchangeWeb.SampleLive.Index do
   end
 
   def handle_info({:updated_sample, new_sample}, socket) do
-    if socket.assigns.search == "" and socket.assigns.samples.loading == false do
+    if socket.assigns.search == "" and socket.assigns.samples.loading == nil do
       current_samples = socket.assigns.samples
       current_count = socket.assigns.count
 
@@ -157,11 +173,19 @@ defmodule ExchangeWeb.SampleLive.Index do
         end)
 
       samples = AsyncResult.ok(current_samples, new_samples)
-      count = AsyncResult.ok(current_count, (current_count.result || 0) - 1)
 
       socket =
         assign(socket, :samples, samples)
-        |> assign(:count, count)
+
+      socket =
+        if socket.assigns.count.loading == nil do
+          count = AsyncResult.ok(current_count, (current_count.result || 0) + 1)
+
+          socket
+          |> assign(:count, count)
+        else
+          socket
+        end
 
       socket =
         if new_sample.user_id == socket.assigns.current_user.id do
