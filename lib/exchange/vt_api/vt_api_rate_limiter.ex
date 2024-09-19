@@ -81,7 +81,7 @@ defmodule Exchange.VtApi.VtApiRateLimiter do
   end
 
   @doc """
-  Checks if a request is allowed based total count, prority is only logged.
+  Checks if a request is allowed based total count, priority is only logged.
   """
   def allow_request(priority) do
     GenServer.call(__MODULE__, {:allow_request, priority})

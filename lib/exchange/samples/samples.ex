@@ -375,7 +375,7 @@ defmodule Exchange.Samples do
   If the sample is malware, we update the local sample data and post a comment
   """
   def process_vt_result(attrs) do
-    comment = "File present on vx-underground.org | virus.exchange."
+    comment = get_comment()
     sha256 = Map.get(attrs, "sha256")
     priority = Map.get(attrs, "priority", 3)
 
@@ -393,15 +393,19 @@ defmodule Exchange.Samples do
           {:ok, %Sample{}} ->
             {:ok, :not_malware}
 
-          {:error, %Ecto.Changeset{}} ->
+          {:error, %Ecto.Changeset{}} = error ->
             Logger.error(
               "Failed to delete sha256: #{sha256} from local database for not being malware"
             )
 
-          {:error, _} ->
+            error
+
+          {:error, _} = error ->
             Logger.error(
               "Failed to delete sha256: #{sha256} from cloud provider database for not being malware"
             )
+
+            error
         end
 
       {:error, %Ecto.Changeset{} = _cs} ->
@@ -413,6 +417,11 @@ defmodule Exchange.Samples do
         {:error, {:posting_comment, error}}
     end
   end
+
+  @doc """
+  returns the comment to use for the VT submission
+  """
+  def get_comment(), do: "File present on vx-underground.org | virus.exchange."
 
   @doc """
   Updates a Sample from VT get sampe response

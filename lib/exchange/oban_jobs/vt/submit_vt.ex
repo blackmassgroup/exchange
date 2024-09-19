@@ -27,7 +27,7 @@ defmodule Exchange.ObanJobs.Vt.SubmitVt do
   """
   @max_attempts 20
   use Oban.Worker,
-    queue: :vt_api,
+    queue: :vt_api_uploads,
     max_attempts: @max_attempts,
     unique: [period: :infinity]
 
@@ -114,6 +114,7 @@ defmodule Exchange.ObanJobs.Vt.SubmitVt do
   @impl Oban.Worker
   def perform(%Oban.Job{args: %{"sha256" => sha256, "priority" => priority} = _args} = _job) do
     with(
+      :ok <- VtApiRateLimiter.allow_request(priority),
       {:error, :does_not_exist} <- VirusTotal.get_sample(sha256),
       {:ok, %{body: binary}} <- S3.get_file_binary(sha256),
       :ok <- VtApiRateLimiter.allow_request(priority),

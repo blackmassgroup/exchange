@@ -5,11 +5,12 @@ defmodule Exchange.ObanJobs.Vt.StatusCheckVt do
   It is used to update or remove the Sample in the database once the analysis is completed.
   """
   @max_attempts 20
-  use Oban.Worker, queue: :vt_api, max_attempts: @max_attempts
+  use Oban.Worker, queue: :vt_api_uploads, max_attempts: @max_attempts
 
   alias Exchange.VtApi.VtApiRateLimiter
   alias Exchange.Services.VirusTotal
   alias Exchange.Samples
+  alias Exchange.ObanJobs.Vt.PostComment
 
   @impl Oban.Worker
   def perform(%Oban.Job{args: %{"task_id" => sha256, "priority" => priority, "analysis_id" => id}}) do
@@ -19,6 +20,29 @@ defmodule Exchange.ObanJobs.Vt.StatusCheckVt do
     ) do
       Map.put(attrs, "priority", priority)
       |> Samples.process_vt_result()
+      |> case do
+        {:ok, sample} ->
+          {:ok, sample}
+
+        {:error, {:posting_comment, _}} ->
+          %{
+            "sha256" => sha256,
+            "priority" => priority
+          }
+          |> PostComment.new()
+          |> Oban.insert()
+
+        {:error, :posting_comment} ->
+          %{
+            "sha256" => sha256,
+            "priority" => priority
+          }
+          |> PostComment.new()
+          |> Oban.insert()
+
+        error ->
+          error
+      end
     else
       _ ->
         {:snooze, VtApiRateLimiter.get_snooze_time(priority)}

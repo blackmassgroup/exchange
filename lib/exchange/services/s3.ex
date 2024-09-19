@@ -75,16 +75,18 @@ defmodule Exchange.Services.S3 do
   @doc """
   Copies a file from the mwdb bucket to the private vxug for processing.
   """
-  def copy_file_to_daily_backups(_src_object, false = _is_new_upload), do: {:ok, :old_sample}
+  def copy_file_to_daily_backups(_src_object, false = _is_new_upload, _attrs),
+    do: {:ok, :old_sample}
 
-  def copy_file_to_daily_backups(src_object, _is_new_upload) do
+  def copy_file_to_daily_backups(src_object, true = _is_new_upload, attrs) do
     dest_bucket = get_private_wasabi_bucket()
     src_bucket = get_wasabi_bucket()
     date = Date.utc_today() |> Date.to_iso8601()
     dest_object = "/Daily/#{date}/#{src_object}"
     config_opts = wasabi_config()
+    name = get_in(attrs, ["last_analysis_results", "Kaspersky", "result"])
 
-    S3.put_object_copy(dest_bucket, dest_object, src_bucket, src_object)
+    S3.put_object_copy(dest_bucket, dest_object, src_bucket, name <> "-" <> src_object)
     |> ExAws.request(config_opts)
   end
 
