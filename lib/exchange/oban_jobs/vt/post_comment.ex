@@ -33,7 +33,7 @@ defmodule Exchange.ObanJobs.Vt.PostComment do
     else
       _error ->
         snooze_time = VtApiRateLimiter.get_snooze_time(priority)
-        Logger.warning("Snoozing job for #{sha256} because of VT rate limiting: #{snooze_time}")
+        # Logger.warning("Snoozing job for #{sha256} because of VT rate limiting: #{snooze_time}")
         {:snooze, snooze_time}
     end
   end

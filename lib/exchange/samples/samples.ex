@@ -385,7 +385,7 @@ defmodule Exchange.Samples do
          :ok <- VtApiRateLimiter.allow_request(priority),
          {:ok, _} <- VirusTotal.post_file_comment(sha256, comment),
          {:ok, sample} <- update_sample_from_vt(attrs),
-         {:ok, _} <- S3.copy_file_to_daily_backups(sha256, is_new_upload) do
+         {:ok, _} <- S3.copy_file_to_daily_backups(sha256, is_new_upload, attrs) do
       {:ok, sample}
     else
       false ->

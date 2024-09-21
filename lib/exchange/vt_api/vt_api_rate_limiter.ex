@@ -54,7 +54,7 @@ defmodule Exchange.VtApi.VtApiRateLimiter do
       new_state = %{state | counts: new_counts, total_count: state.total_count + 1}
       {:reply, :ok, new_state}
     else
-      Logger.warning("Rate limit reached: #{state.total_count}/#{state.limit}")
+      # Logger.warning("Rate limit reached: #{state.total_count}/#{state.limit}")
       {:reply, {:rate_limited, priority}, state}
     end
   end

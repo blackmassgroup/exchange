@@ -82,11 +82,16 @@ defmodule Exchange.Services.S3 do
     dest_bucket = get_private_wasabi_bucket()
     src_bucket = get_wasabi_bucket()
     date = Date.utc_today() |> Date.to_iso8601()
-    dest_object = "/Daily/#{date}/#{src_object}"
-    config_opts = wasabi_config()
-    name = get_in(attrs, ["last_analysis_results", "Kaspersky", "result"])
 
-    S3.put_object_copy(dest_bucket, dest_object, src_bucket, name <> "-" <> src_object)
+    name =
+      (get_in(attrs, ["last_analysis_results", "Kaspersky", "result"]) ||
+         "unknown")
+      |> String.replace(":", ".")
+
+    dest_object = "/Daily/#{date}/#{name}-#{src_object}"
+    config_opts = wasabi_config()
+
+    S3.put_object_copy(dest_bucket, dest_object, src_bucket, src_object)
     |> ExAws.request(config_opts)
   end
 

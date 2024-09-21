@@ -37,6 +37,7 @@ defmodule Exchange.ObanJobs.Vt.SubmitVt do
   alias Exchange.Services.S3
   alias Exchange.Samples
   alias Exchange.ObanJobs.Vt.StatusCheckVt
+  alias Exchange.ObanJobs.Vt.PostComment
 
   @doc """
   This function is called when the job is enqueued.
@@ -134,10 +135,31 @@ defmodule Exchange.ObanJobs.Vt.SubmitVt do
       {:ok, %{"attributes" => %{"last_analysis_results" => _} = attrs}} ->
         Map.put(attrs, "priority", priority)
         |> Samples.process_vt_result()
+        |> case do
+          {:error, :posting_comment} ->
+            job =
+              %{
+                "sha256" => sha256,
+                "priority" => priority
+              }
+              |> PostComment.new()
+              |> Oban.insert()
+
+          {:error, {:posting_comment, _}} ->
+            %{
+              "sha256" => sha256,
+              "priority" => priority
+            }
+            |> PostComment.new()
+            |> Oban.insert()
+
+          result ->
+            result
+        end
 
       _error ->
         snooze_time = VtApiRateLimiter.get_snooze_time(priority)
-        Logger.warning("Snoozing job for #{sha256} because of VT rate limiting: #{snooze_time}")
+        # Logger.warning("Snoozing job for #{sha256} because of VT rate limiting: #{snooze_time}")
         {:snooze, snooze_time}
     end
   end
