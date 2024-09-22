@@ -78,22 +78,57 @@ defmodule Exchange.Services.S3 do
   def copy_file_to_daily_backups(_src_object, false = _is_new_upload, _attrs),
     do: {:ok, :old_sample}
 
-  def copy_file_to_daily_backups(src_object, true = _is_new_upload, attrs) do
+  def copy_file_to_daily_backups(src_object, date_or_is_new_upload, attrs) do
     dest_bucket = get_private_wasabi_bucket()
     src_bucket = get_wasabi_bucket()
-    date = Date.utc_today() |> Date.to_iso8601()
+
+    {date_string, is_new_upload} =
+      case date_or_is_new_upload do
+        true -> {Date.utc_today() |> Date.to_iso8601(), true}
+        false -> {Date.utc_today() |> Date.to_iso8601(), false}
+        %NaiveDateTime{} = date -> {NaiveDateTime.to_date(date) |> Date.to_iso8601(), false}
+      end
 
     name =
       (get_in(attrs, ["last_analysis_results", "Kaspersky", "result"]) ||
          "unknown")
       |> String.replace(":", ".")
 
-    dest_object = "/Daily/#{date}/#{name}-#{src_object}"
+    dest_object = "/Daily/#{date_string}/#{name}-#{src_object}"
     config_opts = wasabi_config()
 
-    S3.put_object_copy(dest_bucket, dest_object, src_bucket, src_object)
-    |> ExAws.request(config_opts)
+    # IO.inspect(
+    #   dest_object: dest_object,
+    #   src_object: src_object,
+    #   date_string: date_string,
+    #   name: name
+    # )
+
+    case {is_new_upload,
+          S3.put_object_copy(dest_bucket, dest_object, src_bucket, src_object)
+          |> ExAws.request(config_opts)} do
+      {true, {:ok, _}} -> {:ok, :new_upload_copied}
+      {false, {:ok, _}} -> {:ok, :existing_sample_copied}
+      {_, error} -> error
+    end
   end
+
+  # def copy_file_to_daily_backups(src_object, true = _is_new_upload, attrs) do
+  #   dest_bucket = get_private_wasabi_bucket()
+  #   src_bucket = get_wasabi_bucket()
+  #   date = Date.utc_today() |> Date.to_iso8601()
+
+  #   name =
+  #     (get_in(attrs, ["last_analysis_results", "Kaspersky", "result"]) ||
+  #        "unknown")
+  #     |> String.replace(":", ".")
+
+  #   dest_object = "/Daily/#{date}/#{name}-#{src_object}"
+  #   config_opts = wasabi_config()
+
+  #   S3.put_object_copy(dest_bucket, dest_object, src_bucket, src_object)
+  #   |> ExAws.request(config_opts)
+  # end
 
   @doc """
   Files uploaded through the admin UI are uploaded direct to s3 and have to be properly renamed.

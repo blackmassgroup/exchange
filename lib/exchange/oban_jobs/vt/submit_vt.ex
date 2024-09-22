@@ -137,13 +137,12 @@ defmodule Exchange.ObanJobs.Vt.SubmitVt do
         |> Samples.process_vt_result()
         |> case do
           {:error, :posting_comment} ->
-            job =
-              %{
-                "sha256" => sha256,
-                "priority" => priority
-              }
-              |> PostComment.new()
-              |> Oban.insert()
+            %{
+              "sha256" => sha256,
+              "priority" => priority
+            }
+            |> PostComment.new()
+            |> Oban.insert()
 
           {:error, {:posting_comment, _}} ->
             %{

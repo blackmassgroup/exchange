@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2024.9.22
+- Bug fixes
+- Improvements into data collection pipeline for daily backups
+
 ## 2024.9.10
 
 - Multipart forms for API uploads implemented.
