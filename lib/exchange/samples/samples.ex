@@ -381,32 +381,50 @@ defmodule Exchange.Samples do
 
     is_new_upload = priority in [0, 1]
 
-    with true <- VirusTotal.is_malware?(attrs),
+    with {:ok, sample} <- get_sample_by_sha256(sha256),
+         {_sample, true} <- {sample, VirusTotal.is_malware?(attrs)},
          :ok <- VtApiRateLimiter.allow_request(priority),
          {:ok, _} <- VirusTotal.post_file_comment(sha256, comment),
          {:ok, sample} <- update_sample_from_vt(attrs),
          {:ok, _} <- S3.copy_file_to_daily_backups(sha256, is_new_upload, attrs) do
       {:ok, sample}
     else
-      false ->
-        case delete_sample(sha256) do
-          {:ok, %Sample{}} ->
-            {:ok, :not_malware}
+      {sample, false} ->
+        new_attrs = %{
+          tags: ["marked-non-malware"] ++ ((sample && sample.tags) || [])
+        }
 
-          {:error, %Ecto.Changeset{}} = error ->
-            Logger.error(
-              "Failed to delete sha256: #{sha256} from local database for not being malware"
-            )
+        with(
+          {:ok, sample} <- get_sample_by_sha256(sha256),
+          {:ok, _} <- CleanHashes.create_clean_hash(%{sha256: sample.sha256}),
+          {:ok, sample} = result <- update_sample(sample, new_attrs)
+        ) do
+          if Application.get_env(:exchange, :env) != :test do
+            # S3.delete_exchange_object(sample.sha256)
+            PubSub.broadcast(Exchange.PubSub, "samples", {:updated_sample, sample})
+          end
 
-            error
-
-          {:error, _} = error ->
-            Logger.error(
-              "Failed to delete sha256: #{sha256} from cloud provider database for not being malware"
-            )
-
-            error
+          result
         end
+
+      # case delete_sample(sha256) do
+      #   {:ok, %Sample{}} ->
+      #     {:ok, :not_malware}
+
+      #   {:error, %Ecto.Changeset{}} = error ->
+      #     Logger.error(
+      #       "Failed to delete sha256: #{sha256} from local database for not being malware"
+      #     )
+
+      #     error
+
+      #   {:error, _} = error ->
+      #     Logger.error(
+      #       "Failed to delete sha256: #{sha256} from cloud provider database for not being malware"
+      #     )
+
+      #     error
+      # end
 
       {:error, %Ecto.Changeset{} = _cs} ->
         Logger.error("Error updating local sample #{sha256} from VT")
