@@ -1,5 +1,5 @@
 defmodule Exchange.ObanJobs.CloudMigration.SampleRename do
-  use Oban.Worker, queue: :rename_samples, max_attempts: 20
+  use Oban.Worker, queue: :rename_samples, max_attempts: 20, unique: [period: :infinity]
 
   alias Exchange.Repo.Local, as: Repo
   alias Exchange.Sample
