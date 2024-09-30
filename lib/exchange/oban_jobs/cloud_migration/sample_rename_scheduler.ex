@@ -33,11 +33,11 @@ defmodule Exchange.ObanJobs.CloudMigration.SampleRenameScheduler do
       )
       |> Repo.all()
 
-    Enum.each(samples, fn sha256 ->
+    Enum.map(samples, fn sha256 ->
       %{sha256: sha256}
       |> SampleRename.new()
-      |> Oban.insert()
     end)
+    |> Oban.insert_all()
 
     if length(samples) == batch_size do
       %{
