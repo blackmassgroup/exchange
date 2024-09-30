@@ -84,7 +84,7 @@ defmodule Exchange.VtApi.VtApiRateLimiter do
   Checks if a request is allowed based total count, priority is only logged.
   """
   def allow_request(priority) do
-    GenServer.call(__MODULE__, {:allow_request, priority}, 10_000)
+    GenServer.call(__MODULE__, {:allow_request, priority}, 15_000)
   end
 
   @doc """
@@ -102,7 +102,7 @@ defmodule Exchange.VtApi.VtApiRateLimiter do
   end
 
   def get_snooze_time(priority) do
-    GenServer.call(__MODULE__, {:get_snooze_time, priority}, 10_000)
+    GenServer.call(__MODULE__, {:get_snooze_time, priority}, 15_000)
   end
 
   # Schedules a reset of the counters.
@@ -113,10 +113,10 @@ defmodule Exchange.VtApi.VtApiRateLimiter do
   # Returns the snooze time for a given priority.
   defp get_snooze(priority) do
     case priority do
-      0 -> 15
-      1 -> 30
-      2 -> 45
-      3 -> 60
+      0 -> 60
+      1 -> 60
+      2 -> 300
+      3 -> 300
     end
   end
 end

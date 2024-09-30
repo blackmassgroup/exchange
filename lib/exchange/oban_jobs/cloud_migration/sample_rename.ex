@@ -9,6 +9,17 @@ defmodule Exchange.ObanJobs.CloudMigration.SampleRename do
 
   require Logger
 
+  @doc """
+     Usage: Oban.insert(
+       Exchange.ObanJobs.CloudMigration.SampleRenameScheduler.new(%{
+         batch_size: 1000,
+         offset: 0,
+         start_date: "2024-07-01 00:00:00",
+         end_date: "2024-08-31 23:59:59"
+       })
+     )
+
+  """
   @impl Oban.Worker
   def perform(%Oban.Job{args: %{"sha256" => sha256}}) do
     with {:ok, sample} <- get_sample(sha256),
