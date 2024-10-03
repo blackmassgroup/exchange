@@ -136,13 +136,17 @@ defmodule Exchange.ObanJobs.Vt.SubmitVt do
         Map.put(attrs, "priority", priority)
         |> Samples.process_vt_result()
         |> case do
-          {:error, :posting_comment} ->
-            %{
-              "sha256" => sha256,
-              "priority" => priority
-            }
-            |> PostComment.new()
-            |> Oban.insert()
+          {:ok, sample} ->
+            {:ok, sample}
+
+          {:rate_limited, priority} ->
+            {:snooze, VtApiRateLimiter.get_snooze_time(priority)}
+
+          {:error, :sample_not_found} ->
+            {:ok, :sample_not_found}
+
+          {:error, :error_updating_local_sample} ->
+            {:ok, :error_updating}
 
           {:error, {:posting_comment, _}} ->
             %{
@@ -152,8 +156,16 @@ defmodule Exchange.ObanJobs.Vt.SubmitVt do
             |> PostComment.new()
             |> Oban.insert()
 
-          result ->
-            result
+          {:error, :posting_comment} ->
+            %{
+              "sha256" => sha256,
+              "priority" => priority
+            }
+            |> PostComment.new()
+            |> Oban.insert()
+
+          error ->
+            error
         end
 
       _error ->

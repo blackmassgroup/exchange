@@ -97,11 +97,11 @@ defmodule Exchange.Services.VirusTotal do
         {:ok, body["data"]}
 
       {:ok, %Tesla.Env{status: status}} ->
-        {:error, "Failed with status: #{status}"}
+        {:error, "Comment Failed with status: #{status}"}
 
       {:error, reason} ->
         Logger.error("Failed to post to VirusTotal: #{inspect(reason)}")
-        {:error, "Failed with reason: #{inspect(reason)}"}
+        {:error, "Comment Failed with reason: #{inspect(reason)}"}
     end
   end
 
@@ -147,6 +147,13 @@ defmodule Exchange.Services.VirusTotal do
       get_in(attrs, ["last_analysis_results", "Kaspersky", "result"])
 
     kaspersky_says_so = kaspersky_result not in [nil, "clean"]
+
+    # IO.inspect(
+    #   kaspersky_result: kaspersky_result,
+    #   kaspersky_says_so: kaspersky_says_so,
+    #   has_popular_threat: has_popular_threat,
+    #   result: has_popular_threat or kaspersky_says_so
+    # )
 
     has_popular_threat or kaspersky_says_so
   end

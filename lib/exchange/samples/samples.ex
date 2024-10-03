@@ -381,7 +381,9 @@ defmodule Exchange.Samples do
 
     is_new_upload = priority in [0, 1]
 
-    with {:ok, sample} <- get_sample_by_sha256(sha256),
+    # IO.inspect(comment: comment, sha256: sha256, priority: priority, is_new_upload: is_new_upload)
+
+    with %{} = sample <- get_sample_by_sha256(sha256),
          {_sample, true} <- {sample, VirusTotal.is_malware?(attrs)},
          :ok <- VtApiRateLimiter.allow_request(priority),
          {:ok, _} <- VirusTotal.post_file_comment(sha256, comment),
@@ -389,13 +391,18 @@ defmodule Exchange.Samples do
          {:ok, _} <- S3.copy_file_to_daily_backups(sha256, is_new_upload, attrs) do
       {:ok, sample}
     else
+      nil ->
+        {:error, :sample_not_found}
+
+      {:rate_limited, priority} ->
+        {:rate_limited, priority}
+
       {sample, false} ->
         new_attrs = %{
           tags: ["marked-non-malware"] ++ ((sample && sample.tags) || [])
         }
 
         with(
-          {:ok, sample} <- get_sample_by_sha256(sha256),
           {:ok, _} <- CleanHashes.create_clean_hash(%{sha256: sample.sha256}),
           {:ok, sample} = result <- update_sample(sample, new_attrs)
         ) do
@@ -407,32 +414,18 @@ defmodule Exchange.Samples do
           result
         end
 
-      # case delete_sample(sha256) do
-      #   {:ok, %Sample{}} ->
-      #     {:ok, :not_malware}
-
-      #   {:error, %Ecto.Changeset{}} = error ->
-      #     Logger.error(
-      #       "Failed to delete sha256: #{sha256} from local database for not being malware"
-      #     )
-
-      #     error
-
-      #   {:error, _} = error ->
-      #     Logger.error(
-      #       "Failed to delete sha256: #{sha256} from cloud provider database for not being malware"
-      #     )
-
-      #     error
-      # end
-
       {:error, %Ecto.Changeset{} = _cs} ->
         Logger.error("Error updating local sample #{sha256} from VT")
         {:error, :error_updating_local_sample}
 
-      error ->
+      {:error, "Comment Failed with" <> _} = error ->
         Logger.error("Error posting comment for #{sha256} to VT")
         {:error, {:posting_comment, error}}
+
+      {:error, msg} ->
+        Logger.error("Error processing for #{sha256} to VT: #{inspect(msg)}")
+
+        {:error, msg}
     end
   end
 

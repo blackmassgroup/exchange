@@ -24,6 +24,15 @@ defmodule Exchange.ObanJobs.Vt.StatusCheckVt do
         {:ok, sample} ->
           {:ok, sample}
 
+        {:rate_limited, priority} ->
+          {:snooze, VtApiRateLimiter.get_snooze_time(priority)}
+
+        {:error, :sample_not_found} ->
+          {:ok, :sample_not_found}
+
+        {:error, :error_updating_local_sample} ->
+          {:ok, :error_updating}
+
         {:error, {:posting_comment, _}} ->
           %{
             "sha256" => sha256,
