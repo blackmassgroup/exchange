@@ -53,7 +53,5 @@ defmodule ExchangeWeb.Endpoint do
   plug Plug.Session, @session_options
   plug RemoteIp, headers: ~w[cf-connecting-ip]
   plug Paraxial.AllowedPlug
-  plug Paraxial.RecordPlug
   plug ExchangeWeb.Router
-  plug Paraxial.RecordPlug
 end
