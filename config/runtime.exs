@@ -143,10 +143,5 @@ if config_env() == :prod do
       ]
     ]
 
-  config :paraxial,
-    paraxial_api_key: System.get_env("PARAXIAL_PROD_API_KEY"),
-    paraxial_url: "https://app.paraxial.io",
-    fetch_cloud_ips: true
-
   config :exchange, :vt_api_rate_limit, 1500
 end

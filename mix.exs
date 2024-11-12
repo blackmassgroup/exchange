@@ -68,7 +68,6 @@ defmodule Exchange.MixProject do
       # {:oban_web, "~> 2.10", repo: "oban", only: :dev},
       {:timex, "~> 3.7"},
       {:inet_cidr, "~> 1.0.0"},
-      {:paraxial, "~> 2.6.0"},
       {:remote_ip, "~> 1.1"},
       {:tesla_curl, "~> 1.2.1", only: :dev},
       {:sobelow, "~> 0.13.0"},

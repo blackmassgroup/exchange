@@ -2,15 +2,14 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 permissions:
   contents: read
 
 jobs:
-
   test:
     name: Test
     runs-on: ubuntu-latest
@@ -21,41 +20,39 @@ jobs:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
         image: postgres:16
-        ports: ['5432:5432']
+        ports: ["5432:5432"]
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-    env:
-      PARAXIAL_API_KEY: ${{ secrets.PARAXIAL_API_KEY }}
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Elixir
-      uses: erlef/setup-beam@v1
-      with:
-        elixir-version: '1.17.2' # Define the elixir version [required]
-        otp-version: '27.0.1' # Define the OTP version [required]
-    - name: Restore dependencies cache
-      uses: actions/cache@v4
-      with:
-        path: deps
-        key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-        restore-keys: ${{ runner.os }}-mix-
-    - name: Install dependencies
-      run: mix deps.get
-    - name: Run tests
-      run: MIX_ENV=test mix test.ci
+      - uses: actions/checkout@v4
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: "1.17.2" # Define the elixir version [required]
+          otp-version: "27.0.1" # Define the OTP version [required]
+      - name: Restore dependencies cache
+        uses: actions/cache@v4
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-
+      - name: Install dependencies
+        run: mix deps.get
+      - name: Run tests
+        run: MIX_ENV=test mix test.ci
 
   deploy:
-      name: Deploy app
-      runs-on: ubuntu-latest
-      needs: ["test"]
-      env:
-        FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-      # Only deploy if the PR is merged or if the push is to main
-      if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true || github.event_name == 'push' && github.ref == 'refs/heads/main'
-      steps:
-        - uses: actions/checkout@v4
-        - uses: superfly/flyctl-actions/setup-flyctl@master
-        - run: flyctl deploy --remote-only --wait-timeout 500 -a ${{ secrets.APP_NAME }}
+    name: Deploy app
+    runs-on: ubuntu-latest
+    needs: ["test"]
+    env:
+      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+    # Only deploy if the PR is merged or if the push is to main
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true || github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only --wait-timeout 500 -a ${{ secrets.APP_NAME }}
