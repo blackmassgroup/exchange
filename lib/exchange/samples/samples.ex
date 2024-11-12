@@ -385,10 +385,10 @@ defmodule Exchange.Samples do
 
     with %{} = sample <- get_sample_by_sha256(sha256),
          {_sample, true} <- {sample, VirusTotal.is_malware?(attrs)},
+         {:ok, _} <- S3.copy_file_to_daily_backups(sha256, is_new_upload, attrs),
          :ok <- VtApiRateLimiter.allow_request(priority),
          {:ok, _} <- VirusTotal.post_file_comment(sha256, comment),
-         {:ok, sample} <- update_sample_from_vt(attrs),
-         {:ok, _} <- S3.copy_file_to_daily_backups(sha256, is_new_upload, attrs) do
+         {:ok, sample} <- update_sample_from_vt(attrs) do
       {:ok, sample}
     else
       nil ->

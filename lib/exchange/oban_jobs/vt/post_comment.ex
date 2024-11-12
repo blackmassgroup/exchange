@@ -21,6 +21,8 @@ defmodule Exchange.ObanJobs.Vt.PostComment do
   alias Exchange.Services.VirusTotal
   alias Exchange.VtApi.VtApiRateLimiter
   alias Exchange.Samples
+  alias Exchange.ObanJobs.Vt.SubmitVt
+  alias Phoenix.PubSub
 
   @impl Oban.Worker
   def perform(%Oban.Job{args: %{"sha256" => sha256, "priority" => priority} = _args}) do
