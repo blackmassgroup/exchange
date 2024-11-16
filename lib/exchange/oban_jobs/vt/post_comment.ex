@@ -22,6 +22,7 @@ defmodule Exchange.ObanJobs.Vt.PostComment do
   alias Exchange.VtApi.VtApiRateLimiter
   alias Exchange.Samples
   alias Exchange.ObanJobs.Vt.SubmitVt
+  alias Exchange.Samples.CleanHashes
   alias Phoenix.PubSub
 
   @impl Oban.Worker
