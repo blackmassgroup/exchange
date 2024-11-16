@@ -15,10 +15,7 @@ oban_plugins =
     Oban.Plugins.Pruner,
     {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(10)},
     Oban.Plugins.Reindexer,
-    {Oban.Plugins.Cron,
-     crontab: [
-       {"0 * * * *", Exchange.ObanJobs.Vt.ClearApiLogs}
-     ]}
+    {Oban.Plugins.Cron, crontab: []}
   ]
 
 oban_queues = [
