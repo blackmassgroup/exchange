@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2024.11.16
+
+- Remove request logging
+- Add phx2ban
+- Update deps
+- Bug fixes
+
 ## 2024.9.22
 - Bug fixes
 - Improvements into data collection pipeline for daily backups
