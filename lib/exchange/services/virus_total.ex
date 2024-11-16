@@ -21,7 +21,6 @@ defmodule Exchange.Services.VirusTotal do
   plug Tesla.Middleware.BaseUrl, @public_url
   plug Tesla.Middleware.JSON
   plug Tesla.Middleware.Logger
-  plug Exchange.VtApi.VtApiRequestLogger
 
   plug Tesla.Middleware.Headers, [
     {"accept", "application/json"},
