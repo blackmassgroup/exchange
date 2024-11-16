@@ -26,6 +26,8 @@ defmodule Exchange.Application do
       {Phoenix.PubSub, name: Exchange.PubSub},
       # Start Finch
       {Finch, name: Exchange.Finch},
+      # 👇 Start Phx2Ban before you start your Endpoint.
+      {Phx2Ban, router: ExchangeWeb.Router},
       # Start the Endpoint (http/https)
       ExchangeWeb.Endpoint,
       # Start a worker by calling: Exchange.Worker.start_link(arg)

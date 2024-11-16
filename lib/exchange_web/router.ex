@@ -126,7 +126,12 @@ defmodule ExchangeWeb.Router do
 
   scope "/" do
     pipe_through [:browser_insecure, :require_authenticated_user, :require_admin]
-    live_dashboard "/dashboard", metrics: ExchangeWeb.Telemetry
+
+    live_dashboard "/dashboard",
+      metrics: ExchangeWeb.Telemetry,
+      additional_pages: [
+        route_name: Phx2Ban.LiveDashboardPlugin
+      ]
 
     error_tracker_dashboard("/errors", on_mount: [{ExchangeWeb.UserAuth, :ensure_admin}])
   end

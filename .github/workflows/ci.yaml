@@ -33,6 +33,11 @@ jobs:
         with:
           elixir-version: "1.17.2" # Define the elixir version [required]
           otp-version: "27.0.1" # Define the OTP version [required]
+      - name: Add EZSuite Repo
+        run: |
+          mix hex.repo add ezsuite https://ezsuite.dev/repo \
+          --auth-key ${{ secrets.EZSUITE_AUTH_KEY }} \
+          --fetch-public-key SHA256:5WqcbEXE2PRHFpPrlJeaCCS1mAokfq6Bf/rdKzukVQ4
       - name: Restore dependencies cache
         uses: actions/cache@v4
         with:
@@ -55,4 +60,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only --wait-timeout 500 -a ${{ secrets.APP_NAME }}
+      - run: flyctl deploy --remote-only --wait-timeout 500 -a ${{ secrets.APP_NAME }} --build-secret ezsuite_auth_key="${{ secrets.EZSUITE_AUTH_KEY }}"

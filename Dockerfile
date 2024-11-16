@@ -36,6 +36,12 @@ ENV MIX_ENV="prod"
 
 # install mix dependencies
 COPY mix.exs mix.lock ./
+
+RUN --mount=type=secret,id=ezsuite_auth_key \
+    mix hex.repo add ezsuite https://ezsuite.dev/repo \
+    --fetch-public-key "SHA256:5WqcbEXE2PRHFpPrlJeaCCS1mAokfq6Bf/rdKzukVQ4" \
+    --auth-key "$(cat /run/secrets/ezsuite_auth_key)"
+
 RUN mix deps.get --only $MIX_ENV
 RUN mkdir config
 
