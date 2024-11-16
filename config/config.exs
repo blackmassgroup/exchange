@@ -22,11 +22,11 @@ oban_queues = [
   default: 10,
   vxu_uploads: 1,
   file_uploads: 50,
-  vt_api_uploads: [limit: 25, paused: false],
-  vt_comments: [limit: 25, paused: false],
+  vt_api_uploads: [limit: 25, paused: true],
+  vt_comments: [limit: 25, paused: true],
   clean_samples: [limit: 200, paused: true],
-  rename_samples: [limit: 100, paused: false],
-  rename_samples_scheduler: [limit: 1, paused: false]
+  rename_samples: [limit: 100, paused: true],
+  rename_samples_scheduler: [limit: 1, paused: true]
 ]
 
 config :exchange, Oban,
