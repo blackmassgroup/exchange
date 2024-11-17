@@ -5,7 +5,7 @@ defmodule ExchangeWeb.Plugs.MaintenanceMode do
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    if Application.get_env(:exchange, :maintenance_mode, false) do
+    if Application.get_env(:exchange, :maintenance_mode) do
       case get_format(conn) do
         "json" ->
           conn

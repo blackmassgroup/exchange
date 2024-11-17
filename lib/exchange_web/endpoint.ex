@@ -23,6 +23,7 @@ defmodule ExchangeWeb.Endpoint do
     gzip: false,
     only: ExchangeWeb.static_paths()
 
+  plug RemoteIp, headers: ~w[cf-connecting-ip]
   plug Phx2Ban.Plug
 
   # Code reloading can be explicitly enabled under the
@@ -53,6 +54,5 @@ defmodule ExchangeWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-  plug RemoteIp, headers: ~w[cf-connecting-ip]
   plug ExchangeWeb.Router
 end
