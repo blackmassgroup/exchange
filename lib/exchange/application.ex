@@ -7,7 +7,7 @@ defmodule Exchange.Application do
 
   @impl true
   def start(_type, _args) do
-    topologies = Application.get_env(:libcluster, :topologies) || []
+    _topologies = Application.get_env(:libcluster, :topologies) || []
 
     if Code.ensure_loaded?(Ecto.DevLogger) do
       Ecto.DevLogger.install(Exchange.Repo.Local)

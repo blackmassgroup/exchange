@@ -1,7 +1,7 @@
 import Config
 
 if config_env() != :test do
-  config :exchange, :maintenance_mode, true
+  config :exchange, :maintenance_mode, false
 end
 
 config :exchange,
