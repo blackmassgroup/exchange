@@ -32,7 +32,7 @@ defmodule Exchange.Application do
       ExchangeWeb.Endpoint,
       # Start a worker by calling: Exchange.Worker.start_link(arg)
       # {Exchange.Worker, arg}
-      {Cluster.Supervisor, [topologies, [name: Exchange.ClusterSupervisor]]},
+      # {Cluster.Supervisor, [topologies, [name: Exchange.ClusterSupervisor]]},
       {Oban, Application.fetch_env!(:exchange, Oban)},
       # Start the vt rate limiter with initial limit
       {Exchange.VtApi.VtApiRateLimiter, Application.get_env(:exchange, :vt_api_rate_limit, 1500)}
