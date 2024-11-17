@@ -60,4 +60,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only --wait-timeout 500 -a ${{ secrets.APP_NAME }} --build-secret ezsuite_auth_key="${{ secrets.EZSUITE_AUTH_KEY }}"
+      - run: flyctl deploy --remote-only -a ${{ secrets.APP_NAME }} --build-secret ezsuite_auth_key="${{ secrets.EZSUITE_AUTH_KEY }} --release-command-timeout none"

@@ -47,7 +47,9 @@ config :error_tracker,
 
 config :exchange, Exchange.Repo.Local,
   priv: "priv/repo",
-  timeout: :infinity
+  timeout: :infinity,
+  ownership_timeout: :infinity,
+  pool_timeout: :infinity
 
 # Configures the endpoint
 config :exchange, ExchangeWeb.Endpoint,
