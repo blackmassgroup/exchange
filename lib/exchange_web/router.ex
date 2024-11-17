@@ -6,6 +6,8 @@ defmodule ExchangeWeb.Router do
   import Phoenix.LiveDashboard.Router
 
   pipeline :browser do
+    plug ExchangeWeb.Plugs.MaintenanceMode
+
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
@@ -20,6 +22,8 @@ defmodule ExchangeWeb.Router do
   end
 
   pipeline :browser_insecure do
+    plug ExchangeWeb.Plugs.MaintenanceMode
+
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
@@ -34,6 +38,8 @@ defmodule ExchangeWeb.Router do
   end
 
   pipeline :api do
+    plug ExchangeWeb.Plugs.MaintenanceMode
+
     plug :accepts, ["json", "multipart"]
   end
 

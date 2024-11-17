@@ -1,5 +1,9 @@
 import Config
 
+if config_env() != :test do
+  config :exchange, :maintenance_mode, true
+end
+
 config :exchange,
   vxu_bucket_name: System.get_env("VXU_S3_BUCKET_NAME"),
   s3_host: System.get_env("S3_HOST"),
