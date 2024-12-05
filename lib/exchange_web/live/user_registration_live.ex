@@ -36,21 +36,6 @@ defmodule ExchangeWeb.UserRegistrationLive do
 
           <.input field={{f, :email}} type="email" label="Email" required />
           <.input field={{f, :password}} type="password" label="Password" required />
-          <.input
-            :if={@checked == true}
-            field={{f, :malcore}}
-            type="checkbox"
-            phx-click="toggle-checkbox"
-            label="Create Malcore Account?"
-            checked
-          />
-          <.input
-            :if={@checked == false}
-            field={{f, :malcore}}
-            type="checkbox"
-            phx-click="toggle-checkbox"
-            label="Create Malcore Account?"
-          />
 
           <:actions>
             <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>
@@ -85,11 +70,6 @@ defmodule ExchangeWeb.UserRegistrationLive do
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
-
-      {:error, :failed_to_register_malcore} ->
-        socket = put_flash(socket, :error, "failed to register with Malcore")
-
-        {:noreply, socket}
 
       {:error, :failed_to_register} ->
         socket = put_flash(socket, :error, "Please try again later.")

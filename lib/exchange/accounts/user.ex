@@ -14,7 +14,6 @@ defmodule Exchange.Accounts.User do
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
     field :api_key, :string, redact: true
-    field :malcore_api_key, :string, redact: true
 
     timestamps()
   end
@@ -176,6 +175,6 @@ defmodule Exchange.Accounts.User do
   """
   def api_key_changeset(user, attrs) do
     user
-    |> cast(attrs, [:api_key, :malcore_api_key])
+    |> cast(attrs, [:api_key])
   end
 end
