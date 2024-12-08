@@ -41,7 +41,7 @@ defmodule Exchange.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.20.1"},
+      {:phoenix_live_view, "~> 1.0"},
       {:heroicons, "~> 0.5"},
       {:floki, ">= 0.30.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.8"},
@@ -70,7 +70,7 @@ defmodule Exchange.MixProject do
       {:remote_ip, "~> 1.1"},
       {:tesla_curl, "~> 1.2.1", only: :dev},
       {:sobelow, "~> 0.13.0"},
-      {:error_tracker, "~> 0.2"},
+      {:error_tracker, "0.4.0"},
       {:ecto_psql_extras, "~> 0.6"},
       {:ecto_dev_logger, "~> 0.13", only: [:dev, :test]},
       {:phx_2_ban, "~> 0.1.0", repo: "ezsuite"}

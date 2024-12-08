@@ -10,7 +10,6 @@
 - Uses [`libcluster`](https://fly.io/docs/elixir/the-basics/clustering/#adding-libcluster) and [`fly_postgres`](https://hexdocs.pm/fly_postgres/readme.html) for scalability
 - [CI/CD](https://fly.io/docs/elixir/advanced-guides/github-actions-elixir-ci-cd/) setup and is deployed on Fly.io.
 - Upload, login and get sample API routes
-- ~~Custom Discord Logger backend~~
 - Application Error tracking
 - Uses Oban for retryable jobs.
 
