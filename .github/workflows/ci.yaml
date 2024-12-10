@@ -38,6 +38,11 @@ jobs:
           mix hex.repo add ezsuite https://ezsuite.dev/repo \
           --auth-key ${{ secrets.EZSUITE_AUTH_KEY }} \
           --fetch-public-key ${{ secrets.EZSUITE_PUBLIC_KEY }}
+      - name: Add Fluxon Repo
+        run: |
+          mix hex.repo add ezsuite https://repo.fluxonui.com \
+          --auth-key ${{ secrets.FLUXON_AUTH_KEY }} \
+          --fetch-public-key ${{ secrets.FLUXON_PUBLIC_KEY }}
       - name: Restore dependencies cache
         uses: actions/cache@v4
         with:

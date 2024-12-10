@@ -38,9 +38,16 @@ ENV MIX_ENV="prod"
 COPY mix.exs mix.lock ./
 
 RUN --mount=type=secret,id=ezsuite_auth_key \
+    --mount=type=secret,id=ezsuite_public_key \
     mix hex.repo add ezsuite https://ezsuite.dev/repo \
-    --fetch-public-key "SHA256:5WqcbEXE2PRHFpPrlJeaCCS1mAokfq6Bf/rdKzukVQ4" \
+    --fetch-public-key "$(cat /run/secrets/ezsuite_public_key)" \
     --auth-key "$(cat /run/secrets/ezsuite_auth_key)"
+
+RUN --mount=type=secret,id=fluxon_auth_key \
+    --mount=type=secret,id=fluxon_public_key \
+    mix hex.repo add ezsuite https://ezsuite.dev/repo \
+    --fetch-public-key "$(cat /run/secrets/fluxon_public_key)" \
+    --auth-key "$(cat /run/secrets/fluxon_auth_key)"
 
 RUN mix deps.get --only $MIX_ENV
 RUN mkdir config
@@ -74,7 +81,7 @@ RUN mix release
 FROM ${RUNNER_IMAGE}
 
 RUN apt-get update -y && apt-get install -y libstdc++6 openssl libncurses5 locales \
-  && apt-get clean && rm -f /var/lib/apt/lists/*_*
+    && apt-get clean && rm -f /var/lib/apt/lists/*_*
 
 # Set the locale
 RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen

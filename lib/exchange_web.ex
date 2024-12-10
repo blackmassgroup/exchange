@@ -89,6 +89,7 @@ defmodule ExchangeWeb do
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
+      use Fluxon, avoid_conflicts: true
 
       # Routes generation with the ~p sigil
       unquote(verified_routes())

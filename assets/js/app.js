@@ -22,6 +22,9 @@ import { Socket } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
 import topbar from "../vendor/topbar";
 
+import { Hooks as FluxonHooks, DOM as FluxonDOM } from 'fluxon';
+
+
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
@@ -171,10 +174,17 @@ Hooks.SplitFlap = {
   },
 };
 
+// [!code ++]
+let liveSocket = new LiveSocket("/live", Socket, {
+// [!code ++] }, }, });
+
 let liveSocket = new LiveSocket("/live", Socket, {
   uploaders: Uploaders,
   params: { _csrf_token: csrfToken },
-  hooks: Hooks,
+  hooks: {...Hooks, ...FluxonHooks},
+  dom: {
+    onBeforeElUpdated(from, to) { FluxonDOM.onBeforeElUpdated(from, to); },
+  }
 });
 
 // Show progress bar on live navigation and form submits. Only displays if still
