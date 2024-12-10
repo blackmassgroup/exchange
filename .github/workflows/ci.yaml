@@ -37,7 +37,7 @@ jobs:
         run: |
           mix hex.repo add ezsuite https://ezsuite.dev/repo \
           --auth-key ${{ secrets.EZSUITE_AUTH_KEY }} \
-          --fetch-public-key SHA256:5WqcbEXE2PRHFpPrlJeaCCS1mAokfq6Bf/rdKzukVQ4
+          --fetch-public-key ${{ secrets.EZSUITE_PUBLIC_KEY }}
       - name: Restore dependencies cache
         uses: actions/cache@v4
         with:

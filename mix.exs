@@ -73,7 +73,7 @@ defmodule Exchange.MixProject do
       {:error_tracker, "0.4.0"},
       {:ecto_psql_extras, "~> 0.6"},
       {:ecto_dev_logger, "~> 0.13", only: [:dev, :test]},
-      {:phx_2_ban, "~> 0.1.0", repo: "ezsuite"}
+      {:phx_2_ban, "~> 0.2.0", repo: "ezsuite"}
     ]
   end
 
