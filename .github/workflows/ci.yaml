@@ -40,7 +40,7 @@ jobs:
           --fetch-public-key ${{ secrets.EZSUITE_PUBLIC_KEY }}
       - name: Add Fluxon Repo
         run: |
-          mix hex.repo add ezsuite https://repo.fluxonui.com \
+          mix hex.repo add fluxon https://repo.fluxonui.com \
           --auth-key ${{ secrets.FLUXON_AUTH_KEY }} \
           --fetch-public-key ${{ secrets.FLUXON_PUBLIC_KEY }}
       - name: Restore dependencies cache
@@ -65,4 +65,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --build-secret ezsuite_auth_key=${{ secrets.EZSUITE_AUTH_KEY }} --no-cache --push -y --remote-only -a ${{ secrets.APP_NAME }} --build-secret ezsuite_auth_key="${{ secrets.EZSUITE_AUTH_KEY }} --release-command-timeout none --wait-timeout "20m0s""
+      - run: flyctl deploy --no-cache --push -y --remote-only -a ${{ secrets.APP_NAME }} --release-command-timeout none --wait-timeout "20m0s" --build-secret ezsuite_auth_key=${{ secrets.EZSUITE_AUTH_KEY}} --build-secret ezsuite_public_key=${{ secrets.EZSUITE_PUBLIC_KEY}} --build-secret fluxon_public_key=${{ secrets.FLUXON_PUBLIC_KEY}} --build-secret fluxon_auth_key=${{ secrets.FLUXON_AUTH_KEY}}
+

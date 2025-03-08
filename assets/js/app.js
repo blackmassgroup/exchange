@@ -174,9 +174,6 @@ Hooks.SplitFlap = {
   },
 };
 
-// [!code ++]
-let liveSocket = new LiveSocket("/live", Socket, {
-// [!code ++] }, }, });
 
 let liveSocket = new LiveSocket("/live", Socket, {
   uploaders: Uploaders,

@@ -45,7 +45,7 @@ RUN --mount=type=secret,id=ezsuite_auth_key \
 
 RUN --mount=type=secret,id=fluxon_auth_key \
     --mount=type=secret,id=fluxon_public_key \
-    mix hex.repo add ezsuite https://ezsuite.dev/repo \
+    mix hex.repo add fluxon https://repo.fluxonui.com \
     --fetch-public-key "$(cat /run/secrets/fluxon_public_key)" \
     --auth-key "$(cat /run/secrets/fluxon_auth_key)"
 
