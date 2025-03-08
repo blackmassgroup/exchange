@@ -74,7 +74,8 @@ defmodule Exchange.MixProject do
       {:ecto_psql_extras, "~> 0.6"},
       {:ecto_dev_logger, "~> 0.13", only: [:dev, :test]},
       {:phx_2_ban, "~> 0.2.0", repo: "ezsuite"},
-      {:fluxon, "~> 1.0.0", repo: :fluxon}
+      {:fluxon, "~> 1.0.0", repo: :fluxon},
+      {:oban_web, "~> 2.11"}
     ]
   end
 

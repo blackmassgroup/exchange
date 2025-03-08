@@ -4,6 +4,7 @@ defmodule ExchangeWeb.Router do
 
   import ExchangeWeb.UserAuth
   import Phoenix.LiveDashboard.Router
+  import Oban.Web.Router
 
   pipeline :browser do
     plug ExchangeWeb.Plugs.MaintenanceMode
@@ -138,6 +139,8 @@ defmodule ExchangeWeb.Router do
       additional_pages: [
         route_name: Phx2Ban.LiveDashboardPlugin
       ]
+
+    oban_dashboard("/oban")
 
     error_tracker_dashboard("/errors", on_mount: [{ExchangeWeb.UserAuth, :ensure_admin}])
   end

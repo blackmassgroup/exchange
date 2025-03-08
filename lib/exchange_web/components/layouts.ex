@@ -249,6 +249,13 @@ defmodule ExchangeWeb.Layouts do
                       >
                         💻 Dashboard
                       </.link>
+
+                      <.link
+                        href={~p"/oban"}
+                        class="text-gray-400 hover:text-white hover:bg-zinc-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                      >
+                        Oban Dashboard
+                      </.link>
                     <% end %>
                     <li>
                       <.link
