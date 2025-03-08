@@ -14,6 +14,6 @@
 <div>
   <.nav_menu current_user={@current_user} live_action={@live_action} />
   <div class={if @current_user, do: "xl:pl-72", else: ""}>
-    <%= @inner_content %>
+    {@inner_content}
   </div>
 </div>

@@ -108,7 +108,7 @@ defmodule ExchangeWeb.Layouts do
               </p>
 
               <p class="rounded-full bg-emerald-900 px-2 text-[0.6125rem] font-medium leading-6 text-emerald-500">
-                v <%= Application.spec(:exchange)[:vsn] %>
+                v {Application.spec(:exchange)[:vsn]}
               </p>
             </div>
 
@@ -140,7 +140,7 @@ defmodule ExchangeWeb.Layouts do
 
                         <span class="sr-only">Your profile</span>
                         <span :if={@current_user} aria-hidden="true" class="text-emerald-500">
-                          <%= @current_user.email %>
+                          {@current_user.email}
                         </span>
                       </div>
                     </li>
@@ -303,7 +303,7 @@ defmodule ExchangeWeb.Layouts do
 
                     <span class="sr-only">Your profile</span>
                     <span :if={@current_user} aria-hidden="true" class="text-emerald-500">
-                      <%= @current_user.email %>
+                      {@current_user.email}
                     </span>
                   </div>
                 </li>
@@ -330,7 +330,7 @@ defmodule ExchangeWeb.Layouts do
             Powered by Vx Underground
           </p>
           <p class="rounded-full bg-emerald-900 px-2 text-[0.6125rem] font-medium leading-6 text-zinc-300">
-            v <%= Application.spec(:exchange)[:vsn] %>
+            v {Application.spec(:exchange)[:vsn]}
           </p>
         </div>
         <nav class="flex flex-1 flex-col">
@@ -463,7 +463,7 @@ defmodule ExchangeWeb.Layouts do
 
                     <span class="sr-only">Your profile</span>
                     <span :if={@current_user} aria-hidden="true" class="text-zinc-500">
-                      <%= @current_user.email %>
+                      {@current_user.email}
                     </span>
                   </div>
                 </li>

@@ -16,16 +16,16 @@ defmodule ExchangeWeb.UserSettingsLive do
 
         <div class="md:col-span-2">
           <p class="mt-1 text-sm leading-6 text-gray-400">
-            <strong>User Role:</strong> <%= if @current_user.role != nil,
+            <strong>User Role:</strong> {if @current_user.role != nil,
               do: @current_user.role.name,
-              else: "No role." %>
+              else: "No role."}
           </p>
 
           <p class="mt-1 text-sm leading-6 text-gray-400">
             <strong>Custom Permissions: </strong>
-            <%= if @current_user.custom_permissions not in [nil, %{}],
+            {if @current_user.custom_permissions not in [nil, %{}],
               do: Jason.encode!(@current_user.custom_permissions),
-              else: "No custom permissions." %>
+              else: "No custom permissions."}
           </p>
         </div>
       </div>

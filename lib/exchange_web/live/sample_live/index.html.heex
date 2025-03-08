@@ -6,7 +6,7 @@
       <.async_result :let={count} assign={@count}>
         <:loading>Counting samples...</:loading>
         <:failed :let={_failure}>there was an counting the samples</:failed>
-        <%= count |> Number.Delimit.number_to_delimited(delimiter: ",", precision: 0) %> Samples to date
+        {count |> Number.Delimit.number_to_delimited(delimiter: ",", precision: 0)} Samples to date
       </.async_result>
     </h1>
     <.link

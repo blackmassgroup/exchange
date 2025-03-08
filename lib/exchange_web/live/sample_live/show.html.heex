@@ -9,7 +9,7 @@
       }
   </style>
   <.header :if={connected?(@socket)}>
-    Sample <span class="truncate"><%= @sample.sha256 %></span>
+    Sample <span class="truncate">{@sample.sha256}</span>
     <:subtitle>
       This is a malware sample found in the wild
     </:subtitle>
@@ -34,21 +34,21 @@
 
   <.list :if={connected?(@socket)}>
     <:item title="Hashes"></:item>
-    <:item title="MD5"><%= @sample.md5 %></:item>
-    <:item title="SHA1"><%= @sample.sha1 %></:item>
-    <:item title="SHA256"><%= @sample.sha256 %></:item>
-    <:item title="SHA512"><%= @sample.sha512 %></:item>
+    <:item title="MD5">{@sample.md5}</:item>
+    <:item title="SHA1">{@sample.sha1}</:item>
+    <:item title="SHA256">{@sample.sha256}</:item>
+    <:item title="SHA512">{@sample.sha512}</:item>
     <:item title="Details"></:item>
     <:item title="Size">
-      <%= Number.Delimit.number_to_delimited(@sample.size, precision: 0) %> bytes
+      {Number.Delimit.number_to_delimited(@sample.size, precision: 0)} bytes
     </:item>
-    <:item :if={@sample.type} title="Type"><%= @sample.type %></:item>
-    <:item :if={@sample.first_seen} title="First seen"><%= @sample.first_seen %></:item>
-    <:item :if={@sample.names} title="Names"><%= @sample.names %></:item>
+    <:item :if={@sample.type} title="Type">{@sample.type}</:item>
+    <:item :if={@sample.first_seen} title="First seen">{@sample.first_seen}</:item>
+    <:item :if={@sample.names} title="Names">{@sample.names}</:item>
     <:item title="Actions"></:item>
     <:item :if={@sample.tags not in [nil, []]} title="Tags">
       <div class="flex max-w-xs flex-wrap">
-        <span :for={tag <- @sample.tags} class="tag"><%= tag %></span>
+        <span :for={tag <- @sample.tags} class="tag">{tag}</span>
       </div>
     </:item>
     <:item title="Download File">

@@ -8,7 +8,7 @@ defmodule ExchangeWeb.RoleLive.FormComponent do
     ~H"""
     <div>
       <.header>
-        <%= @title %>
+        {@title}
         <:subtitle>Use this form to manage role records in your database.</:subtitle>
       </.header>
 

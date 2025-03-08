@@ -11,8 +11,8 @@
   </.header>
 
   <.table id="roles" rows={@roles} row_click={&JS.navigate(~p"/roles/#{&1}")}>
-    <:col :let={role} label="Name"><%= role.name %></:col>
-    <:col :let={role} label="Permissions"><%= Jason.encode!(role.permissions) %></:col>
+    <:col :let={role} label="Name">{role.name}</:col>
+    <:col :let={role} label="Permissions">{Jason.encode!(role.permissions)}</:col>
     <:action :let={role}>
       <div class="sr-only">
         <.link navigate={~p"/roles/#{role}"}>Show</.link>

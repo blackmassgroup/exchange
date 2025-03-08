@@ -4,7 +4,7 @@ defmodule ExchangeWeb.SampleLive.SortingComponent do
   def render(%{key: key} = assigns) when is_atom(key) do
     ~H"""
     <div phx-click="sort_by_key" phx-target={@myself} class="sorting-header flex justify-items-center">
-      <%= @key %> <%= chevron(@sorting, @key) %>
+      {@key} {chevron(@sorting, @key)}
     </div>
     """
   end
@@ -16,7 +16,7 @@ defmodule ExchangeWeb.SampleLive.SortingComponent do
       phx-target={@myself}
       class="sorting-header flex justify-items-center items-center"
     >
-      <%= @key %> <%= chevron(@sorting, String.to_existing_atom(@key)) %>
+      {@key} {chevron(@sorting, String.to_existing_atom(@key))}
     </div>
     """
   end

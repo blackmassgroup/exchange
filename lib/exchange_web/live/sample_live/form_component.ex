@@ -11,7 +11,7 @@ defmodule ExchangeWeb.SampleLive.FormComponent do
     ~H"""
     <div>
       <.header>
-        <span class="text-slate-200"><%= @title %></span>
+        <span class="text-slate-200">{@title}</span>
         <:subtitle><span class="text-slate-300"> Something new? Interesting...</span></:subtitle>
       </.header>
 
@@ -23,10 +23,10 @@ defmodule ExchangeWeb.SampleLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <%= Phoenix.HTML.Form.hidden_input(f, :hash) %>
-        <%= Phoenix.HTML.Form.hidden_input(f, :size) %>
-        <%= Phoenix.HTML.Form.hidden_input(f, :type) %>
-        <%= Phoenix.HTML.Form.hidden_input(f, :first_seen) %>
+        {Phoenix.HTML.Form.hidden_input(f, :hash)}
+        {Phoenix.HTML.Form.hidden_input(f, :size)}
+        {Phoenix.HTML.Form.hidden_input(f, :type)}
+        {Phoenix.HTML.Form.hidden_input(f, :first_seen)}
 
         <div
           class="flex items-center justify-center w-full"
@@ -68,7 +68,7 @@ defmodule ExchangeWeb.SampleLive.FormComponent do
         <%= for entry <- @uploads.s3_object_key.entries do %>
           <article class="upload-entry">
             <figure>
-              <figcaption class="text-gray-500"><%= entry.client_name %></figcaption>
+              <figcaption class="text-gray-500">{entry.client_name}</figcaption>
             </figure>
 
             <%!-- entry.progress will update automatically for in-flight entries --%>
@@ -77,7 +77,7 @@ defmodule ExchangeWeb.SampleLive.FormComponent do
               max="100"
               style="width: 95%; height: 10px;border-radius: 25px;"
             >
-              <%= entry.progress %>%
+              {entry.progress}%
             </progress>
 
             <button
@@ -90,7 +90,7 @@ defmodule ExchangeWeb.SampleLive.FormComponent do
             </button>
 
             <%= for err <- upload_errors(@uploads.s3_object_key, entry) do %>
-              <p class="alert alert-danger"><%= error_to_string(err) %></p>
+              <p class="alert alert-danger">{error_to_string(err)}</p>
             <% end %>
           </article>
         <% end %>

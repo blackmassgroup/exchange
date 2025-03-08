@@ -336,7 +336,7 @@ defmodule ExchangeWeb.SampleLive.Index do
 
                     <span class="text-gray-400">/</span>
                     <span class="whitespace-nowrap">
-                      <%= sample.sha256 || "New Upload.. Still Processing" %>
+                      {sample.sha256 || "New Upload.. Still Processing"}
                     </span>
                   </.link>
                 </h2>
@@ -345,24 +345,24 @@ defmodule ExchangeWeb.SampleLive.Index do
                 <div>
                   <p class="">
                     <%= if sample.md5 do %>
-                      <strong>MD5:</strong> <%= sample.md5 %> <br />
-                      <strong>SHA1:</strong> <%= sample.sha1 %>
+                      <strong>MD5:</strong> {sample.md5} <br />
+                      <strong>SHA1:</strong> {sample.sha1}
                     <% else %>
                       Processing...
                     <% end %>
                   </p>
                   <p class="whitespace-nowrap">
                     <strong>FILE SIZE: </strong>
-                    <%= get_shown_number(sample.size, :KB)
-                    |> Number.Delimit.number_to_delimited(precision: 0) %> KB / <%= get_shown_number(
+                    {get_shown_number(sample.size, :KB)
+                    |> Number.Delimit.number_to_delimited(precision: 0)} KB / {get_shown_number(
                       sample.size,
                       :MB
                     )
-                    |> Number.Delimit.number_to_delimited(precision: 2) %> MB / <%= get_shown_number(
+                    |> Number.Delimit.number_to_delimited(precision: 2)} MB / {get_shown_number(
                       sample.size,
                       :GB
                     )
-                    |> Number.Delimit.number_to_delimited(precision: 4) %> GB
+                    |> Number.Delimit.number_to_delimited(precision: 4)} GB
                   </p>
                 </div>
                 <div :if={sample.tags} class="flex max-w-xs flex-wrap">
@@ -370,12 +370,12 @@ defmodule ExchangeWeb.SampleLive.Index do
                     :for={tag <- sample.tags |> Enum.take(3)}
                     class="truncate rounded-full bg-emerald-900 px-2 text-[0.8125rem] font-medium leading-6 text-emerald-500 mb-2"
                   >
-                    <%= tag %>
+                    {tag}
                   </span>
                 </div>
               </div>
               <time datetime={sample.inserted_at} class="flex-none text-xs text-gray-400">
-                Uploaded: <%= format_time(sample.inserted_at) %>
+                Uploaded: {format_time(sample.inserted_at)}
               </time>
             </div>
 
@@ -449,7 +449,7 @@ defmodule ExchangeWeb.SampleLive.Index do
                 </svg>
 
                 <time datetime={sample.inserted_at} class="flex-none text-xs">
-                  <%= format_time(sample.inserted_at) %>
+                  {format_time(sample.inserted_at)}
                 </time>
               </div>
               <p class="mt-3 truncate text-sm text-gray-500">

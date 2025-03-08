@@ -1,6 +1,6 @@
 <div class="p-5">
   <.header>
-    Role <%= @role.name %>
+    Role {@role.name}
     <:subtitle>This is a role record from your database.</:subtitle>
     <:actions>
       <.link patch={~p"/roles/#{@role}/show/edit"} phx-click={JS.push_focus()}>
@@ -10,8 +10,8 @@
   </.header>
 
   <.list>
-    <:item title="Name"><%= @role.name %></:item>
-    <:item title="Permissions"><%= Jason.encode!(@role.permissions) %></:item>
+    <:item title="Name">{@role.name}</:item>
+    <:item title="Permissions">{Jason.encode!(@role.permissions)}</:item>
   </.list>
 
   <.back navigate={~p"/roles"}>Back to roles</.back>
