@@ -217,8 +217,8 @@ defmodule ExchangeWeb.SampleLive.Index do
 
   def generate_url_for_file(s3_object_key) do
     opts = [expires_in: 300]
-    bucket = S3.get_wasabi_bucket()
-    config_opts = S3.wasabi_config()
+    bucket = S3.get_minio_bucket()
+    config_opts = S3.minio_config()
 
     ExAws.Config.new(:s3, config_opts)
     |> ExAws.S3.presigned_url(:get, bucket, s3_object_key, opts)

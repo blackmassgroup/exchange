@@ -1,7 +1,7 @@
 import Config
 
 if config_env() != :test do
-  config :exchange, :maintenance_mode, true
+  config :exchange, :maintenance_mode, false
 end
 
 config :exchange,
@@ -11,6 +11,14 @@ config :exchange,
   s3_access_key_id: System.get_env("AWS_ACCESS_KEY_ID"),
   s3_secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY"),
   s3_bucket_name: System.get_env("S3_BUCKET_NAME")
+
+config :ex_aws,
+  access_key_id: {:system, "AWS_ACCESS_KEY_ID"},
+  secret_access_key: {:system, "AWS_SECRET_ACCESS_KEY"},
+  s3: [
+    scheme: "https://",
+    host: "#{System.get_env("AWS_ENDPOINT")}"
+  ]
 
 # config/runtime.exs is executed for all environments, including
 # during releases. It is executed after compilation and before the

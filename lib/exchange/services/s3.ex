@@ -44,7 +44,7 @@ defmodule Exchange.Services.S3 do
   Config Used to Upload to MinIO
   """
   def minio_config() do
-    host = "mini-01-s3.vx-underground.org"
+    host = Application.get_env(:exchange, :s3_host)
     secret_access_key = Application.get_env(:exchange, :s3_secret_access_key)
     access_key_id = Application.get_env(:exchange, :s3_access_key_id)
 

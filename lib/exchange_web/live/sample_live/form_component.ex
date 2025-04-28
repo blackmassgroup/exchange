@@ -123,9 +123,9 @@ defmodule ExchangeWeb.SampleLive.FormComponent do
   end
 
   defp presign_upload(entry, socket) do
-    bucket = S3.get_wasabi_bucket()
+    bucket = S3.get_minio_bucket()
     key = "#{entry.client_name}"
-    config_opts = S3.wasabi_config()
+    config_opts = S3.minio_config()
 
     opts = [
       expires_in: 3600,
@@ -236,9 +236,9 @@ defmodule ExchangeWeb.SampleLive.FormComponent do
   end
 
   defp get_s3_object({:error, _}, client_name) do
-    config_opts = S3.wasabi_config()
+    config_opts = S3.minio_config()
 
-    S3.get_wasabi_bucket()
+    S3.get_minio_bucket()
     |> ExAws.S3.get_object(client_name)
     |> ExAws.request(config_opts)
     |> get_s3_object(client_name)

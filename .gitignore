@@ -47,3 +47,4 @@ file_list.txt
 daily_objects.txt
 .DS_STORE
 deps/*/*
+.aider*

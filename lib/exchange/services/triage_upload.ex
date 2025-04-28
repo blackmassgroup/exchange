@@ -14,12 +14,12 @@ defmodule Exchange.Services.TriageUpload do
 
   @impl Oban.Worker
   def perform(%Oban.Job{args: %{"sample" => sample}}) do
-    config_opts = S3.wasabi_config()
+    config_opts = S3.minio_config()
 
     with(
       {:ok, presigned_url} <-
         ExAws.Config.new(:s3, config_opts)
-        |> ExAws.S3.presigned_url(:get, S3.get_wasabi_bucket(), "#{sample["sha256"]}"),
+        |> ExAws.S3.presigned_url(:get, S3.get_minio_bucket(), "#{sample["sha256"]}"),
       {:ok, triage_resp} <- Exchange.Services.Triage.upload(presigned_url),
       {:ok, _hashes} <- Exchange.Services.Triage.get_sample(triage_resp["id"])
     ) do
