@@ -13,7 +13,7 @@ defmodule Exchange.ObanJobs.CloudMigration.FileUploader do
       {:ok, file} ->
         upload_path = "/Daily/#{date}/#{file.filename}"
 
-        case S3.put_object(upload_path, file.binary, :wasabi_private) do
+        case S3.put_object(upload_path, file.binary, :minio_private) do
           {:ok, _} ->
             # Logger.info("FileUploader - Uploaded file: #{upload_path}")
             :ok

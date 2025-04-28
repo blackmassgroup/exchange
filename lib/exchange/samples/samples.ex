@@ -488,7 +488,7 @@ defmodule Exchange.Samples do
     with true <- is_below_size_limit(file),
          params <- build_sample_params(file, user_id),
          nil <- Samples.get_sample_by_sha256(params.sha256),
-         {:ok, _sample} <- S3.put_object(params.s3_object_key, file, :wasabi),
+         {:ok, _sample} <- S3.put_object(params.s3_object_key, file, :minio),
          {:ok, sample} <- create_sample(params) do
       {:ok, sample}
     else
