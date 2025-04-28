@@ -10,18 +10,18 @@ defmodule Exchange.Services.S3 do
   @doc """
   Returns the bucket name from the application config.
   """
-  def get_wasabi_bucket(), do: Application.get_env(:exchange, :s3_bucket_name)
+  def get_minio_bucket(), do: Application.get_env(:exchange, :s3_bucket_name)
 
   @doc """
   Returns the bucket name from the application config.
   """
-  def get_private_wasabi_bucket(), do: Application.get_env(:exchange, :vxu_bucket_name)
+  def get_private_minio_bucket(), do: Application.get_env(:exchange, :vxu_bucket_name)
 
   @doc """
   Returns a binary of the file from S3.
   """
   def get_file_binary(object_key) do
-    S3.get_object(get_wasabi_bucket(), object_key) |> ExAws.request(wasabi_config())
+    S3.get_object(get_minio_bucket(), object_key) |> ExAws.request(minio_config())
   end
 
   @doc """
@@ -29,8 +29,8 @@ defmodule Exchange.Services.S3 do
   """
   def get_presigned_url(s3_object_key) do
     opts = [expires_in: 300]
-    bucket = get_wasabi_bucket()
-    config_opts = wasabi_config()
+    bucket = get_minio_bucket()
+    config_opts = minio_config()
 
     ExAws.Config.new(:s3, config_opts)
     |> S3.presigned_url(:get, bucket, s3_object_key, opts)
@@ -41,10 +41,10 @@ defmodule Exchange.Services.S3 do
   end
 
   @doc """
-  Config Used to Upload to Wasabi
+  Config Used to Upload to MinIO
   """
-  def wasabi_config() do
-    host = Application.get_env(:exchange, :s3_host)
+  def minio_config() do
+    host = "mini-01-s3.vx-underground.org"
     secret_access_key = Application.get_env(:exchange, :s3_secret_access_key)
     access_key_id = Application.get_env(:exchange, :s3_access_key_id)
 
@@ -54,20 +54,20 @@ defmodule Exchange.Services.S3 do
   @doc """
   Upload an object to s3
   """
-  def put_object(object_key, binary, :wasabi) do
+  def put_object(object_key, binary, :minio) do
     opts = [{:content_type, "application/octet-stream"}]
-    config_opts = wasabi_config()
+    config_opts = minio_config()
 
-    get_wasabi_bucket()
+    get_minio_bucket()
     |> S3.put_object(object_key, binary, opts)
     |> ExAws.request(config_opts)
   end
 
-  def put_object(object_key, binary, :wasabi_private) do
+  def put_object(object_key, binary, :minio_private) do
     opts = [{:content_type, "application/octet-stream"}]
-    config_opts = wasabi_config()
+    config_opts = minio_config()
 
-    get_private_wasabi_bucket()
+    get_private_minio_bucket()
     |> S3.put_object(object_key, binary, opts)
     |> ExAws.request(config_opts)
   end
@@ -79,8 +79,8 @@ defmodule Exchange.Services.S3 do
     do: {:ok, :old_sample}
 
   def copy_file_to_daily_backups(src_object, date_or_is_new_upload, attrs) do
-    dest_bucket = get_private_wasabi_bucket()
-    src_bucket = get_wasabi_bucket()
+    dest_bucket = get_private_minio_bucket()
+    src_bucket = get_minio_bucket()
 
     {date_string, is_new_upload} =
       case date_or_is_new_upload do
@@ -95,7 +95,7 @@ defmodule Exchange.Services.S3 do
       |> String.replace(":", ".")
 
     dest_object = "/Daily/#{date_string}/#{name}-#{src_object}"
-    config_opts = wasabi_config()
+    config_opts = minio_config()
 
     # IO.inspect(
     #   dest_object: dest_object,
@@ -114,8 +114,8 @@ defmodule Exchange.Services.S3 do
   end
 
   # def copy_file_to_daily_backups(src_object, true = _is_new_upload, attrs) do
-  #   dest_bucket = get_private_wasabi_bucket()
-  #   src_bucket = get_wasabi_bucket()
+  #   dest_bucket = get_private_minio_bucket()
+  #   src_bucket = get_minio_bucket()
   #   date = Date.utc_today() |> Date.to_iso8601()
 
   #   name =
@@ -124,7 +124,7 @@ defmodule Exchange.Services.S3 do
   #     |> String.replace(":", ".")
 
   #   dest_object = "/Daily/#{date}/#{name}-#{src_object}"
-  #   config_opts = wasabi_config()
+  #   config_opts = minio_config()
 
   #   S3.put_object_copy(dest_bucket, dest_object, src_bucket, src_object)
   #   |> ExAws.request(config_opts)
@@ -134,8 +134,8 @@ defmodule Exchange.Services.S3 do
   Files uploaded through the admin UI are uploaded direct to s3 and have to be properly renamed.
   """
   def rename_uploaded_file(sha256, name) do
-    bucket = get_wasabi_bucket()
-    opts = wasabi_config()
+    bucket = get_minio_bucket()
+    opts = minio_config()
 
     with(
       {:ok, _body} <- S3.put_object_copy(bucket, sha256, bucket, name) |> ExAws.request(opts),
@@ -152,8 +152,8 @@ defmodule Exchange.Services.S3 do
   Deletes an object from the exchange bucket.
   """
   def delete_exchange_object(sha256) do
-    bucket = get_wasabi_bucket()
-    opts = wasabi_config()
+    bucket = get_minio_bucket()
+    opts = minio_config()
 
     with(
       {:ok, %{status_code: 204}} <-
